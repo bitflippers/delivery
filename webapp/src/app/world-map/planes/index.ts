@@ -10,7 +10,7 @@ let icon = L.icon({
     iconUrl: 'assets/aeroplane.svg',
     iconSize: [16, 16],
     iconAnchor: [0, 0]
-});  
+});
 
 class Plane extends Marker {
     speed: number; // speed in m/s
@@ -80,7 +80,7 @@ export abstract class Planes {
     }
 
     public static updatePlane(plane) {
-        console.log('update plane', plane);
+        //console.log('update plane', plane);
         let id = Planes.univId(plane);
         if (typeof plns[id] == 'object') {
             // TODO: Check!!!!

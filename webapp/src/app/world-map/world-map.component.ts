@@ -3,7 +3,7 @@ import { map } from './map';
 import { Sat } from './satellites';
 import { MessagingService } from '../messaging/messaging.service';
 import { iconList } from "../ressources/iconConvertor";
-import { Markers} from "./userMarkers";
+import { Markers } from "./userMarkers";
 import { Planes } from "./planes";
 
 @Component({
@@ -34,9 +34,19 @@ export class WorldMapComponent implements OnInit {
       });
     });
     this.msg.planes.subscribe( data => {
-      console.log('Planes', data);
+      //console.log('Planes', data);
       data.forEach(plane => Planes.updatePlane(plane));
-    })
+    });
+    this.msg.satellites.subscribe( data => {
+      //console.log('Satellites', data);
+      data.forEach(satellite => {
+        console.log('Satellite', satellite);
+        Object.values(satellite.mapBeam).forEach(beam => {
+          console.log('beam', beam);
+          Sat.addBeam(beam);
+        })
+      });
+    });
   }
 
 }

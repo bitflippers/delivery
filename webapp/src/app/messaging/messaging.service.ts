@@ -17,6 +17,7 @@ export class MessagingService {
   login: Observable<any>;
   messages: Observable<any>;
   planes: Observable<any>;
+  satellites: Observable<any>;
 
   constructor(public spinner: SpinnerServiceService) {
     console.log('Messaging instantiated');
@@ -36,6 +37,7 @@ export class MessagingService {
     this.login = new Observable(loginObs => socket.on('login', msg => loginObs.next(msg)));
     this.messages = new Observable(msgObs => socket.on('messages', msg => msgObs.next(msg)));
     this.planes = new Observable(planesObs => socket.on('planes', msg => planesObs.next(msg)));
+    this.satellites = new Observable(satObs => socket.on('satellites', msg => satObs.next(msg)));
   }
 
   emit(topic, data = '') {

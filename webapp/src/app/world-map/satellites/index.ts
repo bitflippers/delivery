@@ -22,20 +22,20 @@ let icon = L.icon({
 });
 
 // Mockup data
-let satList = [
-    {
-        "name": "Sat_2",
-        "pos": [0, 0]
-    },
-    {
-        "name": "Sat_1",
-        "pos": [0, -120]
-    },
-    {
-        "name": "Sat_3",
-        "pos": [0, 120]
-    }
-];
+let satList = {
+  "Sat_1": {
+    "name": "Sat_1",
+    "pos": [0, -120]
+  },
+  "Sat_2": {
+    "name": "Sat_2",
+    "pos": [0, 0]
+  },
+  "Sat_3": {
+    "name": "Sat_3",
+    "pos": [0, 120]
+  }
+}
 
 // Beam data
 let beamList = [
@@ -99,13 +99,34 @@ class Beam {
 
   ellipse: Ellipse;
 
+  l: L.LayerGroup;
+
   constructor(public beam) {
-    this.ellipse = new Ellipse({
-    });
+    // this.ellipse = new Ellipse({
+    // });
+    this.draw();
+  }
+
+  remove() {
+    this.l.remove();
   }
 
   //TODO: Do the beam draw and animation
   draw() {
+    this.l = L.layerGroup();
+    this.l.addTo(beamLayer);
+
+    this.beam.footprint.setSADGREMAGridCell.forEach(n => {
+      console.log('Draw circle', n);
+      let x = n.rowIndex * 8;
+      let y = n.columnIndex * 6;
+      L.circle([x, y], {
+        color: 'blue',
+        fillColor: '#008080',
+        fillOpacity: 0.3,
+        radius: 100000
+      }).addTo(this.l);
+    })
   }
 }
 
@@ -115,7 +136,7 @@ export abstract class Sat {
     map = Map().map; // Now we have map
     equatorLayer.addTo(map);
     beamLayer.addTo(map);
-    satList.forEach(s => Sat.addSatellite(s));
+    Object.values(satList).forEach(s => Sat.addSatellite(s));
     Map().control.addOverlay(equatorLayer, "Satelltes");
     Map().control.addOverlay(beamLayer, "Beams");
     let x = new Beam({
