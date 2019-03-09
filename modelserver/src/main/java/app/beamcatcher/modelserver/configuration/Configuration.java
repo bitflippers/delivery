@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class Configuration {
 
+	// MAKE SURE TO UPDATE WorldSingleton if you change these !!!!
 	public static final int MINIMUM_SLOT_INDEX = 1;
 	public static final int MAXIMUM_SLOT_INDEX = 12;
 	public static final int WORLD_MINIMUM_NUMBER_OF_USERS = 0;
