@@ -3,7 +3,7 @@ export const iconList = {
   "2": "where_to_vote",
   "3": "favorite",
   "4": "location_on",
-  "5": "assistant_phone",
+  "5": "assistant_photo",
   "6": "flash_on",
   "7": "beenhere",
   "8": "arrow_downward",
