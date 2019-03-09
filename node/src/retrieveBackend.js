@@ -63,8 +63,8 @@ function broadcast() {
             if (messages.length>0) 
                 io.broadcast('messages', messages);
 
-
-            io.broadcast('satellites',Object.values(jsonObj.mapSatellite));
+            console.log('xx',jsonObj.mapSatellite);
+            io.broadcast('satellites', Object.values(jsonObj.mapSatellite));
         }
     
     });
