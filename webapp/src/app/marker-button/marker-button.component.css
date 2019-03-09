@@ -1,0 +1,29 @@
+.fillSpace {
+  width: 100vw;
+  height: 100%;
+  position: relative;
+}
+
+.toggleIcon {
+  right: 12pt;
+  top: 50%;
+  margin-top: -16pt;
+  position: absolute;
+  z-index: 500;
+}
+
+.toggleIconDef {
+  font-size: 36pt;
+}
+
+.markerList {
+  width: 100%;
+  object-fit: cover;
+  font-size: 400%;
+  color: #1e7e34;
+}
+
+.gridDisplay{
+  display: grid;
+  object-fit: fill;
+}

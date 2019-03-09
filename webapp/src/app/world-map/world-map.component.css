@@ -1,0 +1,68 @@
+#worldmap {
+  width: 100vw;
+  height: 100%;
+  position: relative;
+}
+
+.appUserUi {
+  position: absolute;
+  bottom: 30pt;
+  right: 5pt;
+  z-index: 501;
+}
+
+.appSpinner {
+  position: absolute;
+  bottom: 30pt;
+  left: 5pt;
+  z-index: 500;
+}
+
+.appMarkerButton {
+  position: absolute;
+  top: 47%;
+  left: 10pt;
+  z-index: 500;
+}
+
+.appFooter{
+  position: absolute;
+  bottom: 5%;
+  z-index: 500;
+  left: 25%;
+  right: 25%;
+}
+
+.appHome{
+  position: absolute;
+  z-index: 500;
+  top: 3%;
+  left: 5%;
+}
+
+.appDisaster {
+  position: absolute;
+  z-index: 500;
+}
+
+
+.markerColor1{
+  background: #1c7430;
+}
+
+.markerColor2{
+  background: #fd7e14;
+}
+
+.markerColor3{
+  background: #6f42c1;
+}
+
+.markerColor4{
+  background: #e83e8c;
+}
+
+.markerColor5{
+  background: aqua;
+
+}
