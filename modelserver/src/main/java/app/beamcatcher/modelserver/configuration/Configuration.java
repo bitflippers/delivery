@@ -231,6 +231,8 @@ public class Configuration {
 	public static final String SADREMA_CSV_MARKERS_SIGNAL_SUFFIX = "markers." + SADREMA_CSV_SIGNAL_SUFFIX;
 	public static final long EVENT_POLLING_FREQUENCY_IN_MILLISECONDS = 1000;
 	public static final long SADREMA_SOLUTION_RETRIEVAL_FREQUENCY_IN_MILLISECONDS = 5000;
+	public static final long MARKER_EXPIRY_TIMER_FREQUENCY_IN_MILLISECONDS = 30000;
+	public static final long MARKER_TIMEOUT = 60000;
 
 	public static final Integer SLOT_1_ID = 1;
 	public static final Integer SLOT_2_ID = 2;

@@ -1,4 +1,4 @@
-package app.beamcatcher.modelserver.io.sadrema.out;
+package app.beamcatcher.modelserver.timers;
 
 import java.util.Map;
 import java.util.Set;
@@ -9,24 +9,24 @@ import app.beamcatcher.modelserver.io.WorldSemaphore;
 import app.beamcatcher.modelserver.model.User;
 import app.beamcatcher.modelserver.persistence.WorldSingleton;
 
-public class SadremaSolutionRetriever implements Runnable {
+public class MarkerExpiryTimer implements Runnable {
 
 	public void run() {
+		System.out.println("MarkerExpiryTimer started !");
+		System.out.println("MarkerExpiryTimer rate in milliseconds: "
+				+ Configuration.MARKER_EXPIRY_TIMER_FREQUENCY_IN_MILLISECONDS);
+		System.out.println("Marker timeout in milliseconds: " + Configuration.MARKER_TIMEOUT);
 
-		System.out.println("SadremaSolutionRetriever started !");
-		System.out.println("SadremaSolutionRetriever rate in milliseconds: "
-				+ Configuration.SADREMA_SOLUTION_RETRIEVAL_FREQUENCY_IN_MILLISECONDS);
-
-		System.out.println("Starting polling !");
+		System.out.println("Starting timer !");
 
 		try {
 
 			do {
 
-				System.out.println("SadremaSolutionRetriever requesting lock...");
+				System.out.println("MarkerExpiryTimer requesting lock...");
 				WorldSemaphore.semaphore.acquire();
-				System.out.println("SadremaSolutionRetriever acquired lock !!!");
-				System.out.println("SadremaSolutionRetriever getting to work...");
+				System.out.println("MarkerExpiryTimer acquired lock !!!");
+				System.out.println("MarkerExpiryTimer getting to work...");
 
 				final Map<UUID, User> mapUser = WorldSingleton.INSTANCE.getMapUser();
 				final Set<UUID> setUUIDUser = mapUser.keySet();
@@ -40,25 +40,11 @@ public class SadremaSolutionRetriever implements Runnable {
 
 				if (totalMarkers > 0) {
 
-					System.err.println("Writing CSVs...");
-
-					final StringBuffer markersCSVInput = WorldToMarkersCSVFileMapper
-							.toMarkersCSVFile(WorldSingleton.INSTANCE);
-					final StringBuffer satellitesCSVInput = WorldToSatellitesCSVFileMapper
-							.toSatellitesCSVFile(WorldSingleton.INSTANCE);
-					CSVWriter.writeToFiles(markersCSVInput, satellitesCSVInput);
-
-					System.err.println("Done !");
-
-					// Invoking sadrema...
-
-					// org.uma.jmetal.runner.multiobjective.chetan.NSGAIIBinaryRunner_SDRM
-
 				} else {
 					System.out.println("No markers, nothing to do !");
 				}
 
-				System.out.println("SadremaSolutionRetriever finished work ! realising lock !!!");
+				System.out.println("MarkerExpiryTimer finished work ! realising lock !!!");
 				WorldSemaphore.semaphore.release();
 
 				System.out.println("Sleeping for " + Configuration.SADREMA_SOLUTION_RETRIEVAL_FREQUENCY_IN_MILLISECONDS
