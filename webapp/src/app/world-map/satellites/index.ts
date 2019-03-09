@@ -24,15 +24,15 @@ let icon = L.icon({
 // Mockup data
 let satList = [
     {
-        "name": "Satellite1",
+        "name": "Sat_2",
         "pos": [0, 0]
     },
     {
-        "name": "Satellite2",
+        "name": "Sat_1",
         "pos": [0, -120]
     },
     {
-        "name": "Satellite3",
+        "name": "Sat_3",
         "pos": [0, 120]
     }
 ];
