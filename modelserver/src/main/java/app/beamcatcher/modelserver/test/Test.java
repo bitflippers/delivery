@@ -81,7 +81,7 @@ public class Test {
 				System.out.println("Added beam '" + beamName + "' (" + i + "/" + beamsToAddPerSatellite + ") : units: "
 						+ unitsPerBeam);
 			}
-			pWorld.addBeamToSatellite((String) satelliteName, setBeam);
+			pWorld.addBeamsToSatellite((String) satelliteName, setBeam);
 			numberOfProcessedSatellites++;
 		}
 	}

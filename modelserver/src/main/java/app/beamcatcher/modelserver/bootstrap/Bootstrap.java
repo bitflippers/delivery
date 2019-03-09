@@ -41,6 +41,7 @@ public class Bootstrap {
 			FileUtils.cleanDirectory(new File(Configuration.MODEL_SERVER_IO_DIR_EVENT_SERVER_IN_SIGNAL));
 			FileUtils.cleanDirectory(new File(Configuration.MODEL_SERVER_IO_DIR_EVENT_SERVER_IN_DATA));
 			FileUtils.cleanDirectory(new File(Configuration.MODEL_SERVER_LOG_DIR));
+			FileUtils.cleanDirectory(new File(Configuration.MODEL_SERVER_IO_DIR_SADREMA_IN_DATA));
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(-1);
@@ -74,6 +75,8 @@ public class Bootstrap {
 		createDirectory(Configuration.MODEL_SERVER_IO_DIR_EVENT_SERVER_IN_SIGNAL);
 		createDirectory(Configuration.MODEL_SERVER_IO_DIR_EVENT_SERVER_IN_DATA);
 		createDirectory(Configuration.MODEL_SERVER_LOG_DIR);
+		createDirectory(Configuration.MODEL_SERVER_IO_DIR_SADREMA_IN_DATA);
+
 	}
 
 	private static final void createDirectory(final String pDirectory) {

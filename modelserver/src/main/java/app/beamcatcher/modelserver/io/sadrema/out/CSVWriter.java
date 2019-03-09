@@ -39,10 +39,7 @@ public class CSVWriter {
 	}
 
 	private static void writerMarkersData(final StringBuffer pMarkerString, final Long timestamp, final UUID uuid) {
-		// final String filename = Configuration.MODEL_SERVER_IO_DIR_SADREMA_OUT_DATA +
-		// "/" + timestamp + "-" + uuid + "-" + "marker.csv";
-
-		final String filename = "markers.csv";
+		final String filename = Configuration.MODEL_SERVER_IO_DIR_SADREMA_OUT_DATA + "/markers.csv";
 
 		FileWriter fileWriter = null;
 		try {

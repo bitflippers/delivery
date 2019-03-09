@@ -30,6 +30,9 @@ public class Configuration {
 	public static final String MODEL_SERVER_IO_DIR_SADREMA_OUT_PNG = MODEL_SERVER_IO_DIR_SADREMA_OUT + "/png";
 	public static final String MODEL_SERVER_PROPERTIES_FILENAME = "modelserver.conf";
 
+	public static final String MODEL_SERVER_IO_DIR_SADREMA_IN = MODEL_SERVER_IO_DIR_SADREMA + "/in";
+	public static final String MODEL_SERVER_IO_DIR_SADREMA_IN_DATA = MODEL_SERVER_IO_DIR_SADREMA_IN + "/data";
+
 	public static final String MODEL_SERVER_LOG_DIR = MODEL_SERVER_BASE_DIR + "/log";
 	public static final String MODEL_SERVER_EVENT_LOG = MODEL_SERVER_LOG_DIR + "/event.log";
 
@@ -217,13 +220,13 @@ public class Configuration {
 	public static final int WORLD_MINIMUM_NUMBER_OF_SATELLITES = 3;
 	public static final int WORLD_MAXIMUM_NUMBER_OF_SATELLITES = 3;
 
-	public static final String WORLD_SATELLITE_1_NAME = "SUPERSAT-1";
+	public static final String WORLD_SATELLITE_1_NAME = "Sat_1";
 	public static final int WORLD_SATELLITE_1_PRODUCED_UNITS = 42;
 
-	public static final String WORLD_SATELLITE_2_NAME = "SUPERSAT-2";
+	public static final String WORLD_SATELLITE_2_NAME = "Sat_2";
 	public static final int WORLD_SATELLITE_2_PRODUCED_UNITS = 42;
 
-	public static final String WORLD_SATELLITE_3_NAME = "SUPERSAT-3";
+	public static final String WORLD_SATELLITE_3_NAME = "Sat_3";
 	public static final int WORLD_SATELLITE_3_PRODUCED_UNITS = 42;
 	public static final int EVENT_SERVER_HTTP_ENDPOINT_PORT = 8090;
 

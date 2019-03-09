@@ -164,7 +164,7 @@ public class World {
 
 	}
 
-	public void addBeamToSatellite(final String pSatelliteName, final Set<Beam> pSetBeam) {
+	public void addBeamsToSatellite(final String pSatelliteName, final Set<Beam> pSetBeam) {
 		final Set<UUID> setSatelliteUUID = this.mapSatellite.keySet();
 		Boolean satelliteNameExists = Boolean.FALSE;
 		Satellite satellite = null;
