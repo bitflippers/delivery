@@ -199,6 +199,9 @@ public class World {
 		if (!usernameExists) {
 			throw new IllegalArgumentException("Username " + pUsername + " not found ! cannot remove !");
 		}
+		final User user = this.mapUser.get(userUUIDToRemove);
+		final Slot slot = user.getSlot();
+		this.game.slotFromUsedToFree(slot);
 		this.mapUser.remove(userUUIDToRemove);
 		this.date = new Date();
 	}

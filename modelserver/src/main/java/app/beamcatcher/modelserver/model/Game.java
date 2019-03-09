@@ -75,4 +75,15 @@ public class Game {
 			throw new IllegalStateException();
 		}
 	}
+
+	public void slotFromUsedToFree(final Slot pSlot) {
+		this.usedSlots.remove(pSlot);
+		this.freeSlots.add(pSlot);
+		final Integer numberOfFreeSlots = this.freeSlots.size();
+		final Integer numberOfUsedSlots = this.usedSlots.size();
+		final Boolean slotsOK = (numberOfFreeSlots + numberOfUsedSlots) == Configuration.MAXIMUM_SLOT_INDEX;
+		if (!slotsOK) {
+			throw new IllegalStateException();
+		}
+	}
 }
