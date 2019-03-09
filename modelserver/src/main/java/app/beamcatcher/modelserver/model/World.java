@@ -131,7 +131,7 @@ public class World {
 		if (usernameExists) {
 			System.out.println("Username exists " + pUsername + " ! cannot add user !");
 		} else if (slotNotFound) {
-			throw new IllegalStateException("Free slot '" + pSlotIdentifier + "' not found !");
+			System.err.println("Free slot '" + pSlotIdentifier + "' not found !");
 		} else {
 			final User user = new User(pUsername, slotFound);
 			this.game.slotFromFreeToUsed(slotFound);
