@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
 import app.beamcatcher.modelserver.configuration.Configuration;
 import app.beamcatcher.modelserver.io.eventserver.in.EventProcessor;
 import app.beamcatcher.modelserver.io.eventserver.out.HTTPEndpointHandler;
+import app.beamcatcher.modelserver.io.sadrema.out.SadremaSolutionRetriever;
 import app.beamcatcher.modelserver.test.eventserver.RandomEventGenerator;
 
 public class Bootstrap {
@@ -18,10 +19,17 @@ public class Bootstrap {
 		createPropertiesFile();
 		cleanPreviousState();
 		startJetty();
-
 		startRandomEventGenerator();
-
 		startEventProcessor();
+		startSadremaSolutionRetriever();
+
+	}
+
+	private static void startSadremaSolutionRetriever() {
+		final SadremaSolutionRetriever sadremaSolutionRetriever = new SadremaSolutionRetriever();
+		final Thread eventProcessorThread = new Thread(sadremaSolutionRetriever);
+		eventProcessorThread.setName("SADREMA-SOLUTION-RETRIEVER");
+		eventProcessorThread.start();
 	}
 
 	private static void cleanPreviousState() {

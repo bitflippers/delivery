@@ -9,7 +9,9 @@ import java.util.Map;
 public class Configuration {
 
 	public static final int MINIMUM_SLOT_INDEX = 1;
-	public static final int MAXIMUM_SLOT_INDEX = 20;
+	public static final int MAXIMUM_SLOT_INDEX = 12;
+	public static final int WORLD_MINIMUM_NUMBER_OF_USERS = 0;
+	public static final int WORLD_MAXIMUM_NUMBER_OF_USERS = 12;
 
 	public static final String EVENT_IDENTIFIER_USER_JOINED = "USER_JOINED";
 	public static final String EVENT_IDENTIFIER_USER_LEFT = "USER_LEFT";
@@ -211,25 +213,25 @@ public class Configuration {
 	public static final int SATELLITE_MAXIMUM_NUMBER_OF_BEAMS = 5;
 	public static final int SATELLITE_MINIMUM_PRODUCED_UNITS = 0;
 	public static final int SATELLITE_MAXIMUM_PRODUCED_UNITS = 100000;
-	public static final int WORLD_MINIMUM_NUMBER_OF_USERS = 0;
-	public static final int WORLD_MAXIMUM_NUMBER_OF_USERS = 20;
 	public static final int WORLD_MINIMUM_NUMBER_OF_SATELLITES = 3;
 	public static final int WORLD_MAXIMUM_NUMBER_OF_SATELLITES = 3;
 
 	public static final String WORLD_SATELLITE_1_NAME = "SUPERSAT-1";
-	public static final int WORLD_SATELLITE_1_PRODUCED_UNITS = 20;
+	public static final int WORLD_SATELLITE_1_PRODUCED_UNITS = 42;
 
 	public static final String WORLD_SATELLITE_2_NAME = "SUPERSAT-2";
-	public static final int WORLD_SATELLITE_2_PRODUCED_UNITS = 20;
+	public static final int WORLD_SATELLITE_2_PRODUCED_UNITS = 42;
 
 	public static final String WORLD_SATELLITE_3_NAME = "SUPERSAT-3";
-	public static final int WORLD_SATELLITE_3_PRODUCED_UNITS = 20;
+	public static final int WORLD_SATELLITE_3_PRODUCED_UNITS = 42;
 	public static final int EVENT_SERVER_HTTP_ENDPOINT_PORT = 8090;
 
 	public static final String SADREMA_CSV_SIGNAL_SUFFIX = "signal";
 	public static final String SADREMA_CSV_SATELLITES_SIGNAL_SUFFIX = "satellites." + SADREMA_CSV_SIGNAL_SUFFIX;
 	public static final String SADREMA_CSV_MARKERS_SIGNAL_SUFFIX = "markers." + SADREMA_CSV_SIGNAL_SUFFIX;
 	public static final long EVENT_POLLING_FREQUENCY_IN_MILLISECONDS = 1000;
+	public static final long SADREMA_SOLUTION_RETRIEVAL_FREQUENCY_IN_MILLISECONDS = 5000;
+
 	public static final Integer SLOT_1_ID = 1;
 	public static final Integer SLOT_2_ID = 2;
 	public static final Integer SLOT_3_ID = 3;

@@ -18,8 +18,8 @@ public class CSVWriter {
 		final UUID uuid = UUID.randomUUID();
 
 		writerMarkersData(pMarkerString, timestamp, uuid);
-		writerSatellitesData(pSatellitesString, timestamp, uuid);
-		writeSignal(timestamp, uuid);
+		// writerSatellitesData(pSatellitesString, timestamp, uuid);
+		// writeSignal(timestamp, uuid);
 
 		return uuid;
 	}
