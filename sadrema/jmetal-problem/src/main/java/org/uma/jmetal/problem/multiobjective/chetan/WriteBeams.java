@@ -19,6 +19,8 @@ public class WriteBeams {
 	
 	public static void writeBeamData(String data, String filename) throws IOException
 	{
+		filename = filename.replace("markers", "beams");
+		filename = filename.replace("csv", "txt");
 		new File(path).mkdirs();
 		BufferedWriter writer = new BufferedWriter(new FileWriter(path + sep + filename));
 		writer.write(data);

@@ -1,11 +1,15 @@
 package org.uma.jmetal.problem.multiobjective.chetan;
 
-import java.util.Arrays;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.BitSet;
+import java.util.List;
 
 public class TestingFunctions {
 	
-	public static void main(String [] args)
+	public static void main(String [] args) throws IOException
 	{
 		//System.out.println(String.format("%02d", 101));
 //		Beam_Utils I = new Beam_Utils();
@@ -24,6 +28,9 @@ public class TestingFunctions {
 		{
 			System.out.println((int) (Math.random() * (5)));
 		}
+		//InputStream in = TestingFunctions.class.getResourceAsStream("/Users/chetan.arora/gameofcode/modelserver/io/sadrema/out/data/1552126543994-1eed99e7-061e-4e28-9203-c647428cd632-marker.csv");
+		List<String> str = Files.readAllLines(Paths.get("/Users/chetan.arora/gameofcode/modelserver/io/sadrema/out/data/1552126543994-1eed99e7-061e-4e28-9203-c647428cd632-marker.csv"));
+	    //InputStreamReader isr = new InputStreamReader(in);
 		
 	}
 

@@ -1,7 +1,9 @@
 package org.uma.jmetal.problem.multiobjective.chetan;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GridCell {
 	private String id;
@@ -12,7 +14,8 @@ public class GridCell {
 	public int totalCapacityDemand = 0;
 	public int totalPriorityDemand = 0;
 	public int num_Demands = 0;
-	public double priority_Demand_Ratio = 0.0; 
+	public double priority_Demand_Ratio = 0.0;
+	public Set<String> set_Users = new HashSet<>();
 	
 	public GridCell(String id, String localid)
 	{
@@ -37,5 +40,6 @@ public class GridCell {
 		avgPriority = totalPriorityDemand / (double)cell_Demands.size();
 		num_Demands = cell_Demands.size();
 		priority_Demand_Ratio += Math.pow(demand.getPriority(), 2) / (double)demand.getCapacity();
+		set_Users.add(demand.getUser());
 	}	
 }

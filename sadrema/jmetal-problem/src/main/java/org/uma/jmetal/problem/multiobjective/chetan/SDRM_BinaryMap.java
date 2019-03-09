@@ -4,10 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.uma.jmetal.problem.impl.AbstractBinaryProblem;
 import org.uma.jmetal.solution.BinarySolution;
@@ -26,12 +30,12 @@ public class SDRM_BinaryMap extends AbstractBinaryProblem {
   private int bits ; //Number of bits per beam
   protected int []        numberOfDemands ; //Number of demands
   public static List<HashMap<String, GridCell>> sat_gridcells;
-  private int num_ObjectivesperRegion = 4;
+  private int num_ObjectivesperRegion = 5;
   
   protected SDRM_ReadProperties prop;
   public OverallConstraintViolation<BinarySolution> overallConstraintViolationDegree ;
   public NumberOfViolatedConstraints<BinarySolution> numberOfViolatedConstraints ;
-  
+  public Set<String> sat_Users = new HashSet<>();
   /*
    * configuration Params
    */
@@ -111,10 +115,12 @@ public class SDRM_BinaryMap extends AbstractBinaryProblem {
     double total_priority = 0.0;
     int total_num_extraBeams = 0;
     int total_num_extraBits = 0;
+    int total_Users =0;
     
     double overallConstraintViolation = 0.0;
     int violatedConstraints = 0;
     List<Beam> list = new ArrayList<>();
+    
     for(int satellite=0; satellite<num_satellites; satellite++)
     {    	
     	BitSet bitset = solution.getVariableValue(satellite) ;
@@ -132,6 +138,7 @@ public class SDRM_BinaryMap extends AbstractBinaryProblem {
 	    	capacity[satellite] += beam.capacity;
 	    	demands[satellite] += beam.num_Demands;
 	    	priority[satellite] += beam.priority_Demand_Ratio;
+	    	sat_Users.addAll(beam.users_beam);
 	    }
 	    extrabits[satellite] = bitset_copy.cardinality() - bitset.cardinality();
 	    int extrabeams = list_Beams.size()-3;
@@ -154,33 +161,29 @@ public class SDRM_BinaryMap extends AbstractBinaryProblem {
     total_num_extraBeams+=num_extraBeams[satellite];
     total_priority+=priority[satellite];
     total_num_extraBits+=extrabits[satellite];
+    total_Users=sat_Users.size();
     BinarySet binSet = (BinarySet) bitset;
     solution.setVariableValue(satellite, binSet);
-//	    solution.setObjective(num_ObjectivesperRegion * satellite + 0, -1.0 * priority[satellite]);
-//	    solution.setObjective(num_ObjectivesperRegion * satellite + 1, -1.0 * capacity[satellite]);
-//	    solution.setObjective(num_ObjectivesperRegion * satellite + 2, -1.0 * demands[satellite]);   
-//	    solution.setObjective(num_ObjectivesperRegion * satellite + 3, 1.0 * num_extraBeams[satellite]);
     }
     solution.setObjective(0, -1.0 * total_priority);
     solution.setObjective(1, -1.0 * total_Capacity);
     solution.setObjective(2, -1.0 * total_Demands);
     solution.setObjective(3, 1.0 * total_num_extraBeams);
-    //solution.setObjective(4, 1.0 * total_num_extraBits); 
-    
-    
-    
+    solution.setObjective(4, -1.0 * total_Users); 
     overallConstraintViolationDegree.setAttribute(solution, overallConstraintViolation);
     numberOfViolatedConstraints.setAttribute(solution, violatedConstraints);    
   }
   
   private void readProblem(String file) throws IOException {
-    InputStream in = getClass().getResourceAsStream(file);
-    InputStreamReader isr = new InputStreamReader(in);
-    BufferedReader br = new BufferedReader(isr);
+//    InputStream in = getClass().getResourceAsStream(file);
+//    InputStreamReader isr = new InputStreamReader(in);
+//    BufferedReader br = new BufferedReader(isr);
+	  List<String> str = Files.readAllLines(Paths.get(file));
     try {
-    	String line;
+    	//String line;
     	int idx = 0;
-    		while((line = br.readLine()) !=null)
+    		//while((line = str.) !=null)
+    		for(String line: str)
     		{
     			String[] values = line.split(",");
     			//System.out.println(Integer.parseInt(values[0]));
@@ -206,7 +209,7 @@ public class SDRM_BinaryMap extends AbstractBinaryProblem {
 						break;
 					}    						
     			}
-    			SDRM_GridProperties.getInstance().setMax_Priority(Integer.parseInt(values[2].trim()), SatIdx);
+    			SDRM_GridProperties.getInstance().setMax_Priority(Integer.parseInt(values[2].trim()), SatIdx,values[3].trim());
     			grid_snapshot.get(SatIdx).set((num_rows * (row_idx-1)) + col_idx-(SatIdx*num_cols) - 1); //HARD-CODED
     			
     			HashMap<String, GridCell> gridcells = sat_gridcells.get(SatIdx);
