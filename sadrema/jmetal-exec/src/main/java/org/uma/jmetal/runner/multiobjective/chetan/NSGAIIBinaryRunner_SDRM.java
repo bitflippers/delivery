@@ -1,5 +1,6 @@
 package org.uma.jmetal.runner.multiobjective.chetan;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -45,6 +46,9 @@ public class NSGAIIBinaryRunner_SDRM extends AbstractAlgorithmRunner {
    * Invoking command:
   java org.uma.jmetal.runner.multiobjective.NSGAIIBinaryRunner problemName [referenceFront]
    */
+	private static String sep = File.separator;
+	private static String path = System.getProperty("user.home") + sep + "gameofcode" + sep + "modelserver" + sep + "io" + sep + "sadrema" + sep + "out" + sep +"data";
+	private static String filename;
   public static void main(String[] args) throws Exception {
     BinaryProblem problem;
     Algorithm<List<BinarySolution>> algorithm;
@@ -54,20 +58,15 @@ public class NSGAIIBinaryRunner_SDRM extends AbstractAlgorithmRunner {
     
     JMetalRandom.getInstance().setSeed(10L);
     
-    String problemName ;
+    String problemName = "org.uma.jmetal.problem.multiobjective.chetan.SDRM_BinaryMap";
     String referenceParetoFront = "" ;
-    if (args.length == 1) {
-      problemName = args[0];
-    } else if (args.length == 2) {
-      problemName = args[0] ;
-      referenceParetoFront = args[1] ;
-    } else {
-      problemName = "org.uma.jmetal.problem.multiobjective.chetan.SDRM_BinaryMap";
-      referenceParetoFront = "" ;
-    }
-
+    
+    filename = args[0];
+    String filePath = path + sep + filename; 
     //problem = (BinaryProblem) ProblemUtils.<BinarySolution> loadProblem(problemName);
-    problem = new SDRM_BinaryMap("/SDRM_files/1552120460216-24ea99c2-f442-4cb4-962b-04a24c87ab84-marker.csv");
+    //problem = new SDRM_BinaryMap("/SDRM_files/1552120460216-24ea99c2-f442-4cb4-962b-04a24c87ab84-marker.csv");
+    System.out.println(filePath);
+    problem = new SDRM_BinaryMap(filePath);
 
     double crossoverProbability = 0.9 ;
     crossover = new SinglePointCrossover(crossoverProbability) ;
@@ -111,12 +110,13 @@ public class NSGAIIBinaryRunner_SDRM extends AbstractAlgorithmRunner {
 			int sum = Arrays.stream(SDRM_GridProperties.getInstance().MAX_PRIORITY).sum();
 			int total_Markers = SDRM_GridProperties.getInstance().totalMarkers;
 			int capacity = Arrays.stream(SDRM_ReadProperties.getInstance().SAT_CAPACITY).sum();
+			int numUsers = SDRM_GridProperties.getInstance().setUsers.size();
 			
 			double o1_capacity = -1 * (double)o1.getObjective(1);
 			double o2_capacity = -1 * (double)o2.getObjective(1);
-			if((o1_capacity - o2_capacity) > capacity/20)
+			if((o1_capacity - o2_capacity) > capacity/10)
 				return 0;
-			else if((o2_capacity - o1_capacity) > capacity/20)
+			else if((o2_capacity - o1_capacity) > capacity/10)
 				return 1;
 			
 			double o1_priority = -1 * (double)o1.getObjective(0);
@@ -125,12 +125,14 @@ public class NSGAIIBinaryRunner_SDRM extends AbstractAlgorithmRunner {
 			double o2_markers = -1 * (double)o2.getObjective(2);
 			double o1_extrabeams = (double)o1.getObjective(3);
 			double o2_extrabeams = (double)o2.getObjective(3);
-			
-			double o1_score = o1_priority*12/(sum*sum) + o1_capacity*20/capacity + o1_markers*15/total_Markers - 8*o1_extrabeams;
-			double o2_score = o2_priority*12/(sum*sum) + o2_capacity*20/capacity + o2_markers*15/total_Markers - 8*o2_extrabeams;
+			double o1_users = (double)o1.getObjective(4);
+			double o2_users = (double)o2.getObjective(4);
+						
+			double o1_score = o1_priority*15/(sum*sum) + o1_capacity*22.0/(double)capacity + (o1_markers+o1_users)*10.0/(double)total_Markers;
+			double o2_score = o2_priority*15/(sum*sum) + o2_capacity*22.0/(double)capacity + (o2_markers+o2_users)*10.0/(double)total_Markers;
 			if(o1_score > o2_score)
 				return 0;
-				
+			
 			return 1;
 		}
 	};
@@ -151,8 +153,7 @@ public class NSGAIIBinaryRunner_SDRM extends AbstractAlgorithmRunner {
 			  joiner.add(("Sat_"+sat + " : " + "Beam_"+count +   " Capacity="+b.capacity + ": " + b.size() + " cells " + b).trim());
 			  count++;
 		  }
-	  }
-	  String filename = "1552120460216-24ea99c2-f442-4cb4-962b-04a24c87ab84-marker.txt".replace("marker", "beams");
+	  }	  
 	  WriteBeams.writeBeamData(joiner.toString(), filename);
   }
 }

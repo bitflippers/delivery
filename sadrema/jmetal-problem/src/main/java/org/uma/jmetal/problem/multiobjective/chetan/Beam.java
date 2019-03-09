@@ -1,7 +1,9 @@
 package org.uma.jmetal.problem.multiobjective.chetan;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.StringJoiner;
 
 public class Beam {
@@ -11,6 +13,7 @@ public class Beam {
 	public double priority_Demand_Ratio = 0.0;
 	public static int MAX_CAPACITY;
 	public static int MAX_CELLS;
+	public Set<String> users_beam = new HashSet<>();
 	private StringJoiner id_List = new StringJoiner(" , "); 
 	/*
 	 * Constructor
@@ -44,6 +47,7 @@ public class Beam {
 		num_Demands += cell.num_Demands;
 		priority_Demand_Ratio += cell.priority_Demand_Ratio;
 		id_List.add(cell.getId());
+		users_beam.addAll(cell.set_Users);
 		return true;
 	}
 	
