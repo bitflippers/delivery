@@ -14,6 +14,7 @@ let equatorLine = L.polyline([[0, -300], [0, 300]], {
 }).addTo(equatorLayer);
 
 let beamLayer = L.layerGroup();
+//beamLayer.stop('click');
 
 let icon = L.icon({
     iconUrl: 'assets/satellite-icon.png',
@@ -116,16 +117,20 @@ class Beam {
     this.l = L.layerGroup();
     this.l.addTo(beamLayer);
 
-    this.beam.footprint.setSADGREMAGridCell.forEach(n => {
+
+    this.beam.footprint.setSADREMAGridCell.forEach(n => {
       console.log('Draw circle', n);
-      let x = n.rowIndex * 8;
-      let y = n.columnIndex * 6;
-      L.circle([x, y], {
+      let lat = (n.rowIndex * 6) - 90;
+      let lon = (n.columnIndex * 8) - 180;
+      let c = L.circle([lat, lon], {
         color: 'blue',
         fillColor: '#008080',
         fillOpacity: 0.3,
-        radius: 100000
-      }).addTo(this.l);
+        radius: 330000
+      });
+      c.bindTooltip(this.beam.name+' '+n.rowIndex+' '+n.columnIndex + ' out ' + lat + ' ' + lon);
+      c.addTo(this.l);
+      //c.stop('click');
     })
   }
 }
@@ -139,8 +144,8 @@ export abstract class Sat {
     Object.values(satList).forEach(s => Sat.addSatellite(s));
     Map().control.addOverlay(equatorLayer, "Satelltes");
     Map().control.addOverlay(beamLayer, "Beams");
-    let x = new Beam({
-    });
+    // let x = new Beam({
+    // });
   }
 
   public static addSatellite(satellite) {

@@ -38,7 +38,7 @@ export class WorldMapComponent implements OnInit {
       data.forEach(plane => Planes.updatePlane(plane));
     });
     this.msg.satellites.subscribe( data => {
-      //console.log('Satellites', data);
+//      console.log('Satellites', data);
       data.forEach(satellite => {
         console.log('Satellite', satellite);
         Object.values(satellite.mapBeam).forEach(beam => {
