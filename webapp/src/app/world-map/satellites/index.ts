@@ -120,8 +120,8 @@ class Beam {
 
     this.beam.footprint.setSADREMAGridCell.forEach(n => {
       console.log('Draw circle', n);
-      let lat = (n.rowIndex * 6) - 90;
-      let lon = (n.columnIndex * 8) - 180;
+      let lon = (parseInt(n.columnIndex) * 6) - 180;
+      let lat = (parseInt(n.rowIndex) * 8) - 90;
       let c = L.circle([lat, lon], {
         color: 'blue',
         fillColor: '#008080',
