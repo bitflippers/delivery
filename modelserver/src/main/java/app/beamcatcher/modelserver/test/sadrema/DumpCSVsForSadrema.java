@@ -37,12 +37,12 @@ public class DumpCSVsForSadrema {
 
 		Test.main(args);
 		final World world = WorldSingleton.INSTANCE;
-		final StringBuffer markersCSVFile = WorldToMarkersCSVFileMapper.toMarkersCSVFile(world);
+		final StringBuffer markersCSVFile = WorldToMarkersCSVFileMapper.toMarkersCSVFile();
 
 		final UUID uuid = CSVWriter.writeToFiles(markersCSVFile);
 
-		final Integer totalRequestedCapacity = doPNG(uuid, world);
-		final Integer totalSatelliteCapacity = getTotalSatelliteCapacity(world);
+		final Integer totalRequestedCapacity = doPNG(uuid);
+		final Integer totalSatelliteCapacity = getTotalSatelliteCapacity();
 		final Integer numberOfSatellites = world.getMapSatellite().size();
 
 		System.out.println("Total requested capacity: " + totalRequestedCapacity);
@@ -51,9 +51,9 @@ public class DumpCSVsForSadrema {
 
 	}
 
-	private static Integer doPNG(final UUID uuid, final World pWorld) {
+	private static Integer doPNG(final UUID uuid) {
 		final Set<Marker> setMarker = new HashSet<Marker>();
-		final Map<UUID, User> mapUser = pWorld.getMapUser();
+		final Map<UUID, User> mapUser = WorldSingleton.INSTANCE.getMapUser();
 		final Set<UUID> setUserUUID = mapUser.keySet();
 		Integer totalRequestedCapacity = 0;
 		for (UUID userUUID : setUserUUID) {
@@ -71,8 +71,8 @@ public class DumpCSVsForSadrema {
 		return totalRequestedCapacity;
 	}
 
-	private static Integer getTotalSatelliteCapacity(final World pWorld) {
-		final Map<UUID, Satellite> mapSatellite = pWorld.getMapSatellite();
+	private static Integer getTotalSatelliteCapacity() {
+		final Map<UUID, Satellite> mapSatellite = WorldSingleton.INSTANCE.getMapSatellite();
 		final Set<UUID> setSatelliteUUID = mapSatellite.keySet();
 		Integer totalSatelliteCapacity = 0;
 		for (UUID satelliteUUID : setSatelliteUUID) {

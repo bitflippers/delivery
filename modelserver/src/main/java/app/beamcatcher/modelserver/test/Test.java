@@ -35,7 +35,7 @@ public class Test {
 		}
 	}
 
-	public static void addMarkers(final Integer pMarkersPerUserRatio, final World pWorld) {
+	public static void addMarkers(final Integer pMarkersPerUserRatio) {
 
 		final Integer markersToAddPerUser = Configuration.USER_MARKER_MAX / pMarkersPerUserRatio;
 
@@ -49,18 +49,17 @@ public class Test {
 				Double pLongitude = randomLocation.getLongitude();
 				Integer pRequestedUnits = Util.getRandomRequestedUnits();
 				Integer pPriority = Util.getRandomPriority();
-				pWorld.addMarkerToUser(username, pLatitude, pLongitude, pRequestedUnits, pPriority);
+				WorldSingleton.INSTANCE.addMarkerToUser(username, pLatitude, pLongitude, pRequestedUnits, pPriority);
 				System.out.println("Added marker (" + i + "/" + markersToAddPerUser + ") for user " + username);
 			}
 
 		}
 	}
 
-	public static void addBeams(final Integer pNumberBeamsRatio, final Integer pCapacityUsageDistribution,
-			final World pWorld) {
+	public static void addBeams(final Integer pNumberBeamsRatio, final Integer pCapacityUsageDistribution) {
 		final Integer beamsToAddPerSatellite = Configuration.SATELLITE_MAXIMUM_NUMBER_OF_BEAMS / pNumberBeamsRatio;
 		System.out.println("Will add " + beamsToAddPerSatellite + " beams per satellite");
-		final Map<UUID, Satellite> mapSatellite = pWorld.getMapSatellite();
+		final Map<UUID, Satellite> mapSatellite = WorldSingleton.INSTANCE.getMapSatellite();
 		final Set<UUID> keySet = mapSatellite.keySet();
 		final Integer totalNumberOfSatellites = keySet.size();
 		Integer numberOfProcessedSatellites = 0;
@@ -81,7 +80,7 @@ public class Test {
 				System.out.println("Added beam '" + beamName + "' (" + i + "/" + beamsToAddPerSatellite + ") : units: "
 						+ unitsPerBeam);
 			}
-			pWorld.addBeamsToSatellite((String) satelliteName, setBeam);
+			WorldSingleton.INSTANCE.addBeamsToSatellite((String) satelliteName, setBeam);
 			numberOfProcessedSatellites++;
 		}
 	}
@@ -126,8 +125,8 @@ public class Test {
 		addSatellites(numberOfSatellites, capacityPerSatellite);
 		final World world = WorldSingleton.INSTANCE;
 		addUsers(numberOfUsers);
-		addMarkers(markersPerUserRatio, world);
-		addBeams(numberBeamsRatio, capacityUsageDistribution, world);
+		addMarkers(markersPerUserRatio);
+		addBeams(numberBeamsRatio, capacityUsageDistribution);
 
 		USERS.clear();
 

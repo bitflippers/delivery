@@ -77,7 +77,7 @@ public class RandomEventGenerator implements Runnable {
 				if (!eventAlreadyPublished && atLeastOneUser) {
 					// USER_EXITS
 					if (randomPercentage(8) && atLeastOneUser) {
-						final UUID userThatExitedUUID = getRandomExistingUser(world);
+						final UUID userThatExitedUUID = getRandomExistingUser();
 						final String userThatExited = (String) WorldSingleton.INSTANCE.getMapUser()
 								.get(userThatExitedUUID).getUsername();
 						final EventUserLeftMessage eventUserLeftMessage = new EventUserLeftMessage();
@@ -91,7 +91,7 @@ public class RandomEventGenerator implements Runnable {
 				if (randomPercentage(4) && atLeastOneUser) {
 					// MARKER_ADDED
 					String eventIdentifier = Configuration.EVENT_IDENTIFIER_USER_PLACED_MARKER;
-					UUID userUUID = getRandomExistingUser(world);
+					UUID userUUID = getRandomExistingUser();
 					final User user = WorldSingleton.INSTANCE.getMapUser().get(userUUID);
 					final CharSequence username = user.getUsername();
 					final Integer numberOfUserMarkers = user.getMapMarker().size();
@@ -228,8 +228,8 @@ public class RandomEventGenerator implements Runnable {
 
 	}
 
-	private static UUID getRandomExistingUser(final World pWorld) {
-		final Map<UUID, User> mapUser = pWorld.getMapUser();
+	private static UUID getRandomExistingUser() {
+		final Map<UUID, User> mapUser = WorldSingleton.INSTANCE.getMapUser();
 		final Set<UUID> setUserUUID = mapUser.keySet();
 		final Object[] arrayUSerUUID = setUserUUID.toArray();
 		final Integer totalNumberOfUsers = arrayUSerUUID.length;

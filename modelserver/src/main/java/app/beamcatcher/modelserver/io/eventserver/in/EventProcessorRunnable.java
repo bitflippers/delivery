@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import app.beamcatcher.modelserver.configuration.Configuration;
 import app.beamcatcher.modelserver.io.WorldSemaphore;
-import app.beamcatcher.modelserver.model.World;
 import app.beamcatcher.modelserver.persistence.WorldSingleton;
 import app.beamcatcher.modelserver.util.ModelValidator;
 
@@ -71,9 +70,8 @@ public class EventProcessorRunnable implements Runnable {
 
 					// Process event
 					logger.info("Processing event...");
-					final World world = WorldSingleton.INSTANCE;
-					EventProcessor.processEvent(dataFileContents, eventIdentifier, world);
-					postEventActions(mostRecentSignalEventFileAbsolutePath, dataFileAbsolutePath, world);
+					EventProcessor.processEvent(dataFileContents, eventIdentifier);
+					postEventActions(mostRecentSignalEventFileAbsolutePath, dataFileAbsolutePath);
 					logger.info("Done !");
 
 					logger.info("EventProcessor finished work ! realising lock !!!");
@@ -96,10 +94,10 @@ public class EventProcessorRunnable implements Runnable {
 	}
 
 	private void postEventActions(final String pMostRecentSignalEventFileAbsolutePath,
-			final String pDataFileAbsolutePath, final World pWorld) {
+			final String pDataFileAbsolutePath) {
 
 		logger.info("Validating model...");
-		ModelValidator.validate(pWorld);
+		ModelValidator.validate(WorldSingleton.INSTANCE);
 		// Services.performTimedOperations(WorldSingleton.INSTANCE);
 		// SadremaHelper.mutateBeams(WorldSingleton.INSTANCE);
 

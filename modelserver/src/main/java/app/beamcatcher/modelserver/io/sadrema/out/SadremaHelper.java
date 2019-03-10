@@ -14,7 +14,7 @@ import org.uma.jmetal.runner.multiobjective.chetan.NSGAIIBinaryRunner_SDRM;
 import app.beamcatcher.modelserver.configuration.Configuration;
 import app.beamcatcher.modelserver.model.Marker;
 import app.beamcatcher.modelserver.model.User;
-import app.beamcatcher.modelserver.model.World;
+import app.beamcatcher.modelserver.persistence.WorldSingleton;
 import app.beamcatcher.modelserver.test.sadrema.awt.MGRSImageSaver;
 
 public class SadremaHelper {
@@ -51,9 +51,9 @@ public class SadremaHelper {
 
 	}
 
-	private static Integer doPNG(final UUID uuid, final World pWorld) {
+	private static Integer doPNG(final UUID uuid) {
 		final Set<Marker> setMarker = new HashSet<Marker>();
-		final Map<UUID, User> mapUser = pWorld.getMapUser();
+		final Map<UUID, User> mapUser = WorldSingleton.INSTANCE.getMapUser();
 		final Set<UUID> setUserUUID = mapUser.keySet();
 		Integer totalRequestedCapacity = 0;
 		for (UUID userUUID : setUserUUID) {

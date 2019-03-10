@@ -56,8 +56,7 @@ public class SadremaSolutionRetrieverRunnable implements Runnable {
 
 					logger.info("Writing CSVs...");
 
-					final StringBuffer markersCSVInput = WorldToMarkersCSVFileMapper
-							.toMarkersCSVFile(WorldSingleton.INSTANCE);
+					final StringBuffer markersCSVInput = WorldToMarkersCSVFileMapper.toMarkersCSVFile();
 
 					CSVWriter.writeToFiles(markersCSVInput);
 
