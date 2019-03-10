@@ -68,3 +68,6 @@ package-lock.json
 .idea/
 .angulardoc.json
 node/public/
+
+#david
+**/target/
