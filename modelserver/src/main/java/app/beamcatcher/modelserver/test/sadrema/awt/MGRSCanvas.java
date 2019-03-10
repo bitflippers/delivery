@@ -9,6 +9,10 @@ import app.beamcatcher.modelserver.model.Marker;
 
 public class MGRSCanvas extends Canvas {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final Integer NUMBER_OF_MGRS_COLUMNS_AT_100_KM2_RESOLUTION = 60;
 	private static final Integer NUMBER_OF_MGRS_ROWS_AT_100_KM2_RESOLUTION = 20;
 	private static final Integer SCALE_DOWN_FACTOR = 1;

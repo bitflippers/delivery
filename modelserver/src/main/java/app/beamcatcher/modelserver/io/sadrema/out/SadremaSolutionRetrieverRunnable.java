@@ -3,13 +3,15 @@ package app.beamcatcher.modelserver.io.sadrema.out;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.uma.jmetal.runner.multiobjective.chetan.NSGAIIBinaryRunner_SDRM;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import app.beamcatcher.modelserver.configuration.Configuration;
 import app.beamcatcher.modelserver.io.WorldSemaphore;
@@ -19,24 +21,26 @@ import app.beamcatcher.modelserver.model.SADREMAGridCell;
 import app.beamcatcher.modelserver.model.User;
 import app.beamcatcher.modelserver.persistence.WorldSingleton;
 
-public class SadremaSolutionRetriever implements Runnable {
+public class SadremaSolutionRetrieverRunnable implements Runnable {
+
+	private static final Logger logger = LoggerFactory.getLogger(SadremaSolutionRetrieverRunnable.class);
 
 	public void run() {
 
-		System.out.println("SadremaSolutionRetriever started !");
-		System.out.println("SadremaSolutionRetriever rate in milliseconds: "
+		logger.info("SadremaSolutionRetriever started !");
+		logger.info("SadremaSolutionRetriever rate in milliseconds: "
 				+ Configuration.SADREMA_SOLUTION_RETRIEVAL_FREQUENCY_IN_MILLISECONDS);
 
-		System.out.println("Starting polling !");
+		logger.info("Starting polling !");
 
 		try {
 
 			do {
 
-				System.out.println("SadremaSolutionRetriever requesting lock...");
+				logger.info("SadremaSolutionRetriever requesting lock...");
 				WorldSemaphore.semaphore.acquire();
-				System.out.println("SadremaSolutionRetriever acquired lock !!!");
-				System.out.println("SadremaSolutionRetriever getting to work...");
+				logger.info("SadremaSolutionRetriever acquired lock !!!");
+				logger.info("SadremaSolutionRetriever getting to work...");
 
 				final Map<UUID, User> mapUser = WorldSingleton.INSTANCE.getMapUser();
 				final Set<UUID> setUUIDUser = mapUser.keySet();
@@ -46,50 +50,20 @@ public class SadremaSolutionRetriever implements Runnable {
 					totalMarkers = totalMarkers + user.getMapMarker().size();
 				}
 
-				System.out.println("Total markers: " + totalMarkers);
+				logger.info("Total markers: " + totalMarkers);
 
 				if (totalMarkers > 0) {
 
-					System.err.println("Writing CSVs...");
+					logger.info("Writing CSVs...");
 
 					final StringBuffer markersCSVInput = WorldToMarkersCSVFileMapper
 							.toMarkersCSVFile(WorldSingleton.INSTANCE);
-					final StringBuffer satellitesCSVInput = WorldToSatellitesCSVFileMapper
-							.toSatellitesCSVFile(WorldSingleton.INSTANCE);
-					CSVWriter.writeToFiles(markersCSVInput, satellitesCSVInput);
 
-					System.err.println("Done !");
+					CSVWriter.writeToFiles(markersCSVInput);
 
-					// Invoking sadrema...
-					long startTime = System.currentTimeMillis();
+					logger.info("Done !");
 
-					System.err.println("Invoking SADREMA !!!!!!!!!!");
-
-					String[] args = new String[] { "markers.csv" };
-					NSGAIIBinaryRunner_SDRM.main(args);
-
-					System.err.println("SADREMA Invoked...");
-
-					// Wait for result
-					Boolean sadremaFinished = Boolean.FALSE;
-
-					final String fileToLookFor = Configuration.MODEL_SERVER_IO_DIR_SADREMA_IN_DATA + "/beams.txt";
-
-					System.err.println("Waiting for: " + fileToLookFor + "...");
-
-					final File beamsTXTFile = new File(fileToLookFor);
-					do {
-						System.err.println("Waiting for: " + fileToLookFor + "...");
-						sadremaFinished = beamsTXTFile.exists();
-						Thread.sleep(1000);
-					} while (!sadremaFinished);
-
-					long stopTime = System.currentTimeMillis();
-					long elapsedTime = stopTime - startTime;
-
-					System.err.println("Sadrema finished in " + elapsedTime + " milliseconds !");
-
-					// TODO: read beams, map, put in model
+					final File beamsTXTFile = SadremaHelper.obtainSolution();
 
 					applyBeams(beamsTXTFile);
 
@@ -100,13 +74,13 @@ public class SadremaSolutionRetriever implements Runnable {
 					input.delete();
 
 				} else {
-					System.out.println("No markers, nothing to do !");
+					logger.info("No markers, nothing to do !");
 				}
 
-				System.out.println("SadremaSolutionRetriever finished work ! realising lock !!!");
+				logger.info("SadremaSolutionRetriever finished work ! realising lock !!!");
 				WorldSemaphore.semaphore.release();
 
-				System.out.println("Sleeping for " + Configuration.SADREMA_SOLUTION_RETRIEVAL_FREQUENCY_IN_MILLISECONDS
+				logger.info("Sleeping for " + Configuration.SADREMA_SOLUTION_RETRIEVAL_FREQUENCY_IN_MILLISECONDS
 						+ " milliseconds...");
 				Thread.sleep(Configuration.SADREMA_SOLUTION_RETRIEVAL_FREQUENCY_IN_MILLISECONDS);
 
@@ -121,19 +95,19 @@ public class SadremaSolutionRetriever implements Runnable {
 	}
 
 	private void applyBeams(final File pFile) {
-		System.err.println("Processing beams from Sadrema:");
+		logger.info("Processing beams from Sadrema:");
+		BufferedReader br = null;
 		try {
-
+			br = new BufferedReader(new FileReader(pFile));
 			final Map<String, Set<Beam>> beamsPerSat = new HashMap<String, Set<Beam>>();
 
 			beamsPerSat.put(Configuration.WORLD_SATELLITE_1_NAME, new HashSet<Beam>());
 			beamsPerSat.put(Configuration.WORLD_SATELLITE_2_NAME, new HashSet<Beam>());
 			beamsPerSat.put(Configuration.WORLD_SATELLITE_3_NAME, new HashSet<Beam>());
 
-			BufferedReader br = new BufferedReader(new FileReader(pFile));
 			String line;
 			while ((line = br.readLine()) != null) {
-				System.err.println(line);
+				logger.info(line);
 
 				final String[] splitByColon = line.split(":");
 				String satelliteName = splitByColon[0].trim();
@@ -142,16 +116,16 @@ public class SadremaSolutionRetriever implements Runnable {
 				String capacityWithEquals = beamAndCapacity[1];
 				String[] yaSplit = capacityWithEquals.split("=");
 				String capacity = yaSplit[1];
-				System.err.println("SatelliteName: " + satelliteName);
-				System.err.println("BeamName: " + beamName);
-				System.err.println("Capacity: " + capacity);
+				logger.info("SatelliteName: " + satelliteName);
+				logger.info("BeamName: " + beamName);
+				logger.info("Capacity: " + capacity);
 				String[] cellsSplit = line.split("cells");
 				String cellsRawComma = cellsSplit[1];
-				System.err.println("Cells: " + cellsRawComma);
+				logger.info("Cells: " + cellsRawComma);
 				String[] cells = cellsRawComma.split(",");
 				for (int i = 0; i < cells.length; i++) {
 					String cellTemp = cells[i].trim();
-					System.err.println("Cell (" + i + "/" + cells.length + "): " + cellTemp);
+					logger.info("Cell (" + i + "/" + cells.length + "): " + cellTemp);
 				}
 				final Beam beam = getBeam(beamName, capacity, cells);
 				if (satelliteName.equals(Configuration.WORLD_SATELLITE_1_NAME)) {
@@ -185,17 +159,17 @@ public class SadremaSolutionRetriever implements Runnable {
 				}
 			}
 
-			System.err.println("Beams on satelite 1:");
+			logger.info("Beams on satelite 1:");
 			for (Beam beam : sat1Beam) {
-				System.err.println(beam);
+				logger.info(beam.toString());
 			}
-			System.err.println("Beams on satelite 2:");
+			logger.info("Beams on satelite 2:");
 			for (Beam beam : sat2Beam) {
-				System.err.println(beam);
+				logger.info(beam.toString());
 			}
-			System.err.println("Beams on satelite 3:");
+			logger.info("Beams on satelite 3:");
 			for (Beam beam : sat3Beam) {
-				System.err.println(beam);
+				logger.info(beam.toString());
 			}
 
 			// Apply to model
@@ -206,6 +180,13 @@ public class SadremaSolutionRetriever implements Runnable {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(-1);
+		} finally {
+			try {
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.exit(-1);
+			}
 		}
 
 	}

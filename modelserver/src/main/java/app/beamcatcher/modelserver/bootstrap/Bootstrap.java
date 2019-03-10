@@ -8,10 +8,10 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 
 import app.beamcatcher.modelserver.configuration.Configuration;
-import app.beamcatcher.modelserver.io.eventserver.in.EventProcessor;
+import app.beamcatcher.modelserver.io.eventserver.in.EventProcessorRunnable;
+import app.beamcatcher.modelserver.io.eventserver.in.simulator.RandomEventGenerator;
 import app.beamcatcher.modelserver.io.eventserver.out.HTTPEndpointHandler;
-import app.beamcatcher.modelserver.io.sadrema.out.SadremaSolutionRetriever;
-import app.beamcatcher.modelserver.test.eventserver.RandomEventGenerator;
+import app.beamcatcher.modelserver.io.sadrema.out.SadremaSolutionRetrieverRunnable;
 
 public class Bootstrap {
 	public static void main(String[] args) throws Exception {
@@ -26,7 +26,7 @@ public class Bootstrap {
 	}
 
 	private static void startSadremaSolutionRetriever() {
-		final SadremaSolutionRetriever sadremaSolutionRetriever = new SadremaSolutionRetriever();
+		final SadremaSolutionRetrieverRunnable sadremaSolutionRetriever = new SadremaSolutionRetrieverRunnable();
 		final Thread eventProcessorThread = new Thread(sadremaSolutionRetriever);
 		eventProcessorThread.setName("SADREMA-SOLUTION-RETRIEVER");
 		eventProcessorThread.start();
@@ -50,7 +50,7 @@ public class Bootstrap {
 	}
 
 	private static void startEventProcessor() {
-		EventProcessor eventProcessor = new EventProcessor();
+		EventProcessorRunnable eventProcessor = new EventProcessorRunnable();
 		final Thread eventProcessorThread = new Thread(eventProcessor);
 		eventProcessorThread.setName("EVENT-PROCESSOR-THREAD");
 		eventProcessorThread.start();

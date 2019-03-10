@@ -10,8 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 
 import app.beamcatcher.modelserver.configuration.Configuration;
-import app.beamcatcher.modelserver.io.eventserver.in.EventMarkerPlacedMessage;
-import app.beamcatcher.modelserver.io.eventserver.in.EventUserGrantedAccessMessage;
 import app.beamcatcher.modelserver.model.SADREMAGridCell;
 
 public class Util {
@@ -164,15 +162,4 @@ public class Util {
 		return System.getProperty("user.home");
 	}
 
-	public static void writeTestEventServerEvent(final Object pObject) {
-
-		if (pObject instanceof EventMarkerPlacedMessage) {
-			EventMarkerPlacedMessage eventMarkerPlacedMessage = (EventMarkerPlacedMessage) pObject;
-		} else if (pObject instanceof EventUserGrantedAccessMessage) {
-			EventUserGrantedAccessMessage eventUserGrantedAccessMessage = (EventUserGrantedAccessMessage) pObject;
-		} else {
-			throw new IllegalArgumentException();
-		}
-
-	}
 }

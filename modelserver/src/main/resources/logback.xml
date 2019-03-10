@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+	<appender name="STDOUT-SYSTEM"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [SYSTEM] %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="STDOUT-EVENTS"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [EVENTS] %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="STDOUT-SADREMA"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [SADREMA] %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<logger
+		name="app.beamcatcher.modelserver.io.eventserver.in.EventProcessor"
+		level="INFO" additivity="false">
+		<appender-ref ref="STDOUT-EVENTS" />
+	</logger>
+
+	<logger
+		name="app.beamcatcher.modelserver.io.sadrema.out.SadremaHelper"
+		level="INFO" additivity="false">
+		<appender-ref ref="STDOUT-SADREMA" />
+	</logger>
+
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT-SYSTEM" />
+	</root>
+
+</configuration>

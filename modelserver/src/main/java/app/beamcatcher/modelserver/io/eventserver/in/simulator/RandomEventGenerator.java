@@ -1,4 +1,4 @@
-package app.beamcatcher.modelserver.test.eventserver;
+package app.beamcatcher.modelserver.io.eventserver.in.simulator;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.javafaker.Faker;
 
@@ -28,33 +31,35 @@ import app.beamcatcher.modelserver.util.Util;
 
 public class RandomEventGenerator implements Runnable {
 
+	private static final Logger logger = LoggerFactory.getLogger(RandomEventGenerator.class);
+
 	private static final Integer EVENT_PRODUCTION_RATE_IN_MILLISECONDS = 2000;
 
 	public void run() {
 
-		System.out.println("Started random event generator !");
-		System.out.println("Event generation every " + EVENT_PRODUCTION_RATE_IN_MILLISECONDS + " milliseconds!");
+		logger.info("Started random event generator !");
+		logger.info("Event generation every " + EVENT_PRODUCTION_RATE_IN_MILLISECONDS + " milliseconds!");
 
 		try {
 			do {
 
-				System.out.println("RandomEventGenerator requesting lock...");
+				logger.info("RandomEventGenerator requesting lock...");
 				WorldSemaphore.semaphore.acquire();
-				System.out.println("RandomEventGenerator acquired lock !!!");
-				System.out.println("RandomEventGenerator getting to work...");
+				logger.info("RandomEventGenerator acquired lock !!!");
+				logger.info("RandomEventGenerator getting to work...");
 
 				final World world = WorldSingleton.INSTANCE;
 
 				final Boolean atLeastOneUser = (world.getMapUser() != null) && (!world.getMapUser().isEmpty());
 
 				final Integer totalNumberOfUsers = world.getMapUser().keySet().size();
-				System.out.println("RandomEventGenerator --> Total users: " + totalNumberOfUsers);
+				logger.info("RandomEventGenerator --> Total users: " + totalNumberOfUsers);
 
 				Boolean eventAlreadyPublished = Boolean.FALSE;
 
 				// USER_JOINS
 				if (totalNumberOfUsers < Configuration.WORLD_MAXIMUM_NUMBER_OF_USERS) {
-					System.err.println("TOTALUSERS " + totalNumberOfUsers);
+					logger.info("TOTALUSERS " + totalNumberOfUsers);
 					if (randomPercentage(4)) {
 						final String username = new Faker().gameOfThrones().character();
 						final EventUserGrantedAccessMessage eventUserGrantedAccessMessage = new EventUserGrantedAccessMessage();
@@ -108,10 +113,10 @@ public class RandomEventGenerator implements Runnable {
 					}
 				}
 
-				System.out.println("RandomEventGenerator finished work, releasing lock !!");
+				logger.info("RandomEventGenerator finished work, releasing lock !!");
 				WorldSemaphore.semaphore.release();
 
-				System.out.println("Sleeping for " + EVENT_PRODUCTION_RATE_IN_MILLISECONDS + " milliseconds...");
+				logger.info("Sleeping for " + EVENT_PRODUCTION_RATE_IN_MILLISECONDS + " milliseconds...");
 				Thread.sleep(EVENT_PRODUCTION_RATE_IN_MILLISECONDS);
 
 			} while (true);
@@ -131,7 +136,7 @@ public class RandomEventGenerator implements Runnable {
 		// TODO: HACK: No idea what is going on here
 		if (numberOfFreeSlots > 0) {
 			final Random random = new Random();
-			System.err.println("FREESLOTS " + numberOfFreeSlots);
+			logger.info("FREESLOTS " + numberOfFreeSlots);
 			final Integer randomSlotIndex = random.nextInt(numberOfFreeSlots);
 			final Slot slot = (Slot) arrayOfFreeSlot[randomSlotIndex];
 			return slot.getIdentifier();
@@ -216,10 +221,10 @@ public class RandomEventGenerator implements Runnable {
 			System.exit(-1);
 		}
 
-		System.out.println("Generated:");
-		System.out.println(filename);
-		System.out.println(filenameSignal);
-		System.out.println(jsonString);
+		logger.info("Generated:");
+		logger.info(filename);
+		logger.info(filenameSignal);
+		logger.info(jsonString);
 
 	}
 

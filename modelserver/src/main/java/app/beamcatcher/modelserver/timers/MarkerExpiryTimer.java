@@ -4,6 +4,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import app.beamcatcher.modelserver.configuration.Configuration;
 import app.beamcatcher.modelserver.io.WorldSemaphore;
 import app.beamcatcher.modelserver.model.User;
@@ -11,22 +14,24 @@ import app.beamcatcher.modelserver.persistence.WorldSingleton;
 
 public class MarkerExpiryTimer implements Runnable {
 
-	public void run() {
-		System.out.println("MarkerExpiryTimer started !");
-		System.out.println("MarkerExpiryTimer rate in milliseconds: "
-				+ Configuration.MARKER_EXPIRY_TIMER_FREQUENCY_IN_MILLISECONDS);
-		System.out.println("Marker timeout in milliseconds: " + Configuration.MARKER_TIMEOUT);
+	private static final Logger logger = LoggerFactory.getLogger(MarkerExpiryTimer.class);
 
-		System.out.println("Starting timer !");
+	public void run() {
+		logger.info("MarkerExpiryTimer started !");
+		logger.info("MarkerExpiryTimer rate in milliseconds: "
+				+ Configuration.MARKER_EXPIRY_TIMER_FREQUENCY_IN_MILLISECONDS);
+		logger.info("Marker timeout in milliseconds: " + Configuration.MARKER_TIMEOUT);
+
+		logger.info("Starting timer !");
 
 		try {
 
 			do {
 
-				System.out.println("MarkerExpiryTimer requesting lock...");
+				logger.info("MarkerExpiryTimer requesting lock...");
 				WorldSemaphore.semaphore.acquire();
-				System.out.println("MarkerExpiryTimer acquired lock !!!");
-				System.out.println("MarkerExpiryTimer getting to work...");
+				logger.info("MarkerExpiryTimer acquired lock !!!");
+				logger.info("MarkerExpiryTimer getting to work...");
 
 				final Map<UUID, User> mapUser = WorldSingleton.INSTANCE.getMapUser();
 				final Set<UUID> setUUIDUser = mapUser.keySet();
@@ -36,18 +41,18 @@ public class MarkerExpiryTimer implements Runnable {
 					totalMarkers = totalMarkers + user.getMapMarker().size();
 				}
 
-				System.out.println("Total markers: " + totalMarkers);
+				logger.info("Total markers: " + totalMarkers);
 
 				if (totalMarkers > 0) {
 
 				} else {
-					System.out.println("No markers, nothing to do !");
+					logger.info("No markers, nothing to do !");
 				}
 
-				System.out.println("MarkerExpiryTimer finished work ! realising lock !!!");
+				logger.info("MarkerExpiryTimer finished work ! realising lock !!!");
 				WorldSemaphore.semaphore.release();
 
-				System.out.println("Sleeping for " + Configuration.SADREMA_SOLUTION_RETRIEVAL_FREQUENCY_IN_MILLISECONDS
+				logger.info("Sleeping for " + Configuration.SADREMA_SOLUTION_RETRIEVAL_FREQUENCY_IN_MILLISECONDS
 						+ " milliseconds...");
 				Thread.sleep(Configuration.SADREMA_SOLUTION_RETRIEVAL_FREQUENCY_IN_MILLISECONDS);
 

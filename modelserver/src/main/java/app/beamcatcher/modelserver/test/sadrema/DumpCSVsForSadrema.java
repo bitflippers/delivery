@@ -12,7 +12,6 @@ import app.beamcatcher.modelserver.bootstrap.Bootstrap;
 import app.beamcatcher.modelserver.configuration.Configuration;
 import app.beamcatcher.modelserver.io.sadrema.out.CSVWriter;
 import app.beamcatcher.modelserver.io.sadrema.out.WorldToMarkersCSVFileMapper;
-import app.beamcatcher.modelserver.io.sadrema.out.WorldToSatellitesCSVFileMapper;
 import app.beamcatcher.modelserver.model.Marker;
 import app.beamcatcher.modelserver.model.Satellite;
 import app.beamcatcher.modelserver.model.User;
@@ -22,6 +21,7 @@ import app.beamcatcher.modelserver.test.Test;
 import app.beamcatcher.modelserver.test.sadrema.awt.MGRSImageSaver;
 
 public class DumpCSVsForSadrema {
+
 //java -cp <jar>.jar app.beamcatcher.modelserver.test.DumpCSVsForSadrema 3 20 10 1 5 5
 
 	public static void main(String[] args) throws JsonProcessingException {
@@ -38,9 +38,8 @@ public class DumpCSVsForSadrema {
 		Test.main(args);
 		final World world = WorldSingleton.INSTANCE;
 		final StringBuffer markersCSVFile = WorldToMarkersCSVFileMapper.toMarkersCSVFile(world);
-		final StringBuffer satellitesCSVFile = WorldToSatellitesCSVFileMapper.toSatellitesCSVFile(world);
 
-		final UUID uuid = CSVWriter.writeToFiles(markersCSVFile, satellitesCSVFile);
+		final UUID uuid = CSVWriter.writeToFiles(markersCSVFile);
 
 		final Integer totalRequestedCapacity = doPNG(uuid, world);
 		final Integer totalSatelliteCapacity = getTotalSatelliteCapacity(world);

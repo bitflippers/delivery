@@ -1,4 +1,4 @@
-package app.beamcatcher.modelserver.test.eventserver;
+package app.beamcatcher.modelserver.io.eventserver.in.simulator;
 
 public class RandomEventGeneratorRunner {
 	public static void main(String[] args) {
