@@ -19,7 +19,10 @@ import app.beamcatcher.modelserver.model.Beam;
 import app.beamcatcher.modelserver.model.Footprint;
 import app.beamcatcher.modelserver.model.SADREMAGridCell;
 import app.beamcatcher.modelserver.model.User;
+import app.beamcatcher.modelserver.model.World;
 import app.beamcatcher.modelserver.persistence.WorldSingleton;
+import app.beamcatcher.modelserver.util.ModelValidator;
+import app.beamcatcher.modelserver.util.Util;
 
 public class SadremaSolutionRetrieverRunnable implements Runnable {
 
@@ -36,11 +39,7 @@ public class SadremaSolutionRetrieverRunnable implements Runnable {
 		try {
 
 			do {
-
-				logger.info("SadremaSolutionRetriever requesting lock...");
 				WorldSemaphore.semaphore.acquire();
-				logger.info("SadremaSolutionRetriever acquired lock !!!");
-				logger.info("SadremaSolutionRetriever getting to work...");
 
 				final Map<UUID, User> mapUser = WorldSingleton.INSTANCE.getMapUser();
 				final Set<UUID> setUUIDUser = mapUser.keySet();
@@ -50,17 +49,11 @@ public class SadremaSolutionRetrieverRunnable implements Runnable {
 					totalMarkers = totalMarkers + user.getMapMarker().size();
 				}
 
-				logger.info("Total markers: " + totalMarkers);
-
 				if (totalMarkers > 0) {
-
-					logger.info("Writing CSVs...");
 
 					final StringBuffer markersCSVInput = WorldToMarkersCSVFileMapper.toMarkersCSVFile();
 
 					CSVWriter.writeToFiles(markersCSVInput);
-
-					logger.info("Done !");
 
 					final File beamsTXTFile = SadremaHelper.obtainSolution();
 
@@ -72,15 +65,10 @@ public class SadremaSolutionRetrieverRunnable implements Runnable {
 
 					input.delete();
 
-				} else {
-					logger.info("No markers, nothing to do !");
 				}
 
-				logger.info("SadremaSolutionRetriever finished work ! realising lock !!!");
 				WorldSemaphore.semaphore.release();
 
-				logger.info("Sleeping for " + Configuration.SADREMA_SOLUTION_RETRIEVAL_FREQUENCY_IN_MILLISECONDS
-						+ " milliseconds...");
 				Thread.sleep(Configuration.SADREMA_SOLUTION_RETRIEVAL_FREQUENCY_IN_MILLISECONDS);
 
 			} while (true);
@@ -106,8 +94,6 @@ public class SadremaSolutionRetrieverRunnable implements Runnable {
 
 			String line;
 			while ((line = br.readLine()) != null) {
-				logger.info(line);
-
 				final String[] splitByColon = line.split(":");
 				String satelliteName = splitByColon[0].trim();
 				String[] beamAndCapacity = splitByColon[1].trim().split(" ");
@@ -115,17 +101,9 @@ public class SadremaSolutionRetrieverRunnable implements Runnable {
 				String capacityWithEquals = beamAndCapacity[1];
 				String[] yaSplit = capacityWithEquals.split("=");
 				String capacity = yaSplit[1];
-				logger.info("SatelliteName: " + satelliteName);
-				logger.info("BeamName: " + beamName);
-				logger.info("Capacity: " + capacity);
 				String[] cellsSplit = line.split("cells");
 				String cellsRawComma = cellsSplit[1];
-				logger.info("Cells: " + cellsRawComma);
 				String[] cells = cellsRawComma.split(",");
-				for (int i = 0; i < cells.length; i++) {
-					String cellTemp = cells[i].trim();
-					logger.info("Cell (" + i + "/" + cells.length + "): " + cellTemp);
-				}
 				final Beam beam = getBeam(beamName, capacity, cells);
 				if (satelliteName.equals(Configuration.WORLD_SATELLITE_1_NAME)) {
 					beamsPerSat.get(Configuration.WORLD_SATELLITE_1_NAME).add(beam);
@@ -158,23 +136,28 @@ public class SadremaSolutionRetrieverRunnable implements Runnable {
 				}
 			}
 
-			logger.info("Beams on satelite 1:");
 			for (Beam beam : sat1Beam) {
 				logger.info(beam.toString());
 			}
-			logger.info("Beams on satelite 2:");
 			for (Beam beam : sat2Beam) {
 				logger.info(beam.toString());
 			}
-			logger.info("Beams on satelite 3:");
 			for (Beam beam : sat3Beam) {
 				logger.info(beam.toString());
 			}
 
 			// Apply to model
-			WorldSingleton.INSTANCE.addBeamsToSatellite(Configuration.WORLD_SATELLITE_1_NAME, sat1Beam);
-			WorldSingleton.INSTANCE.addBeamsToSatellite(Configuration.WORLD_SATELLITE_2_NAME, sat2Beam);
-			WorldSingleton.INSTANCE.addBeamsToSatellite(Configuration.WORLD_SATELLITE_3_NAME, sat3Beam);
+
+			// If world is not valid due to being mutated in the meantime, discard...
+
+			final String oldWorldJSON = Util.getJSON(WorldSingleton.INSTANCE);
+			final World newWorld = Util.OBJECT_MAPPER.readValue(oldWorldJSON, World.class);
+			newWorld.addBeamsToSatellite(Configuration.WORLD_SATELLITE_1_NAME, sat1Beam);
+			newWorld.addBeamsToSatellite(Configuration.WORLD_SATELLITE_2_NAME, sat2Beam);
+			newWorld.addBeamsToSatellite(Configuration.WORLD_SATELLITE_3_NAME, sat3Beam);
+			if (ModelValidator.isValid(newWorld)) {
+				WorldSingleton.INSTANCE = newWorld;
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();

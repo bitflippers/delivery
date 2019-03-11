@@ -45,6 +45,10 @@ public class World {
 	@PastOrPresent
 	private Date date;
 
+	public World() {
+
+	}
+
 	public World(final Set<Satellite> pSetSatellite, final Game pGame) {
 		this.game = pGame;
 		this.uuid = UUID.randomUUID();
@@ -133,9 +137,11 @@ public class World {
 		Boolean slotNotFound = (slotUUID == null);
 
 		if (usernameExists) {
-			logger.info("Username exists " + pUsername + " ! cannot add user !");
+			logger.error("Username exists " + pUsername + " ! cannot add user !");
+			System.exit(-1);
 		} else if (slotNotFound) {
 			logger.error("Free slot '" + pSlotIdentifier + "' not found !");
+			System.exit(-1);
 		} else {
 			final User user = new User(pUsername, slotFound);
 			this.game.slotFromFreeToUsed(slotFound);
@@ -160,6 +166,7 @@ public class World {
 		}
 		if (!usernameExists) {
 			logger.error("User not found: " + pUsername + " ! cannot add marker to user !");
+			System.exit(-1);
 		} else {
 			final User user = this.mapUser.get(userUUIDOfUserThatAddedMarker);
 			user.addMarker(pLatitude, pLongitude, pRequestedUnits, pPriority);
@@ -180,7 +187,8 @@ public class World {
 			}
 		}
 		if (!satelliteNameExists) {
-			throw new IllegalArgumentException("Satellite not found: " + pSatelliteName + " ! cannot add beams !");
+			logger.error("Satellite not found: " + pSatelliteName + " ! cannot add beams !");
+			System.exit(-1);
 		}
 		satellite.setBeams(pSetBeam);
 
@@ -201,7 +209,8 @@ public class World {
 			}
 		}
 		if (!usernameExists) {
-			throw new IllegalArgumentException("Username " + pUsername + " not found ! cannot remove !");
+			logger.error("Username " + pUsername + " not found ! cannot remove !");
+			System.exit(-1);
 		}
 		final User user = this.mapUser.get(userUUIDToRemove);
 		final Slot slot = user.getSlot();

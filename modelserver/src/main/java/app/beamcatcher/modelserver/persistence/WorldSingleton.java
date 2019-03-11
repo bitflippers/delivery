@@ -67,30 +67,6 @@ public class WorldSingleton {
 		final Slot slot12 = new Slot(Configuration.SLOT_12_ID);
 		freeSlots.add(slot12);
 
-//		final Slot slot13 = new Slot(Configuration.SLOT_13_ID);
-//		freeSlots.add(slot13);
-//
-//		final Slot slot14 = new Slot(Configuration.SLOT_14_ID);
-//		freeSlots.add(slot14);
-//
-//		final Slot slot15 = new Slot(Configuration.SLOT_15_ID);
-//		freeSlots.add(slot15);
-//
-//		final Slot slot16 = new Slot(Configuration.SLOT_16_ID);
-//		freeSlots.add(slot16);
-//
-//		final Slot slot17 = new Slot(Configuration.SLOT_17_ID);
-//		freeSlots.add(slot17);
-//
-//		final Slot slot18 = new Slot(Configuration.SLOT_18_ID);
-//		freeSlots.add(slot18);
-//
-//		final Slot slot19 = new Slot(Configuration.SLOT_19_ID);
-//		freeSlots.add(slot19);
-//
-//		final Slot slot20 = new Slot(Configuration.SLOT_20_ID);
-//		freeSlots.add(slot20);
-
 		final Game game = new Game(freeSlots, usedSlots);
 
 		INSTANCE = new World(setSatellite, game);

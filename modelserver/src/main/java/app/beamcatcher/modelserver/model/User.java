@@ -36,6 +36,10 @@ public class User {
 	@PastOrPresent
 	private Date mostRecentActivityDate;
 
+	public User() {
+
+	}
+
 	public User(final CharSequence pUsername, final Slot pSlot) {
 		this.uuid = UUID.randomUUID();
 		this.mostRecentActivityDate = new Date();
@@ -91,6 +95,7 @@ public class User {
 			final Integer pPriority) {
 		final Marker marker = new Marker(pLatitude, pLongitude, pRequestedUnits, pPriority);
 		this.mapMarker.put(marker.getUuid(), marker);
+		this.setMostRecentActivityDate(new Date());
 	}
 
 }

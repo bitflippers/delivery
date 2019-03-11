@@ -41,6 +41,10 @@ public class MGRSWGS84Coordinate {
 	@Max(Configuration.MGRS_WGS84_LONGITUDE_UPPER_LIMIT_INCLUSIVE)
 	private Double longitude;
 
+	public MGRSWGS84Coordinate() {
+
+	}
+
 	public MGRSWGS84Coordinate(final Double pLatitude, final Double pLongitude) {
 		this.uuid = UUID.randomUUID();
 		this.latitude = pLatitude;

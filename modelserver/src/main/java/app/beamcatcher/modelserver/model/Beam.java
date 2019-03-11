@@ -30,6 +30,10 @@ public class Beam {
 	@NotNull
 	private UUID uuid;
 
+	public Beam() {
+
+	}
+
 	public Beam(final CharSequence pName, final Integer pDeliveredUnits, final Footprint pFootprint) {
 		this.uuid = UUID.randomUUID();
 		this.name = pName;

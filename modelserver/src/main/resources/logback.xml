@@ -89,6 +89,7 @@
 
 	<root level="INFO" additivity="true">
 		<appender-ref ref="FILE-SYSTEM" />
+		<appender-ref ref="STDOUT-SYSTEM" />
 	</root>
 
 </configuration>

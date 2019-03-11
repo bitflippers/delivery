@@ -9,7 +9,7 @@ import org.apache.commons.io.FileUtils;
 
 import app.beamcatcher.modelserver.configuration.Configuration;
 import app.beamcatcher.modelserver.io.eventserver.in.EventProcessorRunnable;
-import app.beamcatcher.modelserver.io.eventserver.in.simulator.RandomEventGenerator;
+import app.beamcatcher.modelserver.io.eventserver.in.simulator.RandomEventGeneratorRunnable;
 import app.beamcatcher.modelserver.io.eventserver.out.HTTPEndpointHandler;
 import app.beamcatcher.modelserver.io.sadrema.out.SadremaSolutionRetrieverRunnable;
 
@@ -57,7 +57,7 @@ public class Bootstrap {
 	}
 
 	private static void startRandomEventGenerator() {
-		final RandomEventGenerator randomEventGenerator = new RandomEventGenerator();
+		final RandomEventGeneratorRunnable randomEventGenerator = new RandomEventGeneratorRunnable();
 		final Thread randomEventGeneratorThread = new Thread(randomEventGenerator);
 		randomEventGeneratorThread.setName("RANDOM-EVENT-GENERATOR");
 		randomEventGeneratorThread.start();

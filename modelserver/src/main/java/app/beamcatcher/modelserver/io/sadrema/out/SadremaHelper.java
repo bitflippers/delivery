@@ -26,21 +26,20 @@ public class SadremaHelper {
 		File beamsTXTFile = null;
 
 		try {
-			logger.info("Solution requested  !");
+			logger.info("Solution requested: computing...");
 			long startTime = System.currentTimeMillis();
 			String[] args = new String[] { "markers.csv" };
-			logger.info("Computing...");
 			NSGAIIBinaryRunner_SDRM.main(args);
 			Boolean sadremaFinished = Boolean.FALSE;
 			final String fileToLookFor = Configuration.MODEL_SERVER_IO_DIR_SADREMA_IN_DATA + "/beams.txt";
 			beamsTXTFile = new File(fileToLookFor);
 			do {
 				sadremaFinished = beamsTXTFile.exists();
-				Thread.sleep(1000);
+				Thread.sleep(100);
 			} while (!sadremaFinished);
 			long stopTime = System.currentTimeMillis();
 			long elapsedTime = stopTime - startTime;
-			logger.info("Optimal solution found in " + elapsedTime + " milliseconds !");
+			logger.info("Optimal solution found in " + elapsedTime + " ms");
 			return beamsTXTFile;
 		} catch (Exception e) {
 			e.printStackTrace();

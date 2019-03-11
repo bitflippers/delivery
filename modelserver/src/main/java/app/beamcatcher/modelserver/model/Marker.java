@@ -37,6 +37,10 @@ public class Marker {
 	@NotNull
 	private UUID uuid;
 
+	public Marker() {
+
+	}
+
 	public Marker(final Double pLatitude, final Double pLongitude, final Integer pRequestedUnits,
 			final Integer pPriority) {
 		this.uuid = UUID.randomUUID();
