@@ -84,7 +84,7 @@ export abstract class Planes {
         let id = Planes.univId(plane);
         if (typeof plns[id] == 'object') {
             // TODO: Check!!!!
-            plns[id].marker.marker.setLatLng(plane.latlng);
+            //plns[id].marker.marker.setLatLng(plane.latlng);
         } else {
             plns[id] = plane;
             plns[id].marker = new Plane(plane);
