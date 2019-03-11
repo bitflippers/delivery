@@ -68,3 +68,10 @@ package-lock.json
 .idea/
 .angulardoc.json
 node/public/
+
+#david
+**/target/
+FUN.tsv
+VAR.tsv
+
+

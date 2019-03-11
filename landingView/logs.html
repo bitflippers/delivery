@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>logs</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style type="text/css" rel="stylesheet">
+        body {
+            background-color: #222;
+        }
+        #selector {
+            float: left;
+        }
+        #logname {
+            font-size: 24px;
+            color: #FFF;
+            text-shadow: #444 1px 1px 2px;
+            margin: 20px 10px;
+        }
+        #logsadrema {
+            clear: both;
+            border: 1px solid #444;
+            overflow-x: hidden;
+            overflow-y: auto;
+            background-color: #333;
+            color: #EEE;
+            text-shadow: #000 0 0 2px;
+            height: 250px;
+            padding: 10px;
+            font-size: 16px;
+            line-height: 20px;
+        }
+        #logevents {
+            clear: both;
+            border: 1px solid #444;
+            overflow-x: hidden;
+            overflow-y: auto;
+            background-color: #333;
+            color: #EEE;
+            text-shadow: #000 0 0 2px;
+            height: 250px;
+            padding: 10px;
+            font-size: 16px;
+            line-height: 20px;
+        }
+        #logsystem {
+            clear: both;
+            border: 1px solid #444;
+            overflow-x: hidden;
+            overflow-y: auto;
+            background-color: #333;
+            color: #EEE;
+            text-shadow: #000 0 0 2px;
+            height: 250px;
+            padding: 10px;
+            font-size: 16px;
+            line-height: 20px;
+        }
+        .monospace {
+            font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+        }
+    </style>
+</head>
+<body>
+<div id="logname">Events:</div>
+<div id="logevents" class="monospace"></div>
+<div id="logname">Sadrema:</div>
+<div id="logsadrema" class="monospace"></div>
+<div id="logname">System:</div>
+<div id="logsystem" class="monospace"></div>
+<script type="text/javascript">
+        function doSadremaUpdate() {
+          $.ajax({type: "GET", url : "http://localhost:8090/sadremalogs",
+                  success: function (data) {
+                     if (data.length > 0)
+                     {
+                        $("#logsadrema").append(data);
+                     }
+                     var elem = document.getElementById('logsadrema');
+                    elem.scrollTop = elem.scrollHeight;
+                     setTimeout("doSadremaUpdate()", 2000);
+                   }});
+        }
+
+        setTimeout("doSadremaUpdate()", 2000);
+
+        function doEventsUpdate() {
+          $.ajax({type: "GET", url : "http://localhost:8090/eventlogs",
+                  success: function (data) {
+                     if (data.length > 0)
+                     {
+                        $("#logevents").append(data);
+                     }
+                     var elem = document.getElementById('logevents');
+                    elem.scrollTop = elem.scrollHeight;                     
+                     setTimeout("doEventsUpdate()", 2000);
+                   }});
+        }
+
+        setTimeout("doEventsUpdate()", 2000);
+
+        function doSystemUpdate() {
+          $.ajax({type: "GET", url : "http://localhost:8090/systemlogs",
+                  success: function (data) {
+                     if (data.length > 0)
+                     {
+                        $("#logsystem").append(data);
+                     }
+                     var elem = document.getElementById('logsystem');
+                    elem.scrollTop = elem.scrollHeight;                     
+                     setTimeout("doSystemUpdate()", 2000);
+                   }});
+        }
+
+        setTimeout("doSystemUpdate()", 2000);
+</script>
+</body>
+</html>

@@ -12,10 +12,14 @@ import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import app.beamcatcher.modelserver.configuration.Configuration;
 
 public class World {
+
+	private static final Logger logger = LoggerFactory.getLogger(World.class);
 
 	@NotNull
 	private Integer worldModelVersion = 2;
@@ -129,9 +133,9 @@ public class World {
 		Boolean slotNotFound = (slotUUID == null);
 
 		if (usernameExists) {
-			System.out.println("Username exists " + pUsername + " ! cannot add user !");
+			logger.info("Username exists " + pUsername + " ! cannot add user !");
 		} else if (slotNotFound) {
-			System.err.println("Free slot '" + pSlotIdentifier + "' not found !");
+			logger.error("Free slot '" + pSlotIdentifier + "' not found !");
 		} else {
 			final User user = new User(pUsername, slotFound);
 			this.game.slotFromFreeToUsed(slotFound);
@@ -155,7 +159,7 @@ public class World {
 			}
 		}
 		if (!usernameExists) {
-			System.err.println("User not found: " + pUsername + " ! cannot add marker to user !");
+			logger.error("User not found: " + pUsername + " ! cannot add marker to user !");
 		} else {
 			final User user = this.mapUser.get(userUUIDOfUserThatAddedMarker);
 			user.addMarker(pLatitude, pLongitude, pRequestedUnits, pPriority);

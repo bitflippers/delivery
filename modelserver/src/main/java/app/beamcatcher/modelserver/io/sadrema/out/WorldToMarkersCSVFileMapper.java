@@ -9,15 +9,15 @@ import app.beamcatcher.modelserver.model.Location;
 import app.beamcatcher.modelserver.model.Marker;
 import app.beamcatcher.modelserver.model.SADREMAGridCell;
 import app.beamcatcher.modelserver.model.User;
-import app.beamcatcher.modelserver.model.World;
+import app.beamcatcher.modelserver.persistence.WorldSingleton;
 
 public class WorldToMarkersCSVFileMapper {
 
-	public static StringBuffer toMarkersCSVFile(final World pWorld) {
+	public static StringBuffer toMarkersCSVFile() {
 
 		final StringBuffer output = new StringBuffer();
 
-		final Map<UUID, User> mapUser = pWorld.getMapUser();
+		final Map<UUID, User> mapUser = WorldSingleton.INSTANCE.getMapUser();
 
 		final Set<UUID> setUserUUID = mapUser.keySet();
 

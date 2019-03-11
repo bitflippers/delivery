@@ -20,6 +20,9 @@ public class HTTPEndpointHandler {
 		server.setHandler(servletHandler);
 
 		servletHandler.addServletWithMapping(WorldQueryHandler.class, "/world");
+		servletHandler.addServletWithMapping(SadremaLogsHandler.class, "/sadremalogs");
+		servletHandler.addServletWithMapping(SystemLogsHandler.class, "/systemlogs");
+		servletHandler.addServletWithMapping(EventLogsHandler.class, "/eventlogs");
 
 		server.start();
 

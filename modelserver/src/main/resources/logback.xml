@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+	<appender name="FILE-SYSTEM"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/tmp/system.log</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>/tmp/system.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>1</maxHistory>
+			<totalSizeCap>100MB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [SYSTEM] %-5level %logger{0} %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE-EVENTS"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/tmp/events.log</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>/tmp/events.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>10</maxHistory>
+			<totalSizeCap>1GB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [EVENTS] %-5level %logger{0} %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE-SADREMA"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/tmp/sadrema.log</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>/tmp/sadrema.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>1</maxHistory>
+			<totalSizeCap>100MB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [SADREMA] %-5level %logger{0} %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="STDOUT-SYSTEM"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [SYSTEM] %-5level %logger{0} %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="STDOUT-EVENTS"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [EVENTS] %-5level %logger{0} %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="STDOUT-SADREMA"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [SADREMA] %-5level %logger{0} %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<logger
+		name="app.beamcatcher.modelserver.io.eventserver.in.EventProcessor"
+		level="INFO" additivity="true">
+		<appender-ref ref="STDOUT-EVENTS" />
+		<appender-ref ref="FILE-EVENTS" />
+	</logger>
+
+	<logger
+		name="app.beamcatcher.modelserver.io.sadrema.out.SadremaHelper"
+		level="INFO" additivity="true">
+		<appender-ref ref="STDOUT-SADREMA" />
+		<appender-ref ref="FILE-SADREMA" />
+	</logger>
+
+	<root level="INFO" additivity="true">
+		<appender-ref ref="FILE-SYSTEM" />
+	</root>
+
+</configuration>

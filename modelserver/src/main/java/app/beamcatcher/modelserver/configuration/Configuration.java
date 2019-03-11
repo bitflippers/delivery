@@ -8,6 +8,10 @@ import java.util.Map;
 
 public class Configuration {
 
+	public static final String EVENTS_LOG_FILE = "/tmp/events.log";
+	public static final String SYSTEM_LOG_FILE = "/tmp/system.log";
+	public static final String SADREMA_LOG_FILE = "/tmp/sadrema.log";
+
 	// MAKE SURE TO UPDATE WorldSingleton if you change these !!!!
 	public static final int MINIMUM_SLOT_INDEX = 1;
 	public static final int MAXIMUM_SLOT_INDEX = 12;
