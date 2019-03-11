@@ -95,9 +95,7 @@ function makeCircleTwoPoints(points: Array<Point>, p: Point, q: Point): Circle {
     // Form a circumcircle and classify it on left or right side
     const cross: number = crossProduct(p.x, p.y, q.x, q.y, r.x, r.y);
     const c: Circle | null = makeCircumcircle(p, q, r);
-    if (c === null)
-
-    else if (cross > 0 && (left === null || crossProduct(p.x, p.y, q.x, q.y, c.x, c.y) > crossProduct(p.x, p.y, q.x, q.y, left.x, left.y)))
+    if (c === null) {} else if (cross > 0 && (left === null || crossProduct(p.x, p.y, q.x, q.y, c.x, c.y) > crossProduct(p.x, p.y, q.x, q.y, left.x, left.y)))
       left = c;
     else if (cross < 0 && (right === null || crossProduct(p.x, p.y, q.x, q.y, c.x, c.y) < crossProduct(p.x, p.y, q.x, q.y, right.x, right.y)))
       right = c;

@@ -15,3 +15,8 @@
 .toggleIconDef {
   font-size: 36pt;
 }
+
+.userListCustom {
+  overflow: hidden;
+  width: 120pt;
+}
