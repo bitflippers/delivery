@@ -1,6 +1,6 @@
 <mat-sidenav-container class="sidenav-container fillSpace">
   <mat-sidenav-content>
-    <button mat-icon-button class="toggleIcon" (click)="drawer.toggle()">
+    <button (click)="drawer.toggle()" class="toggleIcon" mat-icon-button>
       <mat-icon aria-label="Side nav" class="toggleIconDef">swap_horizontal_circle</mat-icon>
     </button>
     <div class="fillSpace">
@@ -9,20 +9,22 @@
   </mat-sidenav-content>
   <mat-sidenav
     #drawer
+    attr.role="navigation"
     class="sidenav"
     fixedInViewport="true"
-    attr.role="navigation"
     mode="side"
-    position="end"
-    opened="true">
+    opened="false"
+    position="end">
     <mat-toolbar class="" color="primary">
-      <button mat-button (click)="drawer.toggle()">Users</button>
+      <button (click)="drawer.toggle()" mat-button>Users</button>
     </mat-toolbar>
-    <mat-nav-list>
-      <a mat-list-item href="#" *ngFor="let item of userList">
-        <mat-icon>{{item.icon}}</mat-icon>
-        <h5>{{item.nickname}}</h5>
-      </a>
+    <mat-nav-list class="userListCustom">
+      <pre *ngFor="let item of userList">
+        <a href="#" mat-list-item>
+          <mat-icon>{{item.icon}}</mat-icon>
+          <h5>{{item.nickname}}</h5>
+        </a>
+      </pre>
     </mat-nav-list>
   </mat-sidenav>
 

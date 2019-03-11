@@ -1,4 +1,4 @@
-import { MaterialModuleModule } from './material-module.module';
+import {MaterialModuleModule} from './material-module.module';
 
 describe('MaterialModuleModule', () => {
   let materialModuleModule: MaterialModuleModule;

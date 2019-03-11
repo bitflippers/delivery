@@ -1,5 +1,5 @@
-import { map as Map } from '../map';
-import { Marker } from '../marker';
+import {map as Map} from '../map';
+import {Marker} from '../marker';
 import * as L from 'leaflet';
 
 let map;
@@ -50,6 +50,7 @@ export abstract class Markers {
       mrks[id].marker = new UserMarker(marker);
     }
   }
+
   public static deleteMarker(marker) {
     let id = Markers.univId(marker);
     console.log("We delete marker");
@@ -62,9 +63,9 @@ export abstract class Markers {
 
 class UserMarker extends Marker {
   constructor(public m, public interval = 1000) {
-      super(m.latlng, m.iconL, interval, userMarkerLayer, 0);
-      this.removeZoomTransition(map);
-      console.log("marker priority:" ,m.priority);
-      this.marker.bindTooltip("Priority: " + m.priority.toString());
+    super(m.latlng, m.iconL, interval, userMarkerLayer, 0);
+    this.removeZoomTransition(map);
+    console.log("marker priority:", m.priority);
+    this.marker.bindTooltip("Priority: " + m.priority.toString());
   }
 }

@@ -1,17 +1,22 @@
 .fillSpace {
-    width: 100vw;
-    height: 100%;
-    position: relative;
+  width: 100vw;
+  height: 100%;
+  position: relative;
 }
 
 .toggleIcon {
-    right: 15pt;
-    top: 50%;
-    margin-top: -16pt;
-    position: absolute;
-    z-index: 502;
+  right: 15pt;
+  top: 50%;
+  margin-top: -16pt;
+  position: absolute;
+  z-index: 502;
 }
 
 .toggleIconDef {
-    font-size: 36pt;
+  font-size: 36pt;
+}
+
+.userListCustom {
+  overflow: hidden;
+  width: 120pt;
 }

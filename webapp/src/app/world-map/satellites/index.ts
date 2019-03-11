@@ -1,5 +1,5 @@
-import { map as Map } from '../map';
-import { Marker } from '../marker';
+import {map as Map} from '../map';
+import {Marker} from '../marker';
 import * as L from 'leaflet';
 //import 'leaflet-draw';
 //import '@jjwtay/leaflet.ellipse';
@@ -8,18 +8,18 @@ import * as L from 'leaflet';
 let map;
 let equatorLayer = L.layerGroup();
 let equatorLine = L.polyline([[0, -300], [0, 300]], {
-    "color": "red",
-    "weight": 1,
-    "opacity": 0.5
+  "color": "red",
+  "weight": 1,
+  "opacity": 0.5
 }).addTo(equatorLayer);
 
 let beamLayer = L.layerGroup();
 //beamLayer.stop('click');
 
 let icon = L.icon({
-    iconUrl: 'assets/satellite-icon.png',
-    iconSize: [32, 32],
-    iconAnchor: [20, 12]
+  iconUrl: 'assets/satellite-icon.png',
+  iconSize: [32, 32],
+  iconAnchor: [20, 12]
 });
 
 // Mockup data
@@ -36,7 +36,7 @@ let satList = {
     "name": "Sat_3",
     "pos": [0, 120]
   }
-}
+};
 
 // Beam data
 let beamList = [
@@ -49,38 +49,39 @@ let beamList = [
 ];
 
 
-const satObjs = { };
-const beamObjs = { };
+const satObjs = {};
+const beamObjs = {};
 
 class Satellite extends Marker {
 
-    private intervalT: any = null;
-    path = [ [ -0.3, 0 ], [ 0, -0.3 ], [ 0.3, 0 ], [ 0, 0.3 ] ];
-    count = 0;
+  path = [[-0.3, 0], [0, -0.3], [0.3, 0], [0, 0.3]];
+  count = 0;
+  private intervalT: any = null;
 
-    constructor(public s, public interval = 1000) {
-        super(s.pos, icon, interval, equatorLayer);
-        this.count = parseInt(<any>(Math.random()*this.path.length));
-        this.removeZoomTransition(map);
-        this.intervalT = setInterval(() => {
-          this.nextStep();
-        }, this.interval);
-        this.marker.bindTooltip(s.name);
-    }
+  constructor(public s, public interval = 1000) {
+    super(s.pos, icon, interval, equatorLayer);
+    this.count = parseInt(<any>(Math.random() * this.path.length));
+    this.removeZoomTransition(map);
+    this.intervalT = setInterval(() => {
+      this.nextStep();
+    }, this.interval);
+    this.marker.bindTooltip(s.name);
+  }
 
-    nextStep() {
-        this.count = (++this.count) % this.path.length;
-        this.marker.setLatLng([this.s.pos[0] + this.path[this.count][0], this.s.pos[1]+this.path[this.count][1]]);
-    }
+  nextStep() {
+    this.count = (++this.count) % this.path.length;
+    this.marker.setLatLng([this.s.pos[0] + this.path[this.count][0], this.s.pos[1] + this.path[this.count][1]]);
+  }
 
-    closeX() {
-        clearInterval(this.intervalT);
-        this.marker.remove();
-    }
+  closeX() {
+    clearInterval(this.intervalT);
+    this.marker.remove();
+  }
 }
 
 class Ellipse {
   public ellipse: any;
+
   constructor(public e) {
     this.ellipse = L.polygon([
       [51.509, -0.08],
@@ -128,7 +129,7 @@ class Beam {
         fillOpacity: 0.3,
         radius: 330000
       });
-      c.bindTooltip(this.beam.name+' '+n.rowIndex+' '+n.columnIndex + ' out ' + lat + ' ' + lon);
+      c.bindTooltip(this.beam.name + ' ' + n.rowIndex + ' ' + n.columnIndex + ' out ' + lat + ' ' + lon);
       c.addTo(this.l);
       //c.stop('click');
     })

@@ -14,7 +14,8 @@ export interface DialogData {
 })
 export class MarkerButtonComponent implements OnInit {
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog) {
+  }
 
   ngOnInit() {
   }
@@ -23,7 +24,7 @@ export class MarkerButtonComponent implements OnInit {
     const dialogRef = this.dialog.open(MarkerDialogComponent, {
       width: '40%',
       height: '65%',
-      data: <DialogData>{ username: 'User', password: 'Pass' }
+      data: <DialogData>{username: 'User', password: 'Pass'}
     });
     dialogRef.afterClosed().subscribe(r => {
       console.log('dialog closed', r);
@@ -35,7 +36,7 @@ export class MarkerButtonComponent implements OnInit {
 @Component({
   selector: 'app-dialog-login',
   templateUrl: './dialog-login.component.html',
-  styleUrls: [ './marker-button.component.css']
+  styleUrls: ['./marker-button.component.css']
 })
 export class MarkerDialogComponent {
   constructor(public dialogRef: MatDialogRef<MarkerDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: DialogData) {

@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { WorldMapComponent } from './world-map.component';
+import {WorldMapComponent} from './world-map.component';
 
 describe('WorldMapComponent', () => {
   let component: WorldMapComponent;
@@ -8,9 +8,9 @@ describe('WorldMapComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WorldMapComponent ]
+      declarations: [WorldMapComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

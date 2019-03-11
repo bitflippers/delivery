@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { MessagingService } from '../messaging/messaging.service';
-import {iconList} from "../ressources/iconConvertor";
+import {Component, OnInit} from '@angular/core';
+import {MessagingService} from '../messaging/messaging.service';
+import {iconList} from '../ressources/iconConvertor';
 
 @Component({
   selector: 'app-user-list',
@@ -15,7 +15,7 @@ export class UserListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.msg.users.subscribe( data => {
+    this.msg.users.subscribe(data => {
       console.log('I receive users', data);
       this.userList = data.map(n => {
         n.icon = iconList[n.slot.identifier];
