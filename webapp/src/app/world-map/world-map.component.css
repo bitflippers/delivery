@@ -25,7 +25,7 @@
   z-index: 500;
 }
 
-.appFooter{
+.appFooter {
   position: absolute;
   bottom: 5%;
   z-index: 500;
@@ -33,7 +33,7 @@
   right: 25%;
 }
 
-.appHome{
+.appHome {
   position: absolute;
   z-index: 500;
   top: 3%;
@@ -46,23 +46,23 @@
 }
 
 
-.markerColor1{
+.markerColor1 {
   background: #1c7430;
 }
 
-.markerColor2{
+.markerColor2 {
   background: #fd7e14;
 }
 
-.markerColor3{
+.markerColor3 {
   background: #6f42c1;
 }
 
-.markerColor4{
+.markerColor4 {
   background: #e83e8c;
 }
 
-.markerColor5{
+.markerColor5 {
   background: aqua;
 
 }

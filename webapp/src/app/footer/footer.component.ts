@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MessagingService} from "../messaging/messaging.service";
 import {iconList} from "../ressources/iconConvertor";
 
@@ -39,10 +39,11 @@ export class FooterComponent implements OnInit {
     }
   ];
 
-  constructor(public msg: MessagingService) { }
+  constructor(public msg: MessagingService) {
+  }
 
   ngOnInit() {
-    this.msg.users.subscribe( data => {
+    this.msg.users.subscribe(data => {
       console.log('I receive footer log', data);
       // this.saDReMalog = data;
     });

@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { SpinnerServiceService } from '../spinner-service/spinner-service.service';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {SpinnerServiceService} from '../spinner-service/spinner-service.service';
+import {Observable} from 'rxjs';
 import * as io from 'socket.io-client/dist/socket.io';
 
 @Injectable({
@@ -8,9 +8,7 @@ import * as io from 'socket.io-client/dist/socket.io';
 })
 export class MessagingService {
 
-  public socket:any;
-  private url = 'http://51.38.113.39:3000';
-
+  public socket: any;
   users: Observable<any>;
   markers: Observable<any>;
   beams: Observable<any>;
@@ -18,6 +16,7 @@ export class MessagingService {
   messages: Observable<any>;
   planes: Observable<any>;
   satellites: Observable<any>;
+  private url = 'http://51.38.113.39:3000';
 
   constructor(public spinner: SpinnerServiceService) {
     console.log('Messaging instantiated');

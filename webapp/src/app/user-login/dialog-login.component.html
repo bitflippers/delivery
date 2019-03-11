@@ -1,14 +1,14 @@
- <h2>Enter your credentials</h2>
- <div mat-dialog-content>
-    <mat-form-field>
-      <input matInput required [(ngModel)]="data.username" placeholder="Username">
-    </mat-form-field>
-    <br>
-    <mat-form-field>
-      <input matInput required [(ngModel)]="data.password" placeholder="Password" type="password">
-    </mat-form-field>
+<h2>Enter your credentials</h2>
+<div mat-dialog-content>
+  <mat-form-field>
+    <input [(ngModel)]="data.username" matInput placeholder="Username" required>
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+    <input [(ngModel)]="data.password" matInput placeholder="Password" required type="password">
+  </mat-form-field>
 </div>
 <div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Login</button>
-  <button mat-button (click)="close()">Close</button>
+  <button [mat-dialog-close]="data" cdkFocusInitial mat-button>Login</button>
+  <button (click)="close()" mat-button>Close</button>
 </div>

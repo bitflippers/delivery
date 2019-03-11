@@ -23,7 +23,7 @@
   color: #1e7e34;
 }
 
-.gridDisplay{
+.gridDisplay {
   display: grid;
   object-fit: fill;
 }

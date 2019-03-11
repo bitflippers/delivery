@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { SpinnerServiceService } from '../spinner-service/spinner-service.service';
+import {Component, OnInit} from '@angular/core';
+import {SpinnerServiceService} from '../spinner-service/spinner-service.service';
 
 @Component({
   selector: 'app-user-ui',
@@ -8,7 +8,8 @@ import { SpinnerServiceService } from '../spinner-service/spinner-service.servic
 })
 export class UserUiComponent implements OnInit {
 
-  constructor(public spinner: SpinnerServiceService) { }
+  constructor(public spinner: SpinnerServiceService) {
+  }
 
   ngOnInit() {
     this.spinner.show('User');
