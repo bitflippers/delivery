@@ -19,20 +19,15 @@ class Plane extends Marker {
   intervalT: any;
   lon: number;
   lat: number;
-  surface90 = 10750; // How much km is 90 degree
+  surfaceDeg2Km = 90 / 10750; // 90 degree is 10750km, 1 deg is ~120km
   count = 0;
 
   constructor(plane, public pollInterval = 5000) {
     super(plane.latlng, icon, pollInterval, planeLayer, plane.deg);
 
     this.interval = pollInterval;
-    this.lat = plane.latlng[0];
-    this.lon = plane.latlng[1];
-    this.speed = plane.speed;
-    this.deg = plane.deg;
-
+    this.setLonLat(plane.latlng[1], plane.latlng[0], plane.deg, plane.speed);
     this.removeZoomTransition(map);
-    this.setTransition();
     this.poller();
   }
 
@@ -49,21 +44,16 @@ class Plane extends Marker {
 
   nextStep() {
     this.count++;
-    const {lon, lat, interval} = this.getLonLat();
-    if (interval !== this.interval) {
-      this.interval = interval;
-      this.setTransition();
-      this.poller(); // Change the right speed
-    }
+    const {lon, lat} = this.getLonLat();
     this.marker.setLatLng([lat, lon]);
   }
 
   getLonLat() {
-    const R = this.count * this.speed * (1000 / this.interval) * 90 / (this.surface90 * 1000);
+    // R is in Degrees. Lets check how many degress the plane will move for the interval of time
+    const R = this.count * (this.speed * this.interval * this.surfaceDeg2Km) / 1000000;
     const lon = this.lon + R * Math.cos(this.z(this.deg) * Math.PI / 180);
     const lat = this.lat + R * Math.sin(this.z(this.deg) * Math.PI / 180);
-    const interval = this.surface90 / (90 * this.speed);
-    return {lon: lon, lat: lat, deg: this.deg, speed: this.speed, R: R, interval: interval};
+    return {lon: lon, lat: lat, deg: this.deg, speed: this.speed, R: R};
   }
 
   setLonLat(lon, lat, deg = this.deg, speed = this.speed) {
@@ -72,6 +62,7 @@ class Plane extends Marker {
     this.speed = speed;
     this.deg = deg;
     this.count = 0;
+    this.setRotation(this.deg);
     this.setTransition();
     this.nextStep();
   }
