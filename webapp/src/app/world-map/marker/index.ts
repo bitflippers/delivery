@@ -4,6 +4,9 @@ import 'leaflet-rotatedmarker';
 export class Marker {
   marker: L.Marker;
 
+  private transitionLock = {};
+  private fastInterval = 20;
+
   constructor(
     public pos: L.LatLng,
     public icon: L.Icon,
@@ -32,19 +35,39 @@ export class Marker {
     (<any>this.marker).setRotationAngle(deg);
   }
 
-  removeZoomTransition(map: L.Map, fastInterval = 50) {
+  setFastTransition(name) {
+    this.transitionLock[name] = true;
+    console.log('set fasttransition', name, this,this.transitionLock);
+    this.setTransition(this.fastInterval);
+  }
+
+  unsetFastTransition(name) {
+    delete this.transitionLock[name];
+    console.log('unset fasttransition', name, this,this.transitionLock);
+    if (Object.keys(this.transitionLock).length === 0) {
+      this.setTransition();
+    }
+  }
+
+  removeZoomTransition(map: L.Map, fastInterval = this.fastInterval) {
     if (L.DomUtil.TRANSITION) {
+      this.marker.on('dragstart', e => {
+        this.setFastTransition('drag');
+      });
+      this.marker.on('dragend', e => {
+        this.unsetFastTransition('drag');
+      });
       map.on('movestart', e => {
-        this.setTransition(fastInterval);
+        this.setFastTransition('move');
       });
       map.on('moveend', e => {
-        this.setTransition();
+        this.unsetFastTransition('move');
       });
       map.on('zoomstart', e => {
-        this.setTransition(fastInterval);
+        this.setFastTransition('zoom');
       });
       map.on('zoomend', e => {
-        this.setTransition();
+        this.unsetFastTransition('zoom');
       });
     }
   }

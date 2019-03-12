@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {map} from './map';
+import {World} from './map';
 import {Sat} from './satellites';
 import {MessagingService} from '../messaging/messaging.service';
 import {iconList} from "../ressources/iconConvertor";
@@ -17,7 +17,7 @@ export class WorldMapComponent implements OnInit {
   }
 
   ngOnInit() {
-    map();
+    World.init();
     Sat.init();
     Markers.init();
     Planes.init();

@@ -1,16 +1,16 @@
-import {map as Map} from '../map';
+import {World} from '../map';
 import {Marker} from '../marker';
 import * as L from 'leaflet';
 
 let map;
-let userMarkerLayer = L.layerGroup();
+const userMarkerLayer = L.layerGroup();
 const mrks = {};
 
 export abstract class Markers {
   public static init() {
-    map = Map().map;
+    map = World.map().map;
     userMarkerLayer.addTo(map);
-    Map().control.addOverlay(userMarkerLayer, "Markers");
+    World.map().control.addOverlay(userMarkerLayer, 'Markers');
   }
 
   public static univId(marker) {
@@ -18,7 +18,7 @@ export abstract class Markers {
   }
 
   public static buildIcon(marker) {
-    //console.log("icon color option", marker);
+    // console.log("icon color option", marker);
     return L.icon({
       iconUrl: marker.icon,
       iconSize: [32, 32],
@@ -29,10 +29,10 @@ export abstract class Markers {
   }
 
   public static updateMarker(marker) {
-    let id = Markers.univId(marker);
-    let m = marker.location.mgrsWGS84Coordinate;
-    let latlng = [m.latitude, m.longitude];
-    //console.log('marker', m, latlng);
+    const id = Markers.univId(marker);
+    const m = marker.location.mgrsWGS84Coordinate;
+    const latlng = [m.latitude, m.longitude];
+    // console.log('marker', m, latlng);
     if (typeof mrks[id] == 'object') {
       mrks[id].latlng = latlng;
       mrks[id].marker.marker.setLatLng(mrks[id].latlng);
@@ -52,8 +52,8 @@ export abstract class Markers {
   }
 
   public static deleteMarker(marker) {
-    let id = Markers.univId(marker);
-    console.log("We delete marker");
+    const id = Markers.univId(marker);
+    console.log('We delete marker');
     if (mrks[id]) {
       mrks[id].marker.close();
       delete mrks[id];
@@ -65,7 +65,7 @@ class UserMarker extends Marker {
   constructor(public m, public interval = 1000) {
     super(m.latlng, m.iconL, interval, userMarkerLayer, 0);
     this.removeZoomTransition(map);
-    console.log("marker priority:", m.priority);
-    this.marker.bindTooltip("Priority: " + m.priority.toString());
+    console.log('marker priority:', m.priority);
+    this.marker.bindTooltip('Priority: ' + m.priority.toString());
   }
 }

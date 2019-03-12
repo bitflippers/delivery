@@ -1,50 +1,50 @@
-import {map as Map} from '../map';
+import {World} from '../map';
 import {Marker} from '../marker';
 import * as L from 'leaflet';
-//import 'leaflet-draw';
-//import '@jjwtay/leaflet.ellipse';
-//import '@jjwtay/leaflet.draw-ellipse';
+// import 'leaflet-draw';
+// import '@jjwtay/leaflet.ellipse';
+// import '@jjwtay/leaflet.draw-ellipse';
 
 let map;
-let equatorLayer = L.layerGroup();
-let equatorLine = L.polyline([[0, -300], [0, 300]], {
-  "color": "red",
-  "weight": 1,
-  "opacity": 0.5
+const equatorLayer = L.layerGroup();
+const equatorLine = L.polyline([[0, -300], [0, 300]], {
+  'color': 'red',
+  'weight': 1,
+  'opacity': 0.5
 }).addTo(equatorLayer);
 
-let beamLayer = L.layerGroup();
-//beamLayer.stop('click');
+const beamLayer = L.layerGroup();
+// beamLayer.stop('click');
 
-let icon = L.icon({
+const icon = L.icon({
   iconUrl: 'assets/satellite-icon.png',
   iconSize: [32, 32],
   iconAnchor: [20, 12]
 });
 
 // Mockup data
-let satList = {
-  "Sat_1": {
-    "name": "Sat_1",
-    "pos": [0, -120]
+const satList = {
+  'Sat_1': {
+    'name': 'Sat_1',
+    'pos': [0, -120]
   },
-  "Sat_2": {
-    "name": "Sat_2",
-    "pos": [0, 0]
+  'Sat_2': {
+    'name': 'Sat_2',
+    'pos': [0, 0]
   },
-  "Sat_3": {
-    "name": "Sat_3",
-    "pos": [0, 120]
+  'Sat_3': {
+    'name': 'Sat_3',
+    'pos': [0, 120]
   }
 };
 
 // Beam data
-let beamList = [
+const beamList = [
   {
-    "satellite": "Satellite1",
-    "latng": [0, 0],
-    "radii": [10, 20],
-    "rotate": 90
+    'satellite': 'Satellite1',
+    'latng': [0, 0],
+    'radii': [10, 20],
+    'rotate': 90
   }
 ];
 
@@ -93,7 +93,7 @@ class Ellipse {
       draggable: true,
       opacity: 0.2
     }).addTo(beamLayer);
-    //this.ellipse.stop('click');
+    // this.ellipse.stop('click');
   }
 }
 
@@ -113,7 +113,7 @@ class Beam {
     this.l.remove();
   }
 
-  //TODO: Do the beam draw and animation
+  // TODO: Do the beam draw and animation
   draw() {
     this.l = L.layerGroup();
     this.l.addTo(beamLayer);
@@ -121,9 +121,9 @@ class Beam {
 
     this.beam.footprint.setSADREMAGridCell.forEach(n => {
       console.log('Draw circle', n);
-      let lon = (parseInt(n.columnIndex) * 6) - 180;
-      let lat = (parseInt(n.rowIndex) * 8) - 90;
-      let c = L.circle([lat, lon], {
+      const lon = (parseInt(n.columnIndex) * 6) - 180;
+      const lat = (parseInt(n.rowIndex) * 8) - 90;
+      const c = L.circle([lat, lon], {
         color: 'blue',
         fillColor: '#008080',
         fillOpacity: 0.3,
@@ -131,20 +131,20 @@ class Beam {
       });
       c.bindTooltip(this.beam.name + ' ' + n.rowIndex + ' ' + n.columnIndex + ' out ' + lat + ' ' + lon);
       c.addTo(this.l);
-      //c.stop('click');
-    })
+      // c.stop('click');
+    });
   }
 }
 
 
 export abstract class Sat {
   public static init() {
-    map = Map().map; // Now we have map
+    map = World.map().map; // Now we have map
     equatorLayer.addTo(map);
     beamLayer.addTo(map);
     Object.values(satList).forEach(s => Sat.addSatellite(s));
-    Map().control.addOverlay(equatorLayer, "Satelltes");
-    Map().control.addOverlay(beamLayer, "Beams");
+    World.map().control.addOverlay(equatorLayer, 'Satelltes');
+    World.map().control.addOverlay(beamLayer, 'Beams');
     // let x = new Beam({
     // });
   }

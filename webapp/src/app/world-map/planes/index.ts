@@ -1,11 +1,11 @@
-import {map as Map} from '../map';
+import {World} from '../map';
 import {Marker} from '../marker';
 import * as L from 'leaflet';
-import {interval} from "rxjs";
+import {interval} from 'rxjs';
 
 let map;
-let planeLayer = L.layerGroup();
-let plns = {};
+const planeLayer = L.layerGroup();
+const plns = {};
 
 const icon = L.icon({
   iconUrl: 'assets/aeroplane.svg',
@@ -35,8 +35,9 @@ class Plane extends Marker {
   z = x => ((450 - x) % 360);
 
   tooltip() {
-    let p = this.plane;
-    this.marker.bindTooltip(`ID: ${p.id}<BR>Flight: ${p.n[1]} ${p.n[2]}<BR>Lat: ${p.n[5]} Lon: ${p.n[6]}`);
+    const p = this.plane;
+    const speedKMH = parseInt(<any>(p.speed * 3600 / 1000), 10);
+    this.marker.bindTooltip(`ID: ${p.id}<BR>Flight: ${p.n[1]} ${p.n[2]}<BR>Lat: ${p.n[5]} Lon: ${p.n[6]}<BR>Deg: ${p.deg} Speed: ${p.speed} m/s ${speedKMH} km/h`);
   }
 
   poller() {
@@ -83,9 +84,9 @@ class Plane extends Marker {
 
 export abstract class Planes {
   public static init() {
-    map = Map().map;
+    map = World.map().map;
     planeLayer.addTo(map);
-    Map().control.addOverlay(planeLayer, "Planes");
+    World.map().control.addOverlay(planeLayer, 'Planes');
   }
 
   public static univId(plane) {
@@ -93,8 +94,8 @@ export abstract class Planes {
   }
 
   public static updatePlane(plane) {
-    //console.log('update plane', plane);
-    let id = Planes.univId(plane);
+    // console.log('update plane', plane);
+    const id = Planes.univId(plane);
     if (typeof plns[id] == 'object') {
       // TODO: Check!!!!
       plns[id].plane = plane;
@@ -106,7 +107,7 @@ export abstract class Planes {
   }
 
   public static deletePlane(plane) {
-    let id = Planes.univId(plane);
+    const id = Planes.univId(plane);
     if (typeof plns[id] == 'object') {
       plns[id].marker.close();
       delete plns[id];

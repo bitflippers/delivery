@@ -80,10 +80,12 @@ class Map {
   }
 }
 
-export function map(): Map {
-  //console.log('Map called');
-  if (mapObj == null) {
+export abstract class World {
+  public static init() {
     mapObj = new Map();
   }
-  return mapObj;
+
+  public static map() {
+    return mapObj;
+  }
 }
