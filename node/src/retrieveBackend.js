@@ -1,7 +1,8 @@
 const request = require('request');
 var io = require('./socket.io')();
 
-const pollInterval = 3000;
+const pollSatInterval = 3000;
+const pollPlaneInterval = 10000;
 
 if (!io) {
     setTimeout(() => io = require('./socket.io')(), 500); // Wait for initialization
@@ -15,7 +16,7 @@ let userState = {};
 let oldMarkers = {};
 let oldPlanes = {};
 
-function broadcast() {
+function broadcastSat() {
     request(url, (err, resp, body) => {
         if (err) {
             console.log('Request, err', err);
@@ -68,7 +69,10 @@ function broadcast() {
         }
     
     });
+}
 
+
+function broadcastPlanes() {
     request(planesUrl, (err, resp, body) => {
         let data = JSON.parse(body);
         console.log('Some planes data');
@@ -95,8 +99,8 @@ function broadcast() {
         }).filter(n => n.change);
 
         io.broadcast('planes', d);
-    })
+    });
 }
 
-
-setInterval(() => broadcast(), pollInterval);
+setInterval(() => broadcastSat(), pollSatInterval);
+setInterval(() => broadcastPlanes(), pollPlaneInterval);
