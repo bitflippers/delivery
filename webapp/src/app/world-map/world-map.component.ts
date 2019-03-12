@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {World} from './map';
 import {Sat} from './satellites';
 import {MessagingService} from '../messaging/messaging.service';
-import {iconList} from "../ressources/iconConvertor";
-import {Markers} from "./userMarkers";
-import {Planes} from "./planes";
+import {iconList} from '../ressources/iconConvertor';
+import {Markers} from './userMarkers';
+import {Planes} from './planes';
 
 @Component({
   selector: 'app-world-map',
@@ -17,26 +17,30 @@ export class WorldMapComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Generic INIT
     World.init();
     Sat.init();
     Markers.init();
     Planes.init();
+
     this.msg.markers.subscribe(data => {
 //      console.log('I receive markers', data);
       data.forEach(n => {
-        n.icon = "assets/" + iconList[n.slot.identifier] + ".svg";
+        n.icon = 'assets/' + iconList[n.slot.identifier] + '.svg';
 //        console.log("state of a marker: ",n.state);
-        if (n.state == "delete") {
+        if (n.state === 'delete') {
           Markers.deleteMarker(n);
         } else {
           Markers.updateMarker(n);
         }
       });
     });
+
     this.msg.planes.subscribe(data => {
-      //console.log('Planes', data);
+      // console.log('Planes', data);
       data.forEach(plane => Planes.updatePlane(plane));
     });
+
     this.msg.satellites.subscribe(data => {
 //      console.log('Satellites', data);
       data.forEach(satellite => {
@@ -44,7 +48,7 @@ export class WorldMapComponent implements OnInit {
         Object.values(satellite.mapBeam).forEach(beam => {
           console.log('beam', beam);
           Sat.addBeam(beam);
-        })
+        });
       });
     });
   }
