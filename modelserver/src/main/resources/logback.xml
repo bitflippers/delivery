@@ -81,15 +81,14 @@
 	</logger>
 
 	<logger
-		name="app.beamcatcher.modelserver.io.sadrema.out.SadremaHelper"
+		name="app.beamcatcher.modelserver.io.sadrema.out"
 		level="INFO" additivity="true">
 		<appender-ref ref="STDOUT-SADREMA" />
 		<appender-ref ref="FILE-SADREMA" />
 	</logger>
 
-	<root level="INFO" additivity="true">
+	<root level="INFO" additivity="false">
 		<appender-ref ref="FILE-SYSTEM" />
-		<appender-ref ref="STDOUT-SYSTEM" />
 	</root>
 
 </configuration>

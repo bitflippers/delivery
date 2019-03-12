@@ -73,7 +73,7 @@ public class Game {
 		return ToStringBuilder.reflectionToString(this);
 	}
 
-	public void slotFromFreeToUsed(final Slot pSlot) {
+	protected void slotFromFreeToUsed(final Slot pSlot) {
 		this.freeSlots.remove(pSlot);
 		this.usedSlots.add(pSlot);
 		final Integer numberOfFreeSlots = this.freeSlots.size();
@@ -86,7 +86,7 @@ public class Game {
 		}
 	}
 
-	public void slotFromUsedToFree(final Slot pSlot) {
+	protected void slotFromUsedToFree(final Slot pSlot) {
 		this.usedSlots.remove(pSlot);
 		this.freeSlots.add(pSlot);
 		final Integer numberOfFreeSlots = this.freeSlots.size();

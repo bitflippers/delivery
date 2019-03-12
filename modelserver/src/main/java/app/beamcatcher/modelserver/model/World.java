@@ -136,12 +136,14 @@ public class World {
 
 		Boolean slotNotFound = (slotUUID == null);
 
+		// Required when using simulator
+
 		if (usernameExists) {
-			logger.error("Username exists " + pUsername + " ! cannot add user !");
-			System.exit(-1);
+			logger.warn("Username exists " + pUsername + " ! cannot add user !");
+			logger.warn("Message production too fast?");
 		} else if (slotNotFound) {
-			logger.error("Free slot '" + pSlotIdentifier + "' not found !");
-			System.exit(-1);
+			logger.warn("Free slot '" + pSlotIdentifier + "' not found !");
+			logger.warn("Message production too fast?");
 		} else {
 			final User user = new User(pUsername, slotFound);
 			this.game.slotFromFreeToUsed(slotFound);
@@ -164,9 +166,10 @@ public class World {
 				break;
 			}
 		}
+		// Required when using simulator
 		if (!usernameExists) {
-			logger.error("User not found: " + pUsername + " ! cannot add marker to user !");
-			System.exit(-1);
+			logger.warn("User not found: " + pUsername + " ! cannot add marker to user !");
+			logger.warn("Message production too fast?");
 		} else {
 			final User user = this.mapUser.get(userUUIDOfUserThatAddedMarker);
 			user.addMarker(pLatitude, pLongitude, pRequestedUnits, pPriority);
@@ -209,8 +212,8 @@ public class World {
 			}
 		}
 		if (!usernameExists) {
-			logger.error("Username " + pUsername + " not found ! cannot remove !");
-			System.exit(-1);
+			logger.warn("Username " + pUsername + " not found ! cannot remove !");
+			logger.warn("Message production too fast?");
 		}
 		final User user = this.mapUser.get(userUUIDToRemove);
 		final Slot slot = user.getSlot();
