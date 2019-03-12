@@ -22,16 +22,22 @@ class Plane extends Marker {
   surfaceDeg2Km = 90 / 10750; // 90 degree is 10750km, 1 deg is ~120km
   count = 0;
 
-  constructor(plane, public pollInterval = 5000) {
+  constructor(public plane, public pollInterval = 5000) {
     super(plane.latlng, icon, pollInterval, planeLayer, plane.deg);
 
     this.interval = pollInterval;
+    this.tooltip();
     this.setLonLat(plane.latlng[1], plane.latlng[0], plane.deg, plane.speed);
     this.removeZoomTransition(map);
     this.poller();
   }
 
   z = x => ((450 - x) % 360);
+
+  tooltip() {
+    let p = this.plane;
+    this.marker.bindTooltip(`ID: ${p.id}<BR>Flight: ${p.n[1]} ${p.n[2]}<BR>Lat: ${p.n[5]} Lon: ${p.n[6]}`);
+  }
 
   poller() {
     if (this.intervalT) {
@@ -62,6 +68,7 @@ class Plane extends Marker {
     this.speed = speed;
     this.deg = deg;
     this.count = 0;
+    this.tooltip();
     this.setRotation(this.deg);
     this.setTransition();
     this.nextStep();
@@ -90,7 +97,8 @@ export abstract class Planes {
     let id = Planes.univId(plane);
     if (typeof plns[id] == 'object') {
       // TODO: Check!!!!
-      plns[id].marker.marker.setLatLng(plane.latlng);
+      plns[id].plane = plane;
+      plns[id].marker.setLonLat(plane.latlng[1], plane.latlng[0], plane.deg, plane.speed);
     } else {
       plns[id] = plane;
       plns[id].marker = new Plane(plane);

@@ -25,9 +25,14 @@ function broadcastSat() {
         let jsonObj = JSON.parse(body);
         if (io) {
             let users = Object.values(jsonObj.mapUser);
-            let markers = Object.values(jsonObj.mapUser)
-                .map(n => Object.values(n.mapMarker).map(m => { m.slot = n.slot; return m }))
-                .reduce((x, y) => x.concat(y));
+            let step = Object.values(jsonObj.mapUser)
+                .map(n => Object.values(n.mapMarker).map(m => { m.slot = n.slot; return m }));
+
+            if (typeof step != 'object' || step.length < 1) {
+                return; // Broken data
+            }
+
+            let markers = step.reduce((x, y) => x.concat(y));
             let objm = {};
             markers.forEach(n => objm[n.uuid] = n);
             let newKeys = Object.keys(objm);
