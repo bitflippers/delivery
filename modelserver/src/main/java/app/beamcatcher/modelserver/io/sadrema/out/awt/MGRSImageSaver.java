@@ -1,4 +1,4 @@
-package app.beamcatcher.modelserver.test.sadrema.awt;
+package app.beamcatcher.modelserver.io.sadrema.out.awt;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;

@@ -1,4 +1,4 @@
-package app.beamcatcher.modelserver.test.sadrema.awt;
+package app.beamcatcher.modelserver.io.sadrema.out.awt;
 
 import java.awt.Canvas;
 import java.awt.Font;
@@ -97,7 +97,7 @@ public class MGRSCanvas extends Canvas {
 
 	public void paintMarkers(final Graphics pGraphics) {
 		final String fontFamily = "TimesRoman";
-		final Integer fontSize = 36;
+		final Integer fontSize = 24;
 		final Font font = new Font(fontFamily, Font.PLAIN, fontSize);
 
 		pGraphics.setFont(font);

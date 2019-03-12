@@ -14,9 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.uma.jmetal.runner.multiobjective.chetan.NSGAIIBinaryRunner_SDRM;
 
 import app.beamcatcher.modelserver.configuration.Configuration;
+import app.beamcatcher.modelserver.io.sadrema.out.awt.MGRSImageSaver;
 import app.beamcatcher.modelserver.model.Beam;
 import app.beamcatcher.modelserver.model.Marker;
-import app.beamcatcher.modelserver.test.sadrema.awt.MGRSImageSaver;
 
 public class SadremaHelper {
 
