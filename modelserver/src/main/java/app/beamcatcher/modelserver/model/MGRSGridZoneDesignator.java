@@ -23,6 +23,10 @@ public class MGRSGridZoneDesignator {
 	@NotNull
 	private CharSequence latitudeBandLetter;
 
+	public MGRSGridZoneDesignator() {
+
+	}
+
 	public MGRSGridZoneDesignator(final Integer pUTMZone, final CharSequence pLatitudeBandLetter) {
 		this.uuid = UUID.randomUUID();
 		this.utmZone = pUTMZone;

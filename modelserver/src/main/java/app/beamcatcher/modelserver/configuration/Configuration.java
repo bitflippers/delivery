@@ -8,6 +8,13 @@ import java.util.Map;
 
 public class Configuration {
 
+	public static final Integer MAXIMUM_EVENT_PRODUCTION_RATE_IN_MILLISECONDS = 10000;
+	public static final boolean THROTTLE_EVENT_CONSUMPTION = true;
+	public static final long EVENT_POLLING_FREQUENCY_IN_MILLISECONDS = 1000;
+	public static final long SADREMA_SOLUTION_RETRIEVAL_FREQUENCY_IN_MILLISECONDS = 5000;
+	public static final long MARKER_EXPIRY_TIMER_FREQUENCY_IN_MILLISECONDS = 30000;
+	public static final long MARKER_TIMEOUT = 60000;
+
 	public static final String EVENTS_LOG_FILE = "/tmp/events.log";
 	public static final String SYSTEM_LOG_FILE = "/tmp/system.log";
 	public static final String SADREMA_LOG_FILE = "/tmp/sadrema.log";
@@ -31,8 +38,9 @@ public class Configuration {
 	public static final String MODEL_SERVER_IO_DIR_SADREMA_OUT = MODEL_SERVER_IO_DIR_SADREMA + "/out";
 	public static final String MODEL_SERVER_IO_DIR_SADREMA_OUT_SIGNAL = MODEL_SERVER_IO_DIR_SADREMA_OUT + "/signal";
 	public static final String MODEL_SERVER_IO_DIR_SADREMA_OUT_DATA = MODEL_SERVER_IO_DIR_SADREMA_OUT + "/data";
-	public static final String MODEL_SERVER_IO_DIR_SADREMA_OUT_PNG = MODEL_SERVER_IO_DIR_SADREMA_OUT + "/png";
 	public static final String MODEL_SERVER_PROPERTIES_FILENAME = "modelserver.conf";
+
+	public static final String MODEL_SERVER_IO_DIR_SADREMA_ARCHIVE = MODEL_SERVER_IO_DIR_SADREMA + "/archive";
 
 	public static final String MODEL_SERVER_IO_DIR_SADREMA_IN = MODEL_SERVER_IO_DIR_SADREMA + "/in";
 	public static final String MODEL_SERVER_IO_DIR_SADREMA_IN_DATA = MODEL_SERVER_IO_DIR_SADREMA_IN + "/data";
@@ -198,7 +206,7 @@ public class Configuration {
 	}
 
 	public static final long MARKER_MINIMUM_REQUESTED_UNITS = 1L;
-	public static final long MARKER_MAXIMUM_REQUESTED_UNITS = 10L;
+	public static final long MARKER_MAXIMUM_REQUESTED_UNITS = 20L;
 
 	public static final long MARKER_MINIMUM_PRIORITY = 1L;
 	public static final long MARKER_MAXIMUM_PRIORITY = 10L;
@@ -237,10 +245,6 @@ public class Configuration {
 	public static final String SADREMA_CSV_SIGNAL_SUFFIX = "signal";
 	public static final String SADREMA_CSV_SATELLITES_SIGNAL_SUFFIX = "satellites." + SADREMA_CSV_SIGNAL_SUFFIX;
 	public static final String SADREMA_CSV_MARKERS_SIGNAL_SUFFIX = "markers." + SADREMA_CSV_SIGNAL_SUFFIX;
-	public static final long EVENT_POLLING_FREQUENCY_IN_MILLISECONDS = 1000;
-	public static final long SADREMA_SOLUTION_RETRIEVAL_FREQUENCY_IN_MILLISECONDS = 5000;
-	public static final long MARKER_EXPIRY_TIMER_FREQUENCY_IN_MILLISECONDS = 30000;
-	public static final long MARKER_TIMEOUT = 60000;
 
 	public static final Integer SLOT_1_ID = 1;
 	public static final Integer SLOT_2_ID = 2;

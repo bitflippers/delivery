@@ -25,6 +25,10 @@ public class Location {
 	@Valid
 	private SADREMAGridCell sadremaGridCell;
 
+	public Location() {
+
+	}
+
 	public Location(final Double pLatitude, final Double pLongitude) {
 		this.uuid = UUID.randomUUID();
 		setMGRSWGS84Coordinate(pLatitude, pLongitude);

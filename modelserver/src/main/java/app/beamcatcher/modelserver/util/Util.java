@@ -5,7 +5,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 
@@ -150,12 +149,14 @@ public class Util {
 	}
 
 	public static String getJSON(final Object pObject) {
+		String result = null;
 		try {
-			return OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(pObject);
-		} catch (JsonProcessingException e) {
+			result = OBJECT_MAPPER.writeValueAsString(pObject);
+		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			System.exit(-1);
 		}
+		return result;
 	}
 
 	public static String getHomeDirectory() {
