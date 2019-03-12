@@ -19,7 +19,7 @@
       <button (click)="drawer.toggle()" mat-button>Users</button>
     </mat-toolbar>
     <mat-nav-list class="userListCustom">
-      <pre *ngFor="let item of userList">
+      <pre class="userBox" *ngFor="let item of userList">
         <a href="#" mat-list-item>
           <mat-icon>{{item.icon}}</mat-icon>
           <h5>{{item.nickname}}</h5>

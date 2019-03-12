@@ -1,12 +1,13 @@
 import {map as Map} from '../map';
 import {Marker} from '../marker';
 import * as L from 'leaflet';
+import {interval} from "rxjs";
 
 let map;
 let planeLayer = L.layerGroup();
 let plns = {};
 
-let icon = L.icon({
+const icon = L.icon({
   iconUrl: 'assets/aeroplane.svg',
   iconSize: [16, 16],
   iconAnchor: [0, 0]
@@ -14,41 +15,55 @@ let icon = L.icon({
 
 class Plane extends Marker {
   speed: number; // speed in m/s
-  interval = 2000;
   deg: number;
   intervalT: any;
   lon: number;
   lat: number;
-  count: number = 0;
+  surface90 = 10750; // How much km is 90 degree
+  count = 0;
 
-  constructor(plane) {
-    super(plane.latlng, icon, 2000, planeLayer, plane.deg);
+  constructor(plane, public pollInterval = 5000) {
+    super(plane.latlng, icon, pollInterval, planeLayer, plane.deg);
 
+    this.interval = pollInterval;
     this.lat = plane.latlng[0];
     this.lon = plane.latlng[1];
     this.speed = plane.speed;
     this.deg = plane.deg;
 
     this.removeZoomTransition(map);
+    this.setTransition();
+    this.poller();
+  }
 
+  z = x => ((450 - x) % 360);
+
+  poller() {
+    if (this.intervalT) {
+      clearInterval(this.intervalT);
+    }
     this.intervalT = setInterval(() => {
       this.nextStep();
     }, this.interval);
   }
 
-  z = x => ((450 - x) % 360);
-
   nextStep() {
     this.count++;
-    let {lon, lat} = this.getLonLat();
+    const {lon, lat, interval} = this.getLonLat();
+    if (interval !== this.interval) {
+      this.interval = interval;
+      this.setTransition();
+      this.poller(); // Change the right speed
+    }
     this.marker.setLatLng([lat, lon]);
   }
 
   getLonLat() {
-    let R = this.count * this.speed * (1000 / this.interval) * 90 / (10750 * 1000);
-    let lon = this.lon + R * Math.cos(this.z(this.deg) * Math.PI / 180);
-    let lat = this.lat + R * Math.sin(this.z(this.deg) * Math.PI / 180);
-    return {lon: lon, lat: lat, deg: this.deg, speed: this.speed, R: R};
+    const R = this.count * this.speed * (1000 / this.interval) * 90 / (this.surface90 * 1000);
+    const lon = this.lon + R * Math.cos(this.z(this.deg) * Math.PI / 180);
+    const lat = this.lat + R * Math.sin(this.z(this.deg) * Math.PI / 180);
+    const interval = this.surface90 / (90 * this.speed);
+    return {lon: lon, lat: lat, deg: this.deg, speed: this.speed, R: R, interval: interval};
   }
 
   setLonLat(lon, lat, deg = this.deg, speed = this.speed) {

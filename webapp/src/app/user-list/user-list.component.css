@@ -17,6 +17,11 @@
 }
 
 .userListCustom {
-  overflow: hidden;
+  //overflow: hidden;
   width: 120pt;
+}
+
+.userBox {
+  width: 100%;
+  height: 1.5vw;
 }
