@@ -1,7 +1,8 @@
 const request = require('request');
 var io = require('./socket.io')();
 
-const pollInterval = 3000;
+const pollSatInterval = 3000;
+const pollPlaneInterval = 10000;
 
 if (!io) {
     setTimeout(() => io = require('./socket.io')(), 500); // Wait for initialization
@@ -12,10 +13,10 @@ let url = "http://127.0.0.1:8090/world";
 let planesUrl = "https://opensky-network.org/api/states/all";
 
 let userState = {};
-
 let oldMarkers = {};
+let oldPlanes = {};
 
-function broadcast() {
+function broadcastSat() {
     request(url, (err, resp, body) => {
         if (err) {
             console.log('Request, err', err);
@@ -68,24 +69,38 @@ function broadcast() {
         }
     
     });
+}
 
+
+function broadcastPlanes() {
     request(planesUrl, (err, resp, body) => {
         let data = JSON.parse(body);
         console.log('Some planes data');
 
         let d = data.states.sort((a,b) => a[0]<b[0] ? -1:1).slice(0,50).map(n => {
-            return {
+            let obj = {
                 id: n[0],
                 n: n,
-                latlng: [n[6]||0, n[5]||0],
+                latlng: [n[6], n[5]],
                 deg: n[10] || 0,
-                speed: n[9]
+                speed: n[9],
+                change: true
+            };
+            if (oldPlanes[obj.id] && (oldPlanes[obj.id].latlng[0] != obj.latlng[0]|| oldPlanes[obj.id].latlng[1] != obj.latlng[1])) {
+                obj.change = true;
+            } else {
+                obj.change = false;
             }
-        });
+            if (n[6] == null || n[5] == null || n[6] === 0 || n[5] === 0) {
+                obj.change = false;
+            }
+            oldPlanes[obj.id] = obj;
+            return obj;
+        }).filter(n => n.change);
 
         io.broadcast('planes', d);
-    })
+    });
 }
 
-
-setInterval(() => broadcast(), pollInterval);
+setInterval(() => broadcastSat(), pollSatInterval);
+setInterval(() => broadcastPlanes(), pollPlaneInterval);

@@ -17,7 +17,7 @@ export class Marker {
       draggable: true,
       rotationAngle: this.rotationAngle
     }, options);
-    //console.log("Option display: ",o);
+
     this.marker = L.marker(pos, o);
 
     this.setTransition();
@@ -25,6 +25,11 @@ export class Marker {
     if (this.layer) {
       this.marker.addTo(this.layer);
     }
+  }
+
+  setRotation(deg) {
+    this.rotationAngle = deg;
+    (<any>this.marker).setRotationAngle(deg);
   }
 
   removeZoomTransition(map: L.Map, fastInterval = 50) {
