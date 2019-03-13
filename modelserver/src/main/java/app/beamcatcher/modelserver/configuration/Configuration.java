@@ -40,7 +40,8 @@ public class Configuration {
 	public static final String MODEL_SERVER_IO_DIR_SADREMA_OUT_DATA = MODEL_SERVER_IO_DIR_SADREMA_OUT + "/data";
 	public static final String MODEL_SERVER_PROPERTIES_FILENAME = "modelserver.conf";
 
-	public static final String MODEL_SERVER_IO_DIR_SADREMA_ARCHIVE = MODEL_SERVER_IO_DIR_SADREMA + "/archive";
+	//public static final String MODEL_SERVER_IO_DIR_SADREMA_ARCHIVE = MODEL_SERVER_IO_DIR_SADREMA + "/archive";
+	public static final String MODEL_SERVER_IO_DIR_SADREMA_ARCHIVE = "/var/www/html/archive";
 
 	public static final String MODEL_SERVER_IO_DIR_SADREMA_IN = MODEL_SERVER_IO_DIR_SADREMA + "/in";
 	public static final String MODEL_SERVER_IO_DIR_SADREMA_IN_DATA = MODEL_SERVER_IO_DIR_SADREMA_IN + "/data";
