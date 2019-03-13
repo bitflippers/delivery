@@ -22,7 +22,7 @@ public class SadremaLogsHandler extends HttpServlet {
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-		response.setHeader("Content-Type:", "text/html; charset=utf-8");
+		response.setHeader("Content-Type", "text/html; charset=utf-8");
 		File file = new File(Configuration.SADREMA_LOG_FILE);
 		final Integer numberOfLines = 10;
 		Integer counter = 0;
