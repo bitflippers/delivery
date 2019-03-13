@@ -209,7 +209,7 @@ public class Configuration {
 	public static final long MARKER_MAXIMUM_REQUESTED_UNITS = 20L;
 
 	public static final long MARKER_MINIMUM_PRIORITY = 1L;
-	public static final long MARKER_MAXIMUM_PRIORITY = 10L;
+	public static final long MARKER_MAXIMUM_PRIORITY = 5L;
 
 	public static final int USER_USERNAME_MIN_LENGTH = 1;
 	public static final int USER_USERNMAE_MAX_LENGTH = 50;
