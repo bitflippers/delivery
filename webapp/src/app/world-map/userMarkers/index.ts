@@ -29,11 +29,10 @@ export abstract class Markers {
   }
 
   public static updateMarker(marker) {
-    // Test
     const id = Markers.univId(marker);
     const m = marker.location.mgrsWGS84Coordinate;
     const latlng = [m.latitude, m.longitude];
-    // console.log('marker', m, latlng);
+    console.log('marker', marker, m, latlng);
     if (typeof mrks[id] == 'object') {
       mrks[id].latlng = latlng;
       mrks[id].marker.marker.setLatLng(mrks[id].latlng);
@@ -42,6 +41,7 @@ export abstract class Markers {
         console.log('Marker priority', id, 'markerColor', 'markerColor' + (marker.priority || 1));
         mrks[id].marker.className = 'markerColor' + (marker.priority || 1);
         mrks[id].marker.iconL = Markers.buildIcon(marker);
+        Markers.tooltip(mrks[id], marker);
         mrks[id].marker.marker.setIcon(mrks[id].marker.iconL); // Change the icon
       }
     } else {
@@ -50,7 +50,14 @@ export abstract class Markers {
       marker.iconL = Markers.buildIcon(marker);
       mrks[id] = marker;
       mrks[id].marker = new UserMarker(marker);
+      Markers.tooltip(mrks[id], marker);
     }
+  }
+
+  public static tooltip(m, marker) {
+    //console.log('m.marker', m);
+    //debugger;
+    m.marker.marker.bindTooltip(`<IMG SRC="${marker.icon}">`);
   }
 
   public static deleteMarker(marker) {
@@ -67,7 +74,7 @@ class UserMarker extends Marker {
   constructor(public m, public interval = 1000) {
     super(m.latlng, m.iconL, interval, userMarkerLayer, 0);
     this.removeZoomTransition(map);
-    console.log('marker priority:', m.priority);
-    this.marker.bindTooltip('Priority: ' + m.priority.toString());
+    //console.log('marker:', m);
+    //this.marker.bindTooltip('Priority: ' + m.priority.toString());
   }
 }

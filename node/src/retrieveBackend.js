@@ -25,8 +25,15 @@ function broadcastSat() {
         let jsonObj = JSON.parse(body);
         if (io) {
             let users = Object.values(jsonObj.mapUser);
-            let step = Object.values(jsonObj.mapUser)
-                .map(n => Object.values(n.mapMarker).map(m => { m.slot = n.slot; return m }));
+            let step = users
+                .map(
+                    n => Object.values(n.mapMarker).map(
+                        m => {
+                            m.slot = n.slot;
+                            m.user = Object.assign({}, n);
+                            delete m.user.mapMarker; // Drop the cyclic loop
+                            return m;
+                        }));
 
             if (typeof step != 'object' || step.length < 1) {
                 return; // Broken data
@@ -55,7 +62,7 @@ function broadcastSat() {
             });
 
 
-            io.broadcast('users', Object.values(jsonObj.mapUser));
+            io.broadcast('users', users);
             io.broadcast('markers', Object.values(objm));
             
             oldMarkers = {};
