@@ -29,7 +29,7 @@ function connect(client) {
     io.broadcast('users', oldUsers);
     io.broadcast('planes', Object.values(oldPlanes));
 
-    client.on('moveonemarker', data => {
+    client.socket.on('moveonemarker', data => {
         console.log('Move one marker', data);
         io.broadcast('moveonemarker', data);
     });
