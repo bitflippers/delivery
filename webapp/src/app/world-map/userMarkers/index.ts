@@ -29,6 +29,7 @@ export abstract class Markers {
   }
 
   public static updateMarker(marker) {
+    // Test
     const id = Markers.univId(marker);
     const m = marker.location.mgrsWGS84Coordinate;
     const latlng = [m.latitude, m.longitude];
@@ -38,6 +39,7 @@ export abstract class Markers {
       mrks[id].marker.marker.setLatLng(mrks[id].latlng);
       if (marker.priority !== mrks[id].marker.priority) {
         mrks[id].marker.priority = marker.priority;
+        console.log('Marker priority', id, 'markerColor', 'markerColor' + (marker.priority || 1));
         mrks[id].marker.className = 'markerColor' + (marker.priority || 1);
         mrks[id].marker.iconL = Markers.buildIcon(marker);
         mrks[id].marker.marker.setIcon(mrks[id].marker.iconL); // Change the icon
