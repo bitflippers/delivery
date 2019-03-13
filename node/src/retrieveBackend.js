@@ -26,6 +26,8 @@ function connect() {
     // This function is called every time when a new client connects.
     // We shall immediatelly flush the current known data
     io.broadcast('markers', Object.values(oldMarkers).map(n => { n.state = 'new'; return n; }));
+    io.broadcast('users', oldUsers);
+    io.broadcast('planes', Object.values(oldPlanes));
 
 }
 
