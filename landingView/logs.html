@@ -70,7 +70,7 @@
 <div id="logsystem" class="monospace"></div>
 <script type="text/javascript">
         function doSadremaUpdate() {
-          $.ajax({type: "GET", url : "http://localhost:8090/sadremalogs",
+          $.ajax({type: "GET", url : "http://vps555958.ovh.net:8090/sadremalogs",
                   success: function (data) {
                      if (data.length > 0)
                      {
@@ -85,7 +85,7 @@
         setTimeout("doSadremaUpdate()", 2000);
 
         function doEventsUpdate() {
-          $.ajax({type: "GET", url : "http://localhost:8090/eventlogs",
+          $.ajax({type: "GET", url : "http://vps555958.ovh.net:8090/eventlogs",
                   success: function (data) {
                      if (data.length > 0)
                      {
@@ -100,7 +100,7 @@
         setTimeout("doEventsUpdate()", 2000);
 
         function doSystemUpdate() {
-          $.ajax({type: "GET", url : "http://localhost:8090/systemlogs",
+          $.ajax({type: "GET", url : "http://vps555958.ovh.net:8090/systemlogs",
                   success: function (data) {
                      if (data.length > 0)
                      {
