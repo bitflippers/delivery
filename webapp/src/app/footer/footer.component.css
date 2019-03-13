@@ -55,3 +55,9 @@
     transform: translateX(-100%);
   }
 }
+
+.logList {
+  height: 1vw;
+  overflow: hidden;
+  text-wrap: none;
+}

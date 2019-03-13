@@ -1,5 +1,21 @@
-<mat-toolbar class="footer">
+<!--<mat-toolbar class="footer">
   <a *ngFor="let item of saDReMalog" class="slideLeft" id="timing" mat-list-item>
-    <pre>SaDReMa:<i>{{item.text}} </i></pre>
+    <pre>{{item}}</pre>
   </a>
-</mat-toolbar>
+</mat-toolbar>-->
+
+<mat-expansion-panel class="footer">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Last Log:
+    </mat-panel-title>
+    <mat-panel-description>
+      {{lastMsg}}
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <div *ngFor="let log of saDReMalog" class="logList" style="color:{{log.color}}">
+    {{log.text}}
+  </div>
+
+</mat-expansion-panel>

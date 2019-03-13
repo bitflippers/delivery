@@ -66,10 +66,6 @@ export class WorldMapComponent implements OnInit {
         });
       });
     });
-
-    this.msg.messages.subscribe( data => {
-      console.log('messages', data);
-    });
   }
 
 }

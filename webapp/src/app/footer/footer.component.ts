@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MessagingService} from "../messaging/messaging.service";
+import {SpinnerServiceService} from "../spinner-service/spinner-service.service";
 import {iconList} from "../ressources/iconConvertor";
 
 @Component({
@@ -9,43 +10,18 @@ import {iconList} from "../ressources/iconConvertor";
 })
 export class FooterComponent implements OnInit {
 
-  saDReMalog = [
-    {
-      "text": "vkjenj",
-    },
-    {
-      "text": "vkjenj1",
-    },
-    {
-      "text": "vkjenj2",
-    },
-    {
-      "text": "vkjenj3",
-    },
-    {
-      "text": "vkjenj3",
-    },
-    {
-      "text": "vkjenj3",
-    },
-    {
-      "text": "vkjenj3",
-    },
-    {
-      "text": "vkjenj3",
-    },
-    {
-      "text": "vkjenj3",
-    }
-  ];
+  saDReMalog = [];
+  lastMsg = '';
 
-  constructor(public msg: MessagingService) {
+  constructor(public msg: MessagingService, public spinner: SpinnerServiceService) {
   }
 
   ngOnInit() {
-    this.msg.users.subscribe(data => {
-      console.log('I receive footer log', data);
-      // this.saDReMalog = data;
+    const r = /\[/;
+    this.msg.messages.subscribe(data => {
+      //console.log('Messages', data);
+      this.saDReMalog = this.saDReMalog.concat(data.filter(n => r.test(n)).map(n => ({ text: n, color: 'red' }))).splice(-15);
+      this.lastMsg = this.saDReMalog[this.saDReMalog.length - 1].text;
     });
   }
 
