@@ -46,7 +46,7 @@ function broadcastMsg() {
     console.log('messages processing');
     messages = messages.splice(-100); // Leave only the last 100 messages
     request(url+'/systemlogs', (err, resp, body) => {
-        console.log('systemlogs', err, resp, body);
+       // console.log('systemlogs', err, body);
         if (err || (!body)) return;
         let m = [];
         for (let line of body.split('</br>')) {
