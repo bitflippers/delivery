@@ -45,6 +45,7 @@ function connect(client) {
 function broadcastMsg() {
     messages = messages.splice(-100); // Leave only the last 100 messages
     request(url+'/systemlogs', (err, resp, body) => {
+        if (err || (!body)) return;
         let m = [];
         for (line in body.split('</br>')) {
             if (messages.indexOf(line)<0) {
@@ -55,6 +56,7 @@ function broadcastMsg() {
         io.broadcast('messages', m);
     });
     request(url+'/eventlogs', (err, resp, body) => {
+        if (err || (!body)) return;
         let m = [];
         for (line in body.split('</br>')) {
             if (messages.indexOf(line)<0) {
@@ -65,6 +67,7 @@ function broadcastMsg() {
         io.broadcast('messages', m);
     });
     request(url+'/sadremalogs', (err, resp, body) => {
+        if (err || (!body)) return;
         let m = [];
         for (line in body.split('</br>')) {
             if (messages.indexOf(line)<0) {
