@@ -43,11 +43,13 @@ function connect(client) {
 }
 
 function broadcastMsg() {
+    console.log('messages processing');
     messages = messages.splice(-100); // Leave only the last 100 messages
     request(url+'/systemlogs', (err, resp, body) => {
+        console.log('systemlogs', err, resp, body);
         if (err || (!body)) return;
         let m = [];
-        for (line in body.split('</br>')) {
+        for (let line of body.split('</br>')) {
             if (messages.indexOf(line)<0) {
                 messages.push(line);
                 m.push(line);
@@ -58,7 +60,7 @@ function broadcastMsg() {
     request(url+'/eventlogs', (err, resp, body) => {
         if (err || (!body)) return;
         let m = [];
-        for (line in body.split('</br>')) {
+        for (let line of body.split('</br>')) {
             if (messages.indexOf(line)<0) {
                 messages.push(line);
                 m.push(line);
@@ -69,7 +71,7 @@ function broadcastMsg() {
     request(url+'/sadremalogs', (err, resp, body) => {
         if (err || (!body)) return;
         let m = [];
-        for (line in body.split('</br>')) {
+        for (let line of body.split('</br>')) {
             if (messages.indexOf(line)<0) {
                 messages.push(line);
                 m.push(line);

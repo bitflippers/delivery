@@ -134,9 +134,9 @@ class Beam {
 
 
     this.beam.footprint.setSADREMAGridCell.forEach(n => {
-      console.log('Draw circle', n);
+      // console.log('Draw circle', n);
       const {centerX, centerY, x1, y1, x2, y2} = MGRS.convert(n.columnIndex, n.rowIndex);
-      console.log('centerX', centerX, 'centerY', centerY, 'xy', x1, y1, x2, y2);
+      // console.log('centerX', centerX, 'centerY', centerY, 'xy', x1, y1, x2, y2);
       const p = L.polygon([
         [y1, x1], [y2, x1], [y2, x2], [y1, x2], [y1, x1]
       ], {

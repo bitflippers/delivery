@@ -59,12 +59,16 @@ export class WorldMapComponent implements OnInit {
     this.msg.satellites.subscribe(data => {
 //      console.log('Satellites', data);
       data.forEach(satellite => {
-        console.log('Satellite', satellite);
+        // console.log('Satellite', satellite);
         Object.values(satellite.mapBeam).forEach(beam => {
-          console.log('beam', beam);
+          // console.log('beam', beam);
           Sat.addBeam(beam, satellite);
         });
       });
+    });
+
+    this.msg.messages.subscribe( data => {
+      console.log('messages', data);
     });
   }
 
