@@ -55,7 +55,7 @@ function broadcastMsg() {
                 m.push(line);
             }
         }
-        io.broadcast('messages', m);
+        if (m.length>0) io.broadcast('messages', m);
     });
     request(url+'/eventlogs', (err, resp, body) => {
         if (err || (!body)) return;
@@ -66,7 +66,7 @@ function broadcastMsg() {
                 m.push(line);
             }
         }
-        io.broadcast('messages', m);
+        if (m.length>0) io.broadcast('messages', m);
     });
     request(url+'/sadremalogs', (err, resp, body) => {
         if (err || (!body)) return;
@@ -77,7 +77,7 @@ function broadcastMsg() {
                 m.push(line);
             }
         }
-        io.broadcast('messages', m);
+        if (m.length>0) io.broadcast('messages', m);
     });
 }
 
