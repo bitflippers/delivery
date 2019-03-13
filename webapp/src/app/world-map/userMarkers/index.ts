@@ -1,16 +1,16 @@
-import {map as Map} from '../map';
+import {World} from '../map';
 import {Marker} from '../marker';
 import * as L from 'leaflet';
 
 let map;
-let userMarkerLayer = L.layerGroup();
+const userMarkerLayer = L.layerGroup();
 const mrks = {};
 
 export abstract class Markers {
   public static init() {
-    map = Map().map;
+    map = World.map().map;
     userMarkerLayer.addTo(map);
-    Map().control.addOverlay(userMarkerLayer, "Markers");
+    World.map().control.addOverlay(userMarkerLayer, 'Markers');
   }
 
   public static univId(marker) {
@@ -18,28 +18,30 @@ export abstract class Markers {
   }
 
   public static buildIcon(marker) {
-    //console.log("icon color option", marker);
+    // console.log("icon color option", marker);
     return L.icon({
       iconUrl: marker.icon,
       iconSize: [32, 32],
-      iconAnchor: [0, 0],
+      iconAnchor: [16, 32],
       className: 'markerColor' + (marker.priority || 1),
     });
 
   }
 
   public static updateMarker(marker) {
-    let id = Markers.univId(marker);
-    let m = marker.location.mgrsWGS84Coordinate;
-    let latlng = [m.latitude, m.longitude];
-    //console.log('marker', m, latlng);
-    if (typeof mrks[id] == 'object') {
+    const id = Markers.univId(marker);
+    const m = marker.location.mgrsWGS84Coordinate;
+    const latlng = [m.latitude, m.longitude];
+    // console.log('marker', marker, m, latlng);
+    if (typeof mrks[id] === 'object') {
       mrks[id].latlng = latlng;
       mrks[id].marker.marker.setLatLng(mrks[id].latlng);
       if (marker.priority !== mrks[id].marker.priority) {
         mrks[id].marker.priority = marker.priority;
+        // console.log('Marker priority', id, 'markerColor', 'markerColor' + (marker.priority || 1));
         mrks[id].marker.className = 'markerColor' + (marker.priority || 1);
         mrks[id].marker.iconL = Markers.buildIcon(marker);
+        Markers.tooltip(mrks[id], marker);
         mrks[id].marker.marker.setIcon(mrks[id].marker.iconL); // Change the icon
       }
     } else {
@@ -47,13 +49,20 @@ export abstract class Markers {
       marker.latlng = latlng;
       marker.iconL = Markers.buildIcon(marker);
       mrks[id] = marker;
+      mrks[id].markerID = id;
       mrks[id].marker = new UserMarker(marker);
+      Markers.tooltip(mrks[id], marker);
     }
+    return mrks[id];
+  }
+
+  public static tooltip(m, marker) {
+    m.marker.marker.bindTooltip(`<IMG STYLE="width: 8pt; height: 8pt;" SRC="${marker.icon}">${marker.user.username}<BR>Priority: ${marker.priority}<BR>Requested Units: ${marker.requestedUnits}`);
   }
 
   public static deleteMarker(marker) {
-    let id = Markers.univId(marker);
-    console.log("We delete marker");
+    const id = Markers.univId(marker);
+    console.log('We delete marker');
     if (mrks[id]) {
       mrks[id].marker.close();
       delete mrks[id];
@@ -65,7 +74,7 @@ class UserMarker extends Marker {
   constructor(public m, public interval = 1000) {
     super(m.latlng, m.iconL, interval, userMarkerLayer, 0);
     this.removeZoomTransition(map);
-    console.log("marker priority:", m.priority);
-    this.marker.bindTooltip("Priority: " + m.priority.toString());
+    // console.log('marker:', m);
+    // this.marker.bindTooltip('Priority: ' + m.priority.toString());
   }
 }

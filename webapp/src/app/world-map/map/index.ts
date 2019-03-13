@@ -51,7 +51,7 @@ class Map {
     this.control = L.control.layers({}, {
       'Grid': this.gridLayer
     }).addTo(this.map);
-    console.log('Control', this.control);
+    // console.log('Control', this.control);
   }
 
   drawGridInit() {
@@ -80,10 +80,12 @@ class Map {
   }
 }
 
-export function map(): Map {
-  //console.log('Map called');
-  if (mapObj == null) {
+export abstract class World {
+  public static init() {
     mapObj = new Map();
   }
-  return mapObj;
+
+  public static map() {
+    return mapObj;
+  }
 }

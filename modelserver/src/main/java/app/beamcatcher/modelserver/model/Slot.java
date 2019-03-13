@@ -20,6 +20,10 @@ public class Slot {
 	@Max(Configuration.MAXIMUM_SLOT_INDEX)
 	private Integer identifier;
 
+	public Slot() {
+
+	}
+
 	public Slot(Integer identifier) {
 		this.uuid = UUID.randomUUID();
 		this.identifier = identifier;

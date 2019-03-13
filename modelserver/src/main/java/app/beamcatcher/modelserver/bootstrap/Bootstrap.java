@@ -9,7 +9,7 @@ import org.apache.commons.io.FileUtils;
 
 import app.beamcatcher.modelserver.configuration.Configuration;
 import app.beamcatcher.modelserver.io.eventserver.in.EventProcessorRunnable;
-import app.beamcatcher.modelserver.io.eventserver.in.simulator.RandomEventGenerator;
+import app.beamcatcher.modelserver.io.eventserver.in.simulator.RandomEventGeneratorRunnable;
 import app.beamcatcher.modelserver.io.eventserver.out.HTTPEndpointHandler;
 import app.beamcatcher.modelserver.io.sadrema.out.SadremaSolutionRetrieverRunnable;
 
@@ -22,7 +22,6 @@ public class Bootstrap {
 		startRandomEventGenerator();
 		startEventProcessor();
 		startSadremaSolutionRetriever();
-
 	}
 
 	private static void startSadremaSolutionRetriever() {
@@ -33,11 +32,9 @@ public class Bootstrap {
 	}
 
 	private static void cleanPreviousState() {
-
 		try {
 			FileUtils.cleanDirectory(new File(Configuration.MODEL_SERVER_IO_DIR_SADREMA_OUT_SIGNAL));
 			FileUtils.cleanDirectory(new File(Configuration.MODEL_SERVER_IO_DIR_SADREMA_OUT_DATA));
-			FileUtils.cleanDirectory(new File(Configuration.MODEL_SERVER_IO_DIR_SADREMA_OUT_PNG));
 			FileUtils.cleanDirectory(new File(Configuration.MODEL_SERVER_IO_DIR_EVENT_SERVER_IN_SIGNAL));
 			FileUtils.cleanDirectory(new File(Configuration.MODEL_SERVER_IO_DIR_EVENT_SERVER_IN_DATA));
 			FileUtils.cleanDirectory(new File(Configuration.MODEL_SERVER_LOG_DIR));
@@ -46,7 +43,6 @@ public class Bootstrap {
 			e.printStackTrace();
 			System.exit(-1);
 		}
-
 	}
 
 	private static void startEventProcessor() {
@@ -57,7 +53,7 @@ public class Bootstrap {
 	}
 
 	private static void startRandomEventGenerator() {
-		final RandomEventGenerator randomEventGenerator = new RandomEventGenerator();
+		final RandomEventGeneratorRunnable randomEventGenerator = new RandomEventGeneratorRunnable();
 		final Thread randomEventGeneratorThread = new Thread(randomEventGenerator);
 		randomEventGeneratorThread.setName("RANDOM-EVENT-GENERATOR");
 		randomEventGeneratorThread.start();
@@ -71,12 +67,11 @@ public class Bootstrap {
 	public static final void createDirectories() {
 		createDirectory(Configuration.MODEL_SERVER_IO_DIR_SADREMA_OUT_SIGNAL);
 		createDirectory(Configuration.MODEL_SERVER_IO_DIR_SADREMA_OUT_DATA);
-		createDirectory(Configuration.MODEL_SERVER_IO_DIR_SADREMA_OUT_PNG);
 		createDirectory(Configuration.MODEL_SERVER_IO_DIR_EVENT_SERVER_IN_SIGNAL);
 		createDirectory(Configuration.MODEL_SERVER_IO_DIR_EVENT_SERVER_IN_DATA);
 		createDirectory(Configuration.MODEL_SERVER_LOG_DIR);
 		createDirectory(Configuration.MODEL_SERVER_IO_DIR_SADREMA_IN_DATA);
-
+		createDirectory(Configuration.MODEL_SERVER_IO_DIR_SADREMA_ARCHIVE);
 	}
 
 	private static final void createDirectory(final String pDirectory) {

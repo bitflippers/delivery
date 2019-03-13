@@ -23,6 +23,10 @@ public class SADREMAGridCell {
 	@Max(Configuration.SADREMA_GRID_CELL_MAXIMUM_COLUMN_INDEX)
 	private Integer columnIndex;
 
+	public SADREMAGridCell() {
+
+	}
+
 	public SADREMAGridCell(final Integer pRowIndex, final Integer pColumnIndex) {
 		this.uuid = UUID.randomUUID();
 		this.rowIndex = pRowIndex;

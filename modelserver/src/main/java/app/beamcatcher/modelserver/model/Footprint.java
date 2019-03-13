@@ -24,6 +24,10 @@ public class Footprint {
 	@Valid
 	private Set<SADREMAGridCell> setSADREMAGridCell;
 
+	public Footprint() {
+
+	}
+
 	public Footprint(Set<SADREMAGridCell> pSetSADREMAGridCell) {
 		this.uuid = UUID.randomUUID();
 		this.setSADREMAGridCell = pSetSADREMAGridCell;

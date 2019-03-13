@@ -9,7 +9,6 @@ import java.util.UUID;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import app.beamcatcher.modelserver.bootstrap.Bootstrap;
-import app.beamcatcher.modelserver.configuration.Configuration;
 import app.beamcatcher.modelserver.io.sadrema.out.CSVWriter;
 import app.beamcatcher.modelserver.io.sadrema.out.WorldToMarkersCSVFileMapper;
 import app.beamcatcher.modelserver.model.Marker;
@@ -18,7 +17,6 @@ import app.beamcatcher.modelserver.model.User;
 import app.beamcatcher.modelserver.model.World;
 import app.beamcatcher.modelserver.persistence.WorldSingleton;
 import app.beamcatcher.modelserver.test.Test;
-import app.beamcatcher.modelserver.test.sadrema.awt.MGRSImageSaver;
 
 public class DumpCSVsForSadrema {
 
@@ -66,8 +64,6 @@ public class DumpCSVsForSadrema {
 				totalRequestedCapacity = totalRequestedCapacity + marker.getRequestedUnits();
 			}
 		}
-		final String pngFilename = Configuration.MODEL_SERVER_IO_DIR_SADREMA_OUT_PNG + "/" + uuid + ".png";
-		MGRSImageSaver.savePNG(setMarker, pngFilename);
 		return totalRequestedCapacity;
 	}
 

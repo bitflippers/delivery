@@ -23,53 +23,45 @@ import app.beamcatcher.modelserver.io.eventserver.in.EventUserLeftMessage;
 import app.beamcatcher.modelserver.model.Game;
 import app.beamcatcher.modelserver.model.Slot;
 import app.beamcatcher.modelserver.model.User;
-import app.beamcatcher.modelserver.model.World;
 import app.beamcatcher.modelserver.persistence.WorldSingleton;
 import app.beamcatcher.modelserver.util.ModelValidator;
 import app.beamcatcher.modelserver.util.RandomMGRSWGS84Coordinates;
 import app.beamcatcher.modelserver.util.Util;
 
-public class RandomEventGenerator implements Runnable {
+public class RandomEventGeneratorRunnable implements Runnable {
 
-	private static final Logger logger = LoggerFactory.getLogger(RandomEventGenerator.class);
-
-	private static final Integer EVENT_PRODUCTION_RATE_IN_MILLISECONDS = 2000;
+	private static final Logger logger = LoggerFactory.getLogger(RandomEventGeneratorRunnable.class);
 
 	public void run() {
 
 		logger.info("Started random event generator !");
-		logger.info("Event generation every " + EVENT_PRODUCTION_RATE_IN_MILLISECONDS + " milliseconds!");
+		logger.info("Event generation every " + Configuration.MAXIMUM_EVENT_PRODUCTION_RATE_IN_MILLISECONDS + " ms");
 
 		try {
+			Integer sleepTime = Configuration.MAXIMUM_EVENT_PRODUCTION_RATE_IN_MILLISECONDS;
 			do {
+				final Long startTime = System.currentTimeMillis();
 
-				logger.info("RandomEventGenerator requesting lock...");
 				WorldSemaphore.semaphore.acquire();
-				logger.info("RandomEventGenerator acquired lock !!!");
-				logger.info("RandomEventGenerator getting to work...");
 
-				final World world = WorldSingleton.INSTANCE;
+				final Boolean atLeastOneUser = (WorldSingleton.INSTANCE.getMapUser() != null)
+						&& (!WorldSingleton.INSTANCE.getMapUser().isEmpty());
 
-				final Boolean atLeastOneUser = (world.getMapUser() != null) && (!world.getMapUser().isEmpty());
-
-				final Integer totalNumberOfUsers = world.getMapUser().keySet().size();
-				logger.info("RandomEventGenerator --> Total users: " + totalNumberOfUsers);
+				final Integer totalNumberOfUsers = WorldSingleton.INSTANCE.getMapUser().keySet().size();
 
 				Boolean eventAlreadyPublished = Boolean.FALSE;
+				String generatedEvent = null;
 
 				// USER_JOINS
 				if (totalNumberOfUsers < Configuration.WORLD_MAXIMUM_NUMBER_OF_USERS) {
-					logger.info("TOTALUSERS " + totalNumberOfUsers);
 					if (randomPercentage(4)) {
 						final String username = new Faker().gameOfThrones().character();
 						final EventUserGrantedAccessMessage eventUserGrantedAccessMessage = new EventUserGrantedAccessMessage();
 						eventUserGrantedAccessMessage.setEventIdentifier(Configuration.EVENT_IDENTIFIER_USER_JOINED);
 						eventUserGrantedAccessMessage.setUsername(username);
-						final Integer slotIdentifier = getRandomSlot();
-						if (slotIdentifier > 0) {
-							eventUserGrantedAccessMessage.setSlotIdentifier(slotIdentifier);
-							publishEvent(eventUserGrantedAccessMessage);
-						}
+						final Integer slotIdentifier = getRandomFreeSlot();
+						eventUserGrantedAccessMessage.setSlotIdentifier(slotIdentifier);
+						generatedEvent = publishEvent(eventUserGrantedAccessMessage);
 						eventAlreadyPublished = Boolean.TRUE;
 					}
 				}
@@ -83,15 +75,15 @@ public class RandomEventGenerator implements Runnable {
 						final EventUserLeftMessage eventUserLeftMessage = new EventUserLeftMessage();
 						eventUserLeftMessage.setEventIdentifier(Configuration.EVENT_IDENTIFIER_USER_LEFT);
 						eventUserLeftMessage.setUsername(userThatExited);
-						publishEvent(eventUserLeftMessage);
+						generatedEvent = publishEvent(eventUserLeftMessage);
 						eventAlreadyPublished = Boolean.TRUE;
 					}
 				}
 
-				if (randomPercentage(4) && atLeastOneUser) {
+				if (!eventAlreadyPublished && randomPercentage(2) && atLeastOneUser) {
 					// MARKER_ADDED
-					String eventIdentifier = Configuration.EVENT_IDENTIFIER_USER_PLACED_MARKER;
-					UUID userUUID = getRandomExistingUser();
+					final String eventIdentifier = Configuration.EVENT_IDENTIFIER_USER_PLACED_MARKER;
+					final UUID userUUID = getRandomExistingUser();
 					final User user = WorldSingleton.INSTANCE.getMapUser().get(userUUID);
 					final CharSequence username = user.getUsername();
 					final Integer numberOfUserMarkers = user.getMapMarker().size();
@@ -109,15 +101,33 @@ public class RandomEventGenerator implements Runnable {
 						eventMarkerPlacedMessage.setPriority(priority);
 						eventMarkerPlacedMessage.setRequestedUnits(requestedUnits);
 						eventMarkerPlacedMessage.setUsername((String) username);
-						publishEvent(eventMarkerPlacedMessage);
+						generatedEvent = publishEvent(eventMarkerPlacedMessage);
 					}
 				}
 
-				logger.info("RandomEventGenerator finished work, releasing lock !!");
 				WorldSemaphore.semaphore.release();
 
-				logger.info("Sleeping for " + EVENT_PRODUCTION_RATE_IN_MILLISECONDS + " milliseconds...");
-				Thread.sleep(EVENT_PRODUCTION_RATE_IN_MILLISECONDS);
+				final Long endTime = System.currentTimeMillis();
+
+				final Integer currentNumberOfQueuedEvents = getNumberOfQueuedEvents();
+
+				final Integer delta = 100;
+
+				// throttle
+				if (currentNumberOfQueuedEvents > 10) {
+					sleepTime = sleepTime + delta;
+				} else {
+					if (sleepTime > delta
+							&& (sleepTime - delta) > Configuration.MAXIMUM_EVENT_PRODUCTION_RATE_IN_MILLISECONDS) {
+						sleepTime = sleepTime - delta;
+					}
+				}
+
+				final Long elapsedTime = endTime - startTime;
+				logger.info("Event generated in " + elapsedTime + " ms: " + generatedEvent);
+				logger.info("Events in queue: " + currentNumberOfQueuedEvents);
+				logger.info("Throttle is " + sleepTime + " ms");
+				Thread.sleep(sleepTime);
 
 			} while (true);
 
@@ -128,22 +138,15 @@ public class RandomEventGenerator implements Runnable {
 		}
 	}
 
-	private Integer getRandomSlot() {
+	private Integer getRandomFreeSlot() {
 		final Game game = WorldSingleton.INSTANCE.getGame();
 		final Set<Slot> freeSlots = game.getFreeSlots();
 		final Object[] arrayOfFreeSlot = freeSlots.toArray();
 		final Integer numberOfFreeSlots = arrayOfFreeSlot.length;
-		// TODO: HACK: No idea what is going on here
-		if (numberOfFreeSlots > 0) {
-			final Random random = new Random();
-			logger.info("FREESLOTS " + numberOfFreeSlots);
-			final Integer randomSlotIndex = random.nextInt(numberOfFreeSlots);
-			final Slot slot = (Slot) arrayOfFreeSlot[randomSlotIndex];
-			return slot.getIdentifier();
-		} else {
-			return -1;
-		}
-
+		final Random random = new Random();
+		final Integer randomSlotIndex = random.nextInt(numberOfFreeSlots);
+		final Slot slot = (Slot) arrayOfFreeSlot[randomSlotIndex];
+		return slot.getIdentifier();
 	}
 
 	// pInteger low, more chance
@@ -158,7 +161,7 @@ public class RandomEventGenerator implements Runnable {
 
 	}
 
-	private static void publishEvent(final Object pObject) {
+	private static String publishEvent(final Object pObject) {
 
 		String jsonString = null;
 		String eventIdentifier = null;
@@ -221,10 +224,7 @@ public class RandomEventGenerator implements Runnable {
 			System.exit(-1);
 		}
 
-		logger.info("Generated:");
-		logger.info(filename);
-		logger.info(filenameSignal);
-		logger.info(jsonString);
+		return jsonString;
 
 	}
 
@@ -236,6 +236,10 @@ public class RandomEventGenerator implements Runnable {
 		final Integer randomUserIndex = new Random().nextInt(totalNumberOfUsers);
 		final UUID userUUID = (UUID) arrayUSerUUID[randomUserIndex];
 		return userUUID;
+	}
+
+	private Integer getNumberOfQueuedEvents() {
+		return new File(Configuration.MODEL_SERVER_IO_DIR_EVENT_SERVER_IN_SIGNAL).listFiles().length;
 	}
 
 }

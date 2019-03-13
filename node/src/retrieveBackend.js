@@ -1,10 +1,16 @@
 const request = require('request');
 var io = require('./socket.io')();
 
-const pollInterval = 3000;
+const pollSatInterval = 3000;
+const pollPlaneInterval = 10000;
 
 if (!io) {
-    setTimeout(() => io = require('./socket.io')(), 500); // Wait for initialization
+    setTimeout(() => {
+        io = require('./socket.io')();
+        io.setConnect(connect);
+    }, 500); // Wait for initialization
+} else {
+    io.setConnect(connect);
 }
 
 let url = "http://127.0.0.1:8090/world";
@@ -12,10 +18,24 @@ let url = "http://127.0.0.1:8090/world";
 let planesUrl = "https://opensky-network.org/api/states/all";
 
 let userState = {};
-
 let oldMarkers = {};
+let oldPlanes = {};
+let oldUsers = [];
 
-function broadcast() {
+function connect(client) {
+    // This function is called every time when a new client connects.
+    // We shall immediatelly flush the current known data
+    io.broadcast('markers', Object.values(oldMarkers).map(n => { n.state = 'new'; return n; }));
+    io.broadcast('users', oldUsers);
+    io.broadcast('planes', Object.values(oldPlanes));
+
+    client.socket.on('moveonemarker', data => {
+        console.log('Move one marker', data);
+        io.broadcast('moveonemarker', data);
+    });
+}
+
+function broadcastSat() {
     request(url, (err, resp, body) => {
         if (err) {
             console.log('Request, err', err);
@@ -24,9 +44,21 @@ function broadcast() {
         let jsonObj = JSON.parse(body);
         if (io) {
             let users = Object.values(jsonObj.mapUser);
-            let markers = Object.values(jsonObj.mapUser)
-                .map(n => Object.values(n.mapMarker).map(m => { m.slot = n.slot; return m }))
-                .reduce((x, y) => x.concat(y));
+            let step = users
+                .map(
+                    n => Object.values(n.mapMarker).map(
+                        m => {
+                            m.slot = n.slot;
+                            m.user = Object.assign({}, n);
+                            delete m.user.mapMarker; // Drop the cyclic loop
+                            return m;
+                        }));
+
+            if (typeof step != 'object' || step.length < 1) {
+                return; // Broken data
+            }
+
+            let markers = step.reduce((x, y) => x.concat(y));
             let objm = {};
             markers.forEach(n => objm[n.uuid] = n);
             let newKeys = Object.keys(objm);
@@ -49,8 +81,10 @@ function broadcast() {
             });
 
 
-            io.broadcast('users', Object.values(jsonObj.mapUser));
+            io.broadcast('users', users);
             io.broadcast('markers', Object.values(objm));
+
+            oldUsers = users;
             
             oldMarkers = {};
             Object.values(objm).filter(n => n.state != 'delete').forEach(n => oldMarkers[n.uuid] = n);
@@ -68,24 +102,38 @@ function broadcast() {
         }
     
     });
+}
 
+
+function broadcastPlanes() {
     request(planesUrl, (err, resp, body) => {
         let data = JSON.parse(body);
         console.log('Some planes data');
 
         let d = data.states.sort((a,b) => a[0]<b[0] ? -1:1).slice(0,50).map(n => {
-            return {
+            let obj = {
                 id: n[0],
                 n: n,
-                latlng: [n[6]||0, n[5]||0],
+                latlng: [n[6], n[5]],
                 deg: n[10] || 0,
-                speed: n[9]
+                speed: n[9],
+                change: true
+            };
+            if (oldPlanes[obj.id] && (oldPlanes[obj.id].latlng[0] != obj.latlng[0]|| oldPlanes[obj.id].latlng[1] != obj.latlng[1])) {
+                obj.change = true;
+            } else {
+                obj.change = false;
             }
-        });
+            if (n[6] == null || n[5] == null || n[6] === 0 || n[5] === 0) {
+                obj.change = false;
+            }
+            oldPlanes[obj.id] = obj;
+            return obj;
+        }).filter(n => n.change);
 
         io.broadcast('planes', d);
-    })
+    });
 }
 
-
-setInterval(() => broadcast(), pollInterval);
+setInterval(() => broadcastSat(), pollSatInterval);
+setInterval(() => broadcastPlanes(), pollPlaneInterval);

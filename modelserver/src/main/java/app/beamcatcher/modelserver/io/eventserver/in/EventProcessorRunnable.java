@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -22,68 +23,64 @@ public class EventProcessorRunnable implements Runnable {
 
 	public void run() {
 
-		logger.info("Event processor started !");
+		logger.info("Event processor started");
 
 		logger.info("Event signals directory: " + Configuration.MODEL_SERVER_IO_DIR_EVENT_SERVER_IN_SIGNAL);
 		logger.info("Event data directory: " + Configuration.MODEL_SERVER_IO_DIR_EVENT_SERVER_IN_DATA);
-		logger.info("Events polling rate in milliseconds: " + Configuration.EVENT_POLLING_FREQUENCY_IN_MILLISECONDS);
+		logger.info("Events polling rate in ms: " + Configuration.EVENT_POLLING_FREQUENCY_IN_MILLISECONDS);
 
-		logger.info("Starting polling !");
+		logger.info("Starting polling...");
 
 		try {
+
+			Long previousTimestamp = new Date().getTime();
 
 			do {
 
 				final Boolean signalsFound = getSignalsFound();
 
 				if (signalsFound) {
-
-					logger.info("EventProcessor requesting lock...");
+					final Long startTime = System.currentTimeMillis();
 					WorldSemaphore.semaphore.acquire();
-					logger.info("EventProcessor acquired lock !!!");
-					logger.info("EventProcessor getting to work...");
 
 					// Signalfile
 					final File[] orderedListSignalFiles = getOrderedListSignalFiles();
 					final Integer numberOfSignalFiles = orderedListSignalFiles.length;
-					logger.info(numberOfSignalFiles + " Signal(s) found !");
 					final File mostRecentSignalEventFile = orderedListSignalFiles[0];
 					final String mostRecentSignalEventFileAbsolutePath = mostRecentSignalEventFile.getAbsolutePath();
-					logger.info("Most recent signal (absolute path): " + mostRecentSignalEventFileAbsolutePath);
 					final String mostRecentSignalEventFileFilename = mostRecentSignalEventFile.getName();
-					logger.info("Most recent signal (filename): " + mostRecentSignalEventFileFilename);
 					final String timestampAsString = getTimestamp(mostRecentSignalEventFileFilename);
+					final Long currentTimestamp = Long.valueOf(timestampAsString);
+					if (currentTimestamp < previousTimestamp) {
+						logger.error("Event out of order !");
+						System.exit(-1);
+					} else {
+						previousTimestamp = currentTimestamp;
+					}
 					final String uuidAsString = getUUID(mostRecentSignalEventFileFilename);
 					final String eventIdentifier = getEventIdentifier(mostRecentSignalEventFileFilename);
 					checkFilenameValidity(timestampAsString, uuidAsString, eventIdentifier);
-					logger.info("Timestamp: " + timestampAsString + " UUID: " + uuidAsString + " eventIdentifier: "
-							+ eventIdentifier);
 
 					// DataFile
 					final String dataFileAbsolutePath = getDataFileAbsolutePath(timestampAsString, uuidAsString,
 							eventIdentifier);
-					logger.info("Looking for data file: " + dataFileAbsolutePath);
 					checkDataFile(dataFileAbsolutePath);
-					logger.info("File found !");
 					final String dataFileContents = getDataFileContents(dataFileAbsolutePath);
-					logger.info("Event contents: " + dataFileContents);
 
 					// Process event
-					logger.info("Processing event...");
 					EventProcessor.processEvent(dataFileContents, eventIdentifier);
 					postEventActions(mostRecentSignalEventFileAbsolutePath, dataFileAbsolutePath);
-					logger.info("Done !");
 
-					logger.info("EventProcessor finished work ! realising lock !!!");
 					WorldSemaphore.semaphore.release();
 
-				} else {
-					logger.info("No signals found...");
+					final Long endTime = System.currentTimeMillis();
+					final Long elapsedTime = endTime - startTime;
+					logger.info("Event processed in " + elapsedTime + " ms");
 				}
 
-				logger.info(
-						"Sleeping for " + Configuration.EVENT_POLLING_FREQUENCY_IN_MILLISECONDS + " milliseconds...");
-				Thread.sleep(Configuration.EVENT_POLLING_FREQUENCY_IN_MILLISECONDS);
+				if (Configuration.THROTTLE_EVENT_CONSUMPTION) {
+					Thread.sleep(Configuration.EVENT_POLLING_FREQUENCY_IN_MILLISECONDS);
+				}
 
 			} while (true);
 
@@ -96,13 +93,9 @@ public class EventProcessorRunnable implements Runnable {
 	private void postEventActions(final String pMostRecentSignalEventFileAbsolutePath,
 			final String pDataFileAbsolutePath) {
 
-		logger.info("Validating model...");
 		ModelValidator.validate(WorldSingleton.INSTANCE);
 		// Services.performTimedOperations(WorldSingleton.INSTANCE);
 		// SadremaHelper.mutateBeams(WorldSingleton.INSTANCE);
-
-		logger.info("Removing file: " + pMostRecentSignalEventFileAbsolutePath);
-		logger.info("Removing file: " + pDataFileAbsolutePath);
 
 		removeFiles(pMostRecentSignalEventFileAbsolutePath, pDataFileAbsolutePath);
 	}
@@ -133,7 +126,8 @@ public class EventProcessorRunnable implements Runnable {
 	private void checkDataFile(String dataFileAbsolutePath) {
 		File file = new File(dataFileAbsolutePath);
 		if (!file.exists()) {
-			throw new IllegalStateException("Data file not found ! file: " + dataFileAbsolutePath);
+			logger.error("Data file not found ! file: " + dataFileAbsolutePath);
+			System.exit(-1);
 		}
 	}
 
@@ -157,7 +151,8 @@ public class EventProcessorRunnable implements Runnable {
 		}
 
 		if (!eventIdentifierOk) {
-			throw new IllegalStateException("Unknown event: " + pEventIdentifier);
+			logger.error("Unknown event: " + pEventIdentifier);
+			System.exit(-1);
 		}
 
 	}

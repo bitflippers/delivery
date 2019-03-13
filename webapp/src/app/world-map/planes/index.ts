@@ -1,12 +1,13 @@
-import {map as Map} from '../map';
+import {World} from '../map';
 import {Marker} from '../marker';
 import * as L from 'leaflet';
+import {interval} from 'rxjs';
 
 let map;
-let planeLayer = L.layerGroup();
-let plns = {};
+const planeLayer = L.layerGroup();
+const plns = {};
 
-let icon = L.icon({
+const icon = L.icon({
   iconUrl: 'assets/aeroplane.svg',
   iconSize: [16, 16],
   iconAnchor: [0, 0]
@@ -14,40 +15,51 @@ let icon = L.icon({
 
 class Plane extends Marker {
   speed: number; // speed in m/s
-  interval = 2000;
   deg: number;
   intervalT: any;
   lon: number;
   lat: number;
-  count: number = 0;
+  surfaceDeg2Km = 90 / 10750; // 90 degree is 10750km, 1 deg is ~120km
+  count = 0;
 
-  constructor(plane) {
-    super(plane.latlng, icon, 2000, planeLayer, plane.deg);
+  constructor(public plane, public pollInterval = 5000) {
+    super(plane.latlng, icon, pollInterval, planeLayer, plane.deg);
 
-    this.lat = plane.latlng[0];
-    this.lon = plane.latlng[1];
-    this.speed = plane.speed;
-    this.deg = plane.deg;
-
+    this.interval = pollInterval;
+    this.tooltip();
+    this.setLonLat(plane.latlng[1], plane.latlng[0], plane.deg, plane.speed);
     this.removeZoomTransition(map);
+    this.poller();
+  }
 
+  z = x => ((450 - x) % 360);
+
+  tooltip() {
+    const p = this.plane;
+    const speedKMH = parseInt(<any>(p.speed * 3600 / 1000), 10);
+    this.marker.bindTooltip(`ID: ${p.id}<BR>Flight: ${p.n[1]} ${p.n[2]}<BR>Lat: ${p.n[5]} Lon: ${p.n[6]}<BR>Deg: ${p.deg} Speed: ${p.speed} m/s ${speedKMH} km/h`);
+  }
+
+  poller() {
+    if (this.intervalT) {
+      clearInterval(this.intervalT);
+    }
     this.intervalT = setInterval(() => {
       this.nextStep();
     }, this.interval);
   }
 
-  z = x => ((450 - x) % 360);
-
   nextStep() {
     this.count++;
-    let {lon, lat} = this.getLonLat();
+    const {lon, lat} = this.getLonLat();
     this.marker.setLatLng([lat, lon]);
   }
 
   getLonLat() {
-    let R = this.count * this.speed * (1000 / this.interval) * 90 / (10750 * 1000);
-    let lon = this.lon + R * Math.cos(this.z(this.deg) * Math.PI / 180);
-    let lat = this.lat + R * Math.sin(this.z(this.deg) * Math.PI / 180);
+    // R is in Degrees. Lets check how many degress the plane will move for the interval of time
+    const R = this.count * (this.speed * this.interval * this.surfaceDeg2Km) / 1000000;
+    const lon = this.lon + R * Math.cos(this.z(this.deg) * Math.PI / 180);
+    const lat = this.lat + R * Math.sin(this.z(this.deg) * Math.PI / 180);
     return {lon: lon, lat: lat, deg: this.deg, speed: this.speed, R: R};
   }
 
@@ -57,6 +69,8 @@ class Plane extends Marker {
     this.speed = speed;
     this.deg = deg;
     this.count = 0;
+    this.tooltip();
+    this.setRotation(this.deg);
     this.setTransition();
     this.nextStep();
   }
@@ -70,9 +84,9 @@ class Plane extends Marker {
 
 export abstract class Planes {
   public static init() {
-    map = Map().map;
+    map = World.map().map;
     planeLayer.addTo(map);
-    Map().control.addOverlay(planeLayer, "Planes");
+    World.map().control.addOverlay(planeLayer, 'Planes');
   }
 
   public static univId(plane) {
@@ -80,11 +94,12 @@ export abstract class Planes {
   }
 
   public static updatePlane(plane) {
-    //console.log('update plane', plane);
-    let id = Planes.univId(plane);
+    // console.log('update plane', plane);
+    const id = Planes.univId(plane);
     if (typeof plns[id] == 'object') {
       // TODO: Check!!!!
-      //plns[id].marker.marker.setLatLng(plane.latlng);
+      plns[id].plane = plane;
+      plns[id].marker.setLonLat(plane.latlng[1], plane.latlng[0], plane.deg, plane.speed);
     } else {
       plns[id] = plane;
       plns[id].marker = new Plane(plane);
@@ -92,7 +107,7 @@ export abstract class Planes {
   }
 
   public static deletePlane(plane) {
-    let id = Planes.univId(plane);
+    const id = Planes.univId(plane);
     if (typeof plns[id] == 'object') {
       plns[id].marker.close();
       delete plns[id];

@@ -43,4 +43,8 @@ public class ModelValidator {
 		}
 	}
 
+	public static Boolean isValid(final Object pObject) {
+		return !(ModelValidator.INSTANCE.validate(pObject).size() > 0);
+	}
+
 }
