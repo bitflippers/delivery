@@ -7,10 +7,10 @@ const pollPlaneInterval = 10000;
 if (!io) {
     setTimeout(() => {
         io = require('./socket.io')();
-        io.connectCb(connect);
+        io.setConnect(connect);
     }, 500); // Wait for initialization
 } else {
-    io.connectCb(connect);
+    io.setConnect(connect);
 }
 
 let url = "http://127.0.0.1:8090/world";
