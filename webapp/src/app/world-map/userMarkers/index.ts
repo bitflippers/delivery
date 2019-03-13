@@ -49,6 +49,7 @@ export abstract class Markers {
       marker.latlng = latlng;
       marker.iconL = Markers.buildIcon(marker);
       mrks[id] = marker;
+      mrks[id].markerID = id;
       mrks[id].marker = new UserMarker(marker);
       Markers.tooltip(mrks[id], marker);
     }

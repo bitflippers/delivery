@@ -19,12 +19,12 @@ export class MessagingService {
   private url = 'http://51.38.113.39:3000';
 
   constructor(public spinner: SpinnerServiceService) {
-    console.log('Messaging instantiated');
+    // console.log('Messaging instantiated');
     this.spinner.show('join');
     const socket = io(this.url); // Lets connect back to the url
     this.socket = socket;
     socket.on('connect', data => {
-      console.log('Socket connected', data);
+      // console.log('Socket connected', data);
       this.spinner.hide('join');
     });
     socket.on('error', err => {
@@ -39,7 +39,7 @@ export class MessagingService {
     this.satellites = new Observable(satObs => socket.on('satellites', msg => satObs.next(msg)));
   }
 
-  emit(topic, data = '') {
+  emit(topic, data?: { e: any; markerid: any }) {
     this.socket.emit(topic, data);
   }
 }

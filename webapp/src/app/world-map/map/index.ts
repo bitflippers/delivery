@@ -51,7 +51,7 @@ class Map {
     this.control = L.control.layers({}, {
       'Grid': this.gridLayer
     }).addTo(this.map);
-    console.log('Control', this.control);
+    // console.log('Control', this.control);
   }
 
   drawGridInit() {

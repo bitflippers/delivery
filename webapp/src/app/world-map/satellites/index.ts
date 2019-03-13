@@ -167,7 +167,7 @@ export abstract class Sat {
   }
 
   public static addBeam(beam) {
-    if (typeof beamObjs[beam.name] == 'object') {
+    if (typeof beamObjs[beam.name] === 'object') {
       beamObjs[beam.name].pos = beam.pos;
       beamObjs[beam.name].b.draw(beam.pos);
     } else {
@@ -177,7 +177,7 @@ export abstract class Sat {
   }
 
   public static delBeam(beam) {
-    if (typeof beamObjs[beam.name] == 'object') {
+    if (typeof beamObjs[beam.name] === 'object') {
       beamObjs[beam.name].s.closeX();
       delete beamObjs[beam.name];
     }

@@ -95,7 +95,7 @@ export class Marker {
       });
       this.marker.on('drag', e => {
         if (this.obs) {
-          console.log('drag queen', e);
+          //console.log('drag queen', e);
           this.obs.next({ type: 'drag', msg: e });
         }
       });

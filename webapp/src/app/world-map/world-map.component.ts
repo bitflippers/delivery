@@ -39,7 +39,13 @@ export class WorldMapComponent implements OnInit {
             const m = Markers.updateMarker(n);
             console.log('Subscribe to marker');
             m.marker.events.subscribe(e => {
-              console.log('Event', e);
+              console.log('Drag king', e);
+              if (e.type === 'drag') {
+                this.msg.emit('moveonemarker', {
+                  markerid: m.markerID,
+                  e: e
+                });
+              }
             });
         }
       });
