@@ -215,18 +215,18 @@ public class Configuration {
 	public static final int USER_USERNMAE_MAX_LENGTH = 50;
 
 	public static final int USER_MARKER_MIN = 0;
-	public static final int USER_MARKER_MAX = 4;
+	public static final int USER_MARKER_MAX = 10;
 
 	public static final int BEAM_NAME_MIN_LENGTH = 1;
 	public static final int BEAM_NAME_MAX_LENGTH = 100;
 	public static final long BEAM_MINIMUM_DELIVERED_UNITS = 1;
 
 	public static final int BEAM_MIN_SIZE_IN_CELLS = 1;
-	public static final int BEAM_MAX_SIZE_IN_CELLS = 25;
+	public static final int BEAM_MAX_SIZE_IN_CELLS = 25000;
 	public static final int SATELLITE_NAME_MIN_LENGTH = 1;
 	public static final int SATELLITE_NAME_MAX_LENGTH = 50;
 	public static final int SATELLITE_MINIMUM_NUMBER_OF_BEAMS = 0;
-	public static final int SATELLITE_MAXIMUM_NUMBER_OF_BEAMS = 5;
+	public static final int SATELLITE_MAXIMUM_NUMBER_OF_BEAMS = 5000;
 	public static final int SATELLITE_MINIMUM_PRODUCED_UNITS = 0;
 	public static final int SATELLITE_MAXIMUM_PRODUCED_UNITS = 100000;
 	public static final int WORLD_MINIMUM_NUMBER_OF_SATELLITES = 3;
