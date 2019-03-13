@@ -98,11 +98,19 @@ class Ellipse {
   }
 }
 
+const satColors = {
+  'Sat_1': '#008080',
+  'Sat_2': '#800080',
+  'Sat_3': '#808000'
+}
+
 class Beam {
 
   ellipse: Ellipse;
 
   l: L.LayerGroup;
+
+  b = [];
 
   constructor(public beam) {
     // this.ellipse = new Ellipse({
@@ -119,26 +127,26 @@ class Beam {
     this.l = L.layerGroup();
     this.l.addTo(beamLayer);
 
+    if (this.b.length > 0) {
+      this.b.forEach(p => p.remove());
+      this.b = [];
+    }
+
 
     this.beam.footprint.setSADREMAGridCell.forEach(n => {
       console.log('Draw circle', n);
       const {centerX, centerY, x1, y1, x2, y2} = MGRS.convert(n.columnIndex, n.rowIndex);
       console.log('centerX', centerX, 'centerY', centerY, 'xy', x1, y1, x2, y2);
-      // const c = L.circle([centerY, centerX], {
-      //   color: 'blue',
-      //   fillColor: '#800000',
-      //   fillOpacity: 0.3,
-      //   radius: 330000
-      // }).addTo(this.l);
       const p = L.polygon([
         [y1, x1], [y2, x1], [y2, x2], [y1, x2], [y1, x1]
       ], {
-        color: 'blue',
-        fillColor: '#008080',
-        fillOpacity: 0.3
+        color: 'rgba(0,0,0,0)',
+        fillColor: satColors[this.beam.sat.name] || '#808080',
+        fillOpacity: 0.4
       });
-      p.bindTooltip(`Name: ${this.beam.name} Col: ${n.columnIndex} Row: ${n.rowIndex}<BR>X1: ${x1} Y1: ${y1} X2: ${x2} Y2: ${y2}`);
+      p.bindTooltip(`Sat: ${this.beam.sat.name} Beam: ${this.beam.name}<BR>Col: ${n.columnIndex} Row: ${n.rowIndex}<BR>X1: ${x1} Y1: ${y1} X2: ${x2} Y2: ${y2}`);
       p.addTo(this.l);
+      this.b.push(p);
       // c.stop('click');
     });
   }
@@ -153,8 +161,6 @@ export abstract class Sat {
     Object.values(satList).forEach(s => Sat.addSatellite(s));
     World.map().control.addOverlay(equatorLayer, 'Satelltes');
     World.map().control.addOverlay(beamLayer, 'Beams');
-    // let x = new Beam({
-    // });
   }
 
   public static addSatellite(satellite) {
@@ -174,13 +180,19 @@ export abstract class Sat {
     }
   }
 
-  public static addBeam(beam) {
-    if (typeof beamObjs[beam.name] === 'object') {
-      beamObjs[beam.name].pos = beam.pos;
-      beamObjs[beam.name].b.draw(beam.pos);
+  public static uniqueId(beam, satellite) {
+    return satellite.name + '.' + beam.name;
+  }
+
+  public static addBeam(beam, satellite) {
+    const id = Sat.uniqueId(beam, satellite);
+    if (typeof beamObjs[id] === 'object') {
+      beamObjs[id].pos = beam.pos;
+      beamObjs[id].b.draw(beam.pos);
     } else {
-      beamObjs[beam.name] = beam;
-      beamObjs[beam.name].b = new Beam(beam);
+      beamObjs[id] = beam;
+      beamObjs[id].sat = satellite;
+      beamObjs[id].b = new Beam(beamObjs[id]);
     }
   }
 

@@ -62,7 +62,7 @@ export class WorldMapComponent implements OnInit {
         console.log('Satellite', satellite);
         Object.values(satellite.mapBeam).forEach(beam => {
           console.log('beam', beam);
-          Sat.addBeam(beam);
+          Sat.addBeam(beam, satellite);
         });
       });
     });
