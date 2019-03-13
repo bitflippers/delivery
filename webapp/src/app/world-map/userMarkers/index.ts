@@ -55,9 +55,7 @@ export abstract class Markers {
   }
 
   public static tooltip(m, marker) {
-    //console.log('m.marker', m);
-    //debugger;
-    m.marker.marker.bindTooltip(`<IMG SRC="${marker.icon}">`);
+    m.marker.marker.bindTooltip(`<IMG STYLE="width: 8pt; height: 8pt;" SRC="${marker.icon}">${marker.user.username}<BR>Priority: ${marker.priority}<BR>Requested Units: ${marker.requestedUnits}`);
   }
 
   public static deleteMarker(marker) {
