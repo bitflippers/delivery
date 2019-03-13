@@ -3,6 +3,7 @@ var io = require('./socket.io')();
 
 const pollSatInterval = 3000;
 const pollPlaneInterval = 10000;
+const pollMsgInterval = 1500;
 
 if (!io) {
     setTimeout(() => {
@@ -13,7 +14,7 @@ if (!io) {
     io.setConnect(connect);
 }
 
-let url = "http://127.0.0.1:8090/world";
+let url = "http://127.0.0.1:8090";
 
 let planesUrl = "https://opensky-network.org/api/states/all";
 
@@ -21,13 +22,19 @@ let userState = {};
 let oldMarkers = {};
 let oldPlanes = {};
 let oldUsers = [];
+let oldSatellites = [];
+let messages = [];
 
 function connect(client) {
     // This function is called every time when a new client connects.
     // We shall immediatelly flush the current known data
-    io.broadcast('markers', Object.values(oldMarkers).map(n => { n.state = 'new'; return n; }));
-    io.broadcast('users', oldUsers);
-    io.broadcast('planes', Object.values(oldPlanes));
+    setTimeout(() => {
+        io.broadcast('users', oldUsers);
+        io.broadcast('satellites', oldSatellites);
+        io.broadcast('markers', Object.values(oldMarkers).map(n => { n.state = 'new'; return n; }));
+        io.broadcast('planes', Object.values(oldPlanes));
+        io.broadcast('messages', messages);
+    }, 300);
 
     client.socket.on('moveonemarker', data => {
         console.log('Move one marker', data);
@@ -35,8 +42,42 @@ function connect(client) {
     });
 }
 
+function broadcastMsg() {
+    messages = messages.splice(-100); // Leave only the last 100 messages
+    request(url+'/systemlogs', (err, resp, body) => {
+        let m = [];
+        for (line in body.split('</br>')) {
+            if (messages.indexOf(line)<0) {
+                messages.push(line);
+                m.push(line);
+            }
+        }
+        io.broadcast('messages', m);
+    });
+    request(url+'/eventlogs', (err, resp, body) => {
+        let m = [];
+        for (line in body.split('</br>')) {
+            if (messages.indexOf(line)<0) {
+                messages.push(line);
+                m.push(line);
+            }
+        }
+        io.broadcast('messages', m);
+    });
+    request(url+'/sadremalogs', (err, resp, body) => {
+        let m = [];
+        for (line in body.split('</br>')) {
+            if (messages.indexOf(line)<0) {
+                messages.push(line);
+                m.push(line);
+            }
+        }
+        io.broadcast('messages', m);
+    });
+}
+
 function broadcastSat() {
-    request(url, (err, resp, body) => {
+    request(url + '/world', (err, resp, body) => {
         if (err) {
             console.log('Request, err', err);
             return;
@@ -81,6 +122,9 @@ function broadcastSat() {
             });
 
 
+            //console.log('xx',jsonObj.mapSatellite);
+            oldSatellites = Object.values(jsonObj.mapSatellite);
+            io.broadcast('satellites', oldSatellites);
             io.broadcast('users', users);
             io.broadcast('markers', Object.values(objm));
 
@@ -89,16 +133,6 @@ function broadcastSat() {
             oldMarkers = {};
             Object.values(objm).filter(n => n.state != 'delete').forEach(n => oldMarkers[n.uuid] = n);
 
-            // Fake messages
-            let messages = [];
-            for (i = 0; i<Math.random() * 3; i++) {
-                messages.push('Test message '+parseInt(Math.random()*100));
-            }
-            if (messages.length>0) 
-                io.broadcast('messages', messages);
-
-            console.log('xx',jsonObj.mapSatellite);
-            io.broadcast('satellites', Object.values(jsonObj.mapSatellite));
         }
     
     });
@@ -137,3 +171,4 @@ function broadcastPlanes() {
 
 setInterval(() => broadcastSat(), pollSatInterval);
 setInterval(() => broadcastPlanes(), pollPlaneInterval);
+setInterval(() => broadcastMsg(), pollMsgInterval);
