@@ -5,7 +5,12 @@ const pollSatInterval = 3000;
 const pollPlaneInterval = 10000;
 
 if (!io) {
-    setTimeout(() => io = require('./socket.io')(), 500); // Wait for initialization
+    setTimeout(() => {
+        io = require('./socket.io')();
+        io.connectCb(connect);
+    }, 500); // Wait for initialization
+} else {
+    io.connectCb(connect);
 }
 
 let url = "http://127.0.0.1:8090/world";
@@ -15,6 +20,14 @@ let planesUrl = "https://opensky-network.org/api/states/all";
 let userState = {};
 let oldMarkers = {};
 let oldPlanes = {};
+let oldUsers = [];
+
+function connect() {
+    // This function is called every time when a new client connects.
+    // We shall immediatelly flush the current known data
+    io.broadcast('markers', Object.values(oldMarkers).map(n => { n.state = 'new'; return n; }));
+
+}
 
 function broadcastSat() {
     request(url, (err, resp, body) => {
@@ -64,6 +77,8 @@ function broadcastSat() {
 
             io.broadcast('users', users);
             io.broadcast('markers', Object.values(objm));
+
+            oldUsers = users;
             
             oldMarkers = {};
             Object.values(objm).filter(n => n.state != 'delete').forEach(n => oldMarkers[n.uuid] = n);

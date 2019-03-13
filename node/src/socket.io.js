@@ -47,11 +47,18 @@ class IOmsg {
                     this.list.splice(this.list.indexOf(client), 1);
                 }
             });
+            if (this.connectCb) {
+                this.connectCb(client);
+            }
         });
     }
 
     broadcast(msg, data) {
         this.io.emit(msg, data);
+    }
+
+    setConnect(cb) {
+        this.connectCb = cb;
     }
 }
 

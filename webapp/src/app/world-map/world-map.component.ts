@@ -28,10 +28,19 @@ export class WorldMapComponent implements OnInit {
       data.forEach(n => {
         n.icon = 'assets/' + iconList[n.slot.identifier] + '.svg';
 //        console.log("state of a marker: ",n.state);
-        if (n.state === 'delete') {
-          Markers.deleteMarker(n);
-        } else {
-          Markers.updateMarker(n);
+        switch (<string>n.state) {
+          case 'delete':
+            Markers.deleteMarker(n);
+            break;
+          case 'update':
+            Markers.updateMarker(n);
+            break;
+          default: // TODO: never executed! I need to fix that in the nodejs
+            const m = Markers.updateMarker(n);
+            console.log('Subscribe to marker');
+            m.marker.events.subscribe(e => {
+              console.log('Event', e);
+            });
         }
       });
     });

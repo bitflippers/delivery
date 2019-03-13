@@ -32,13 +32,13 @@ export abstract class Markers {
     const id = Markers.univId(marker);
     const m = marker.location.mgrsWGS84Coordinate;
     const latlng = [m.latitude, m.longitude];
-    console.log('marker', marker, m, latlng);
-    if (typeof mrks[id] == 'object') {
+    // console.log('marker', marker, m, latlng);
+    if (typeof mrks[id] === 'object') {
       mrks[id].latlng = latlng;
       mrks[id].marker.marker.setLatLng(mrks[id].latlng);
       if (marker.priority !== mrks[id].marker.priority) {
         mrks[id].marker.priority = marker.priority;
-        console.log('Marker priority', id, 'markerColor', 'markerColor' + (marker.priority || 1));
+        // console.log('Marker priority', id, 'markerColor', 'markerColor' + (marker.priority || 1));
         mrks[id].marker.className = 'markerColor' + (marker.priority || 1);
         mrks[id].marker.iconL = Markers.buildIcon(marker);
         Markers.tooltip(mrks[id], marker);
@@ -52,6 +52,7 @@ export abstract class Markers {
       mrks[id].marker = new UserMarker(marker);
       Markers.tooltip(mrks[id], marker);
     }
+    return mrks[id];
   }
 
   public static tooltip(m, marker) {
@@ -72,7 +73,7 @@ class UserMarker extends Marker {
   constructor(public m, public interval = 1000) {
     super(m.latlng, m.iconL, interval, userMarkerLayer, 0);
     this.removeZoomTransition(map);
-    //console.log('marker:', m);
-    //this.marker.bindTooltip('Priority: ' + m.priority.toString());
+    // console.log('marker:', m);
+    // this.marker.bindTooltip('Priority: ' + m.priority.toString());
   }
 }
