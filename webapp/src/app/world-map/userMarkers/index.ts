@@ -22,7 +22,7 @@ export abstract class Markers {
     return L.icon({
       iconUrl: marker.icon,
       iconSize: [32, 32],
-      iconAnchor: [0, 0],
+      iconAnchor: [16, 32],
       className: 'markerColor' + (marker.priority || 1),
     });
 

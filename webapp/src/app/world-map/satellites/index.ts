@@ -4,6 +4,7 @@ import * as L from 'leaflet';
 // import 'leaflet-draw';
 // import '@jjwtay/leaflet.ellipse';
 // import '@jjwtay/leaflet.draw-ellipse';
+import {MGRS} from '../mgrs';
 
 let map;
 const equatorLayer = L.layerGroup();
@@ -121,16 +122,23 @@ class Beam {
 
     this.beam.footprint.setSADREMAGridCell.forEach(n => {
       console.log('Draw circle', n);
-      const lon = (parseInt(n.columnIndex) * 6) - 180;
-      const lat = (parseInt(n.rowIndex) * 8) - 90;
-      const c = L.circle([lat, lon], {
+      const {centerX, centerY, x1, y1, x2, y2} = MGRS.convert(n.columnIndex, n.rowIndex);
+      console.log('centerX', centerX, 'centerY', centerY, 'xy', x1, y1, x2, y2);
+      // const c = L.circle([centerY, centerX], {
+      //   color: 'blue',
+      //   fillColor: '#800000',
+      //   fillOpacity: 0.3,
+      //   radius: 330000
+      // }).addTo(this.l);
+      const p = L.polygon([
+        [y1, x1], [y2, x1], [y2, x2], [y1, x2], [y1, x1]
+      ], {
         color: 'blue',
         fillColor: '#008080',
-        fillOpacity: 0.3,
-        radius: 330000
+        fillOpacity: 0.3
       });
-      c.bindTooltip(this.beam.name + ' ' + n.rowIndex + ' ' + n.columnIndex + ' out ' + lat + ' ' + lon);
-      c.addTo(this.l);
+      p.bindTooltip(`Name: ${this.beam.name} Col: ${n.columnIndex} Row: ${n.rowIndex}<BR>X1: ${x1} Y1: ${y1} X2: ${x2} Y2: ${y2}`);
+      p.addTo(this.l);
       // c.stop('click');
     });
   }
