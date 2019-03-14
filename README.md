@@ -1,6 +1,7 @@
 # SaDReMa
 
-The bit flippers submission to the 2019 https://www.gameofcode.eu/ !
+* The bit flippers submission to the 2019 https://www.gameofcode.eu/ !
+*  http://sadrema.app (currently in simulation mode !)
 
 # The Bit Flippers
 
@@ -9,8 +10,6 @@ The bit flippers submission to the 2019 https://www.gameofcode.eu/ !
 * Chetan  (Developer)
 * Delian Delchev (Developer)
 * Pierre Muller (Coach)
-
-*  http://sadrema.app (currently in simulation mode !)
 
 # SaDReMa
 
