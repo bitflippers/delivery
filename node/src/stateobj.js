@@ -26,7 +26,7 @@ class StateObj {
 
     retrieve() {
         let obj = Object.assign({}, this.obj);
-        for (o of Object.values(obj)) {
+        for (let o of Object.values(obj)) {
             if (o.version !== this.version) o.state = 'delete';
             delete this.obj[o.id];
         }
