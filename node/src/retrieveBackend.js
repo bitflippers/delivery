@@ -19,6 +19,8 @@ let url = "http://51.38.113.39:8090";
 
 let planesUrl = "https://opensky-network.org/api/states/all";
 
+const planeNum = 10;
+
 // let userState = {};
 // let oldMarkers = {};
 // let oldPlanes = {};
@@ -43,7 +45,7 @@ function connect(client) {
             planesState.current())
             .map(n => Object.assign({}, n, { state: 'new'}))
             .sort((a,b) => a.id < b.id)
-            .slice(0,50)
+            .slice(0,planeNum)
             .filter(n => n.data.latlng[0] != null && n.data.latlng[0] != 0 && n.data.latlng[1] != null && n.data.latlng[1] != 0));
         io.broadcast('messages', messages);
     }, 300);
@@ -201,7 +203,7 @@ function broadcastPlanes() {
         io.broadcast('planes',
             Object.values(planesState.retrieve())
                 .sort((a,b) => a.id < b.id)
-                .slice(0,50)
+                .slice(0,planeNum)
                 .filter(n => n.data.change)
                 .filter(n => n.data.latlng[0] != null && n.data.latlng[0] != 0 && n.data.latlng[1] != null && n.data.latlng[1] != 0));
 

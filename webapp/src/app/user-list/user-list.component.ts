@@ -20,7 +20,7 @@ export class UserListComponent implements OnInit {
 
   ngOnInit() {
     this.msg.users.subscribe(data => {
-      console.log('I receive users', data);
+      //console.log('I receive users', data);
       this.userList = data.map(n => {
         n.data.icon = iconList[n.data.slot.identifier];
         n.data.nickname = n.data.username;
