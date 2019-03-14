@@ -6,6 +6,7 @@ class StateObj {
 
     update(id, o) {
         if (this.obj[id]) {
+            console.log('update');
             this.obj[id].data = o;
             this.obj[id].state = 'update';
             this.obj[id].version = this.version;

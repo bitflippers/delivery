@@ -25,18 +25,18 @@ export class WorldMapComponent implements OnInit {
 
     this.msg.markers.subscribe(data => {
 //      console.log('I receive markers', data);
-      data.data.forEach(n => {
-        n.icon = 'assets/' + iconList[n.slot.identifier] + '.svg';
+      data.forEach(n => {
+        n.data.icon = 'assets/' + iconList[n.data.slot.identifier] + '.svg';
 //        console.log("state of a marker: ",n.state);
         switch (<string>n.state) {
           case 'delete':
-            Markers.deleteMarker(n);
+            Markers.deleteMarker(n.data);
             break;
           case 'update':
-            Markers.updateMarker(n);
+            Markers.updateMarker(n.data);
             break;
           default:
-            const m = Markers.updateMarker(n);
+            const m = Markers.updateMarker(n.data);
             //console.log('Subscribe to marker');
             m.marker.events.subscribe(e => {
               console.log('Drag king', e);
