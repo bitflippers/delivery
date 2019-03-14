@@ -50,7 +50,7 @@ function connect(client) {
 }
 
 function broadcastMsg() {
-    console.log('messages processing');
+    //console.log('messages processing');
     messages = messages.splice(-100); // Leave only the last 100 messages
     request(url+'/systemlogs', (err, resp, body) => {
        // console.log('systemlogs', err, body);
@@ -90,6 +90,7 @@ function broadcastMsg() {
 
 function broadcastSat() {
     request(url + '/world', (err, resp, body) => {
+        console.log('World processing');
         if (err) {
             console.log('Request, err', err);
             return;
@@ -116,7 +117,10 @@ function broadcastSat() {
             markers.forEach(n => markerState.update(n.uuid, n));
             Object.values(jsonObj.mapSatellite).forEach(n => satState.update(n.uuid, n));
 
-            io.broadcast('users', Object.values(usersState.retrieve()));
+            let o = Object.values(usersState.retrieve());
+            console.log('Users', o);
+
+            io.broadcast('users', o);
             io.broadcast('markers', Object.values(markerState.retrieve()));
             io.broadcast('satellites', Object.values(satState.retrieve()));
 //
