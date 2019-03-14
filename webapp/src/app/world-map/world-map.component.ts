@@ -25,7 +25,7 @@ export class WorldMapComponent implements OnInit {
 
     this.msg.markers.subscribe(data => {
 //      console.log('I receive markers', data);
-      data.forEach(n => {
+      data.data.forEach(n => {
         n.icon = 'assets/' + iconList[n.slot.identifier] + '.svg';
 //        console.log("state of a marker: ",n.state);
         switch (<string>n.state) {
@@ -35,7 +35,7 @@ export class WorldMapComponent implements OnInit {
           case 'update':
             Markers.updateMarker(n);
             break;
-          default: 
+          default:
             const m = Markers.updateMarker(n);
             //console.log('Subscribe to marker');
             m.marker.events.subscribe(e => {
@@ -53,16 +53,16 @@ export class WorldMapComponent implements OnInit {
 
     this.msg.planes.subscribe(data => {
       // console.log('Planes', data);
-      data.forEach(plane => Planes.updatePlane(plane));
+      data.forEach(plane => Planes.updatePlane(plane.data));
     });
 
     this.msg.satellites.subscribe(data => {
 //      console.log('Satellites', data);
       data.forEach(satellite => {
         // console.log('Satellite', satellite);
-        Object.values(satellite.mapBeam).forEach(beam => {
+        Object.values(satellite.data.mapBeam).forEach(beam => {
           // console.log('beam', beam);
-          Sat.addBeam(beam, satellite);
+          Sat.addBeam(beam, satellite.data);
         });
       });
     });
