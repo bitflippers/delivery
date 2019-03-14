@@ -15,7 +15,7 @@ if (!io) {
     io.setConnect(connect);
 }
 
-let url = "http://127.0.0.1:8090";
+let url = "http://51.38.113.39:8090";
 
 let planesUrl = "https://opensky-network.org/api/states/all";
 
@@ -180,7 +180,9 @@ function broadcastPlanes() {
                 change: true
             };
 
-            if (old !== null && old.latlng[0] == obj.latlng[0] && old.latlng[1] == obj.latlng[1]) {
+            if (old !== null && old.data &&
+                old.data.latlng[0] == obj.latlng[0] &&
+                old.data.latlng[1] == obj.latlng[1]) {
                 obj.change = false;
             }
 
