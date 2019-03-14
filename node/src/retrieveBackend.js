@@ -197,8 +197,8 @@ function broadcastPlanes() {
             Object.values(planesState.retrieve())
                 .sort((a,b) => a.id < b.id)
                 .slice(0,50)
-                .filter(n => n.change))
-                .filter(n => n.latlng[0] != null && n.latlng[0] != 0 && n.latlng[1] != null && n.latlng[1] != 0);
+                .filter(n => n.change)
+                .filter(n => n.latlng[0] != null && n.latlng[0] != 0 && n.latlng[1] != null && n.latlng[1] != 0));
 
         // let d = data.states
         //     .sort((a,b) => a[0]<b[0] ? -1:1)
