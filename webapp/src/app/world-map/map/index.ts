@@ -27,6 +27,7 @@ class Map {
       subdomains: ['a', 'b', 'c']
     }).addTo(this.map);
 
+
     let bounds = L.latLngBounds([[-88, -205], [88, 205]]);
     this.map.setMaxBounds(bounds);
     this.map.on('drag', () => this.map.panInsideBounds(bounds, {animate: false}));

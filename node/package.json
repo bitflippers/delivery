@@ -1,9 +1,9 @@
 {
   "name": "node",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "nodemon ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
@@ -16,5 +16,24 @@
     "socket.io": "^2.2.0",
     "webpack": "^4.29.6",
     "webpack-dev-middleware": "^3.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  },
+  "nodemonConfig": {
+    "delay": 1000,
+    "ext": "js,ts,json,css,svg,png,html,font",
+    "watch": [
+      ".",
+      "../webapp/src"
+    ],
+    "ignore": [
+      "public",
+      "public/*"
+    ],
+    "verbose": true,
+    "events": {
+      "restart": "(cd ../webapp; npm install; npm run prod)"
+    }
   }
 }
