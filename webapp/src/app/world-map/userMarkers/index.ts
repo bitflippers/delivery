@@ -62,7 +62,7 @@ export abstract class Markers {
 
   public static deleteMarker(marker) {
     const id = Markers.univId(marker);
-    console.log('We delete marker');
+    //console.log('We delete marker');
     if (mrks[id]) {
       mrks[id].marker.close();
       delete mrks[id];

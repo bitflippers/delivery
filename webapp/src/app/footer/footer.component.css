@@ -58,7 +58,8 @@
 
 .logList {
   overflow: hidden;
-  text-wrap: none;
+  white-space: nowrap;
+  font-size: 9pt;
 }
 
 .footerCnt {
