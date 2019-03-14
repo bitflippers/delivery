@@ -203,4 +203,8 @@ export abstract class Sat {
     }
   }
 
+  public static dropAllBeams() {
+    Object.values(beamObjs).forEach(n => Sat.delBeam(n)); // Remove all beams
+  }
+
 }

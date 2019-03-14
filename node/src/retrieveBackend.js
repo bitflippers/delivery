@@ -18,7 +18,7 @@ if (!io) {
 let url = "http://51.38.113.39:8090";
 let planesUrl = "https://opensky-network.org/api/states/all";
 
-const planeNum = 10;
+const planeNum = 20;
 
 let messages = [];
 const usersState = new StateObj();

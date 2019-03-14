@@ -66,6 +66,7 @@ export class WorldMapComponent implements OnInit {
 
     this.msg.satellites.subscribe(data => {
 //      console.log('Satellites', data);
+      Sat.dropAllBeams(); // Lets remove the old beams, before drawing the new
       data.forEach(satellite => {
         // console.log('Satellite', satellite);
         Object.values(satellite.data.mapBeam).forEach(beam => {
