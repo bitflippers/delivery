@@ -32,6 +32,7 @@
       "public/*"
     ],
     "verbose": true,
+    "exec": "(cd ../webapp; npm install; npm run prod);",
     "events": {
       "restart": "(cd ../webapp; npm install; npm run prod)"
     }
