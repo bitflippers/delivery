@@ -118,7 +118,7 @@ function broadcastSat() {
             Object.values(jsonObj.mapSatellite).forEach(n => satState.update(n.uuid, n));
 
             let o = Object.values(usersState.retrieve());
-            console.log('Users', o);
+//            console.log('Users', o);
 
             io.broadcast('users', o);
             io.broadcast('markers', Object.values(markerState.retrieve()));
