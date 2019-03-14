@@ -26,7 +26,11 @@ In SaDReMa you play the role of a satellite customer. Satellites provide connect
 # Built With
 
 * Angular, NodeJS, Leaflet, Twitter Bootstrap, Angular Material...
-* Backed in Java
+* Backend in Java
 * Optimation algorithmics in Java
-* Contributions from: http://jmetal.sourceforge.net/, https://github.com/Berico-Technologies/Geo-Coordinate-Conversion-Java
-* Modeled on https://en.wikipedia.org/wiki/World_Geodetic_System and https://en.wikipedia.org/wiki/Military_Grid_Reference_System
+* Contributions from: 
+** http://jmetal.sourceforge.net/
+** https://github.com/Berico-Technologies/Geo-Coordinate-Conversion-Java
+* Modeled on:
+** https://en.wikipedia.org/wiki/World_Geodetic_System
+** https://en.wikipedia.org/wiki/Military_Grid_Reference_System
