@@ -53,7 +53,15 @@ export class WorldMapComponent implements OnInit {
 
     this.msg.planes.subscribe(data => {
       // console.log('Planes', data);
-      data.forEach(plane => Planes.updatePlane(plane.data));
+      data.forEach(plane => {
+        switch (<string>plane.state) {
+          case 'delete':
+            Planes.deletePlane(plane.data);
+            break;
+          default:
+            Planes.updatePlane(plane.data);
+        }
+      });
     });
 
     this.msg.satellites.subscribe(data => {
