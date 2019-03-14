@@ -52,7 +52,7 @@ export class WorldMapComponent implements OnInit {
     });
 
     this.msg.planes.subscribe(data => {
-      console.log('Planes', data);
+      // console.log('Planes', data);
       data.forEach(plane => Planes.updatePlane(plane));
     });
 
