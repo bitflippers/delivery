@@ -61,3 +61,24 @@
   overflow: hidden;
   text-wrap: none;
 }
+
+.footerCnt {
+  max-height: 100pt;
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+}
+
+.footerPauseBtn {
+  position: absolute;
+  right: 10pt;
+  top: 30pt;
+}
+
+.footPnlDescr {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.buttonMenu {
+  width: 100%;
+}

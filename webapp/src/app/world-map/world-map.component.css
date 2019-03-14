@@ -27,10 +27,10 @@
 
 .appFooter {
   position: absolute;
-  bottom: 5%;
+  bottom: 2%;
   z-index: 500;
-  left: 25%;
-  right: 25%;
+  left: 15%;
+  right: 15%;
 }
 
 .appHome {

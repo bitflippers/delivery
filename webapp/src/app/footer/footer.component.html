@@ -1,21 +1,32 @@
-<!--<mat-toolbar class="footer">
-  <a *ngFor="let item of saDReMalog" class="slideLeft" id="timing" mat-list-item>
-    <pre>{{item}}</pre>
-  </a>
-</mat-toolbar>-->
-
 <mat-expansion-panel class="footer">
   <mat-expansion-panel-header>
-    <mat-panel-title>
+    <mat-panel-title class="footPnlDescr">
       Last Log:
     </mat-panel-title>
-    <mat-panel-description>
+    <mat-panel-description class="footPnlDescr">
       {{lastMsg}}
     </mat-panel-description>
   </mat-expansion-panel-header>
-
-  <div *ngFor="let log of saDReMalog" class="logList" style="color:{{log.color}}">
-    {{log.text}}
+  <div class="footerPauseBtn">
+    <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+    <mat-menu #menu>
+      <mat-button-toggle mat-flat-button class="buttonMenu" mat-icon-button type="checkbox" (click)="togglePause()">
+        <mat-icon aria-label="Marker button" class="toggleIconDef">pause_circle_outline</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle mat-flat-button class="buttonMenu" mat-icon-button checked=true type="checkbox" (click)="toggleSystem()">
+        System
+      </mat-button-toggle><br>
+      <mat-button-toggle mat-flat-button class="buttonMenu" mat-icon-button checked=true type="checkbox" (click)="toggleEvents()">
+        Events
+      </mat-button-toggle><br>
+      <mat-button-toggle mat-flat-button class="buttonMenu" mat-icon-button checked=true type="checkbox" (click)="toggleSADREMA()">
+        SADREMA
+      </mat-button-toggle><br>
+    </mat-menu>
   </div>
-
+  <div #scrollEl class="footerCnt">
+    <div *ngFor="let log of saDReMalog; trackBy: trackByData" class="logList" [style.color]="log.color">
+      {{log.text}}
+    </div>
+  </div>
 </mat-expansion-panel>
