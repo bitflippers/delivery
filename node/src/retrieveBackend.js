@@ -39,7 +39,12 @@ function connect(client) {
         io.broadcast('users', Object.values(usersState.current()).map( n => Object.assign({}, n, { state: 'new'})));
         io.broadcast('satellites', Object.values(satState.current()).map(n => Object.assign({}, n, { state: 'new'})));
         io.broadcast('markers', Object.values(markerState.current()).map(n => Object.assign({}, n, { state: 'new'})));
-        io.broadcast('planes', Object.values(planesState.current()).map(n => Object.assign({}, n, { state: 'new'})));
+        io.broadcast('planes', Object.values(
+            planesState.current())
+            .map(n => Object.assign({}, n, { state: 'new'}))
+            .sort((a,b) => a.id < b.id)
+            .slice(0,50)
+            .filter(n => n.latlng[0] != null && n.latlng[0] != 0 && n.latlng[1] != null && n.latlng[1] != 0));
         io.broadcast('messages', messages);
     }, 300);
 

@@ -94,7 +94,10 @@ export abstract class Planes {
   }
 
   public static updatePlane(plane) {
-    // console.log('update plane', plane);
+    //console.log('update plane', plane);
+    if (plane.latlng && (plane.latlng[0] == null || plane.latlng[1] == null)) {
+      return; // Ignore plane with null
+    }
     const id = Planes.univId(plane);
     if (typeof plns[id] == 'object') {
       // TODO: Check!!!!
