@@ -10,7 +10,7 @@
   <mat-sidenav
     #drawer
     attr.role="navigation"
-    class="sidenav"
+    class="userSideNav sidenav"
     fixedInViewport="true"
     mode="side"
     opened="false"
@@ -19,7 +19,7 @@
       <button (click)="drawer.toggle()" mat-button>Users</button>
     </mat-toolbar>
     <mat-nav-list class="userListCustom">
-      <div class="userBox" *ngFor="let item of userList">
+      <div class="userBox" *ngFor="let item of userList; trackBy: trackByFn">
         <a href="#" mat-list-item>
           <mat-icon>{{item.icon}}</mat-icon>
           <h5>{{item.nickname}}</h5>

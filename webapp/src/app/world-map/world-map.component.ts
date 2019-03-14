@@ -35,9 +35,9 @@ export class WorldMapComponent implements OnInit {
           case 'update':
             Markers.updateMarker(n);
             break;
-          default: // TODO: never executed! I need to fix that in the nodejs
+          default: 
             const m = Markers.updateMarker(n);
-            console.log('Subscribe to marker');
+            //console.log('Subscribe to marker');
             m.marker.events.subscribe(e => {
               console.log('Drag king', e);
               if (e.type === 'drag') {
@@ -52,7 +52,7 @@ export class WorldMapComponent implements OnInit {
     });
 
     this.msg.planes.subscribe(data => {
-      // console.log('Planes', data);
+      console.log('Planes', data);
       data.forEach(plane => Planes.updatePlane(plane));
     });
 

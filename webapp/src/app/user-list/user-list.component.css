@@ -23,5 +23,10 @@
 
 .userBox {
   width: 100%;
-  height: 1.5vw;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.userSideNav {
+  opacity: 0.3;
 }

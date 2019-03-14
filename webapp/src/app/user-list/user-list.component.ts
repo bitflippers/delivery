@@ -14,6 +14,10 @@ export class UserListComponent implements OnInit {
   constructor(public msg: MessagingService) {
   }
 
+  trackByFn(index: number, data) {
+    return data.nickname;
+  }
+
   ngOnInit() {
     this.msg.users.subscribe(data => {
       // console.log('I receive users', data);
@@ -21,7 +25,7 @@ export class UserListComponent implements OnInit {
         n.icon = iconList[n.slot.identifier];
         n.nickname = n.username;
         return n;
-      });
+      }).sort((a, b) => a.nickname < b.nickname);
     });
   }
 

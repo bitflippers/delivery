@@ -149,26 +149,31 @@ function broadcastPlanes() {
         let data = JSON.parse(body);
         console.log('Some planes data');
 
-        let d = data.states.sort((a,b) => a[0]<b[0] ? -1:1).slice(0,50).map(n => {
-            let obj = {
-                id: n[0],
-                n: n,
-                latlng: [n[6], n[5]],
-                deg: n[10] || 0,
-                speed: n[9],
-                change: true
-            };
-            if (oldPlanes[obj.id] && (oldPlanes[obj.id].latlng[0] != obj.latlng[0]|| oldPlanes[obj.id].latlng[1] != obj.latlng[1])) {
-                obj.change = true;
-            } else {
-                obj.change = false;
-            }
-            if (n[6] == null || n[5] == null || n[6] === 0 || n[5] === 0) {
-                obj.change = false;
-            }
-            oldPlanes[obj.id] = obj;
-            return obj;
-        }).filter(n => n.change);
+        let d = data.states
+            .sort((a,b) => a[0]<b[0] ? -1:1)
+            .slice(0,50)
+            .filter(n => n[6] && n[5])
+            .map(n => {
+                let obj = {
+                    id: n[0],
+                    n: n,
+                    latlng: [n[6], n[5]],
+                    deg: n[10] || 0,
+                    speed: n[9],
+                    change: true
+                };
+                if (oldPlanes[obj.id] && (oldPlanes[obj.id].latlng[0] != obj.latlng[0]|| oldPlanes[obj.id].latlng[1] != obj.latlng[1])) {
+                    obj.change = true;
+                } else {
+                    obj.change = false;
+                }
+                if (n[6] == null || n[5] == null || n[6] === 0 || n[5] === 0) {
+                    obj.change = false;
+                }
+                oldPlanes[obj.id] = obj;
+                return obj;
+            })
+            .filter(n => n.change);
 
         io.broadcast('planes', d);
     });
