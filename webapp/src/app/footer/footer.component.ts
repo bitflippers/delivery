@@ -23,6 +23,8 @@ export class FooterComponent implements OnInit {
   paused = false;
   pausedBuff = [];
 
+  bufferLines = 200;
+
   showSystem = true;
   showEvents = true;
   showSadrema = true;
@@ -38,6 +40,7 @@ export class FooterComponent implements OnInit {
 
   togglePause() {
     this.paused = !this.paused;
+    this.toggleFilter();
   }
 
   toggleSystem() {
@@ -56,6 +59,10 @@ export class FooterComponent implements OnInit {
   }
 
   toggleFilter() {
+    if (!this.paused) {
+      this.saDReMaFullLog = this.saDReMaFullLog.concat(this.pausedBuff).splice(-this.bufferLines);
+      this.scrEl.nativeElement.scrollTop = this.scrEl.nativeElement.scrollHeight;
+    }
     this.saDReMalog = this.saDReMaFullLog
       .filter(n => this.showSystem || (!n.text.match(/\[SYSTEM\]/)))
       .filter(n => this.showEvents || (!n.text.match(/\[EVENTS\]/)))
@@ -74,10 +81,9 @@ export class FooterComponent implements OnInit {
           continue;
         }
         this.pausedBuff.push(line);
-      }
-      if (!this.paused) {
-        this.saDReMaFullLog = this.saDReMalog.concat(this.pausedBuff).splice(-100);
-        this.scrEl.nativeElement.scrollTop = this.scrEl.nativeElement.scrollHeight;
+        if (this.pausedBuff.length > this.bufferLines) {
+          this.pausedBuff = this.pausedBuff.slice(-this.bufferLines);
+        }
       }
       this.toggleFilter(); // Check on it
     });
