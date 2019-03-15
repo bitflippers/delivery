@@ -6,8 +6,8 @@
 # The Bit Flippers
 
 * David Valcarcel (Developer)
-* Loula Beckv (Developer)
-* Chetan  (Developer)
+* Loula Beck (Developer)
+* Chetan Arora (Developer)
 * Delian Delchev (Developer)
 * Pierre Muller (Coach)
 
