@@ -81,12 +81,21 @@ class Map {
   }
 }
 
+const cbList = [];
+
 export abstract class World {
   public static init() {
     mapObj = new Map();
+    cbList.forEach(cb => cb(mapObj));
+    cbList.splice(0); // Empty it without assigning new
   }
 
   public static map() {
     return mapObj;
+  }
+
+  public static cbOnMap(cb) {
+    if (mapObj) { return cb(mapObj); }
+    cbList.push(cb);
   }
 }

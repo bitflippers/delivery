@@ -62,7 +62,7 @@ class Satellite extends Marker {
   constructor(public s, public interval = 1000) {
     super(s.pos, icon, interval, equatorLayer);
     this.count = parseInt(<any>(Math.random() * this.path.length));
-    this.removeZoomTransition(map);
+    this.removeZoomTransition();
     this.intervalT = setInterval(() => {
       this.nextStep();
     }, this.interval);

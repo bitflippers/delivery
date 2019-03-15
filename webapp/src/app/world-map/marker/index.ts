@@ -1,6 +1,30 @@
 import * as L from 'leaflet';
 import 'leaflet-rotatedmarker';
 import {Observable} from 'rxjs';
+import {World} from '../map';
+
+let markerID = 0;
+const markerList = {};
+
+// Performance optimization
+World.cbOnMap(map => {
+  map.map.on('movestart', e => {
+    Object.values(markerList).forEach(m => (<any>m).setFastTransition('mapmove'));
+  });
+
+  map.map.on('moveend', e => {
+    Object.values(markerList).forEach(m => (<any>m).unsetFastTransition('mapmove'));
+  });
+
+  map.map.on('zoomstart', e => {
+    Object.values(markerList).forEach(m => (<any>m).setFastTransition('mapzoom'));
+  });
+
+  map.map.on('zoomend', e => {
+    Object.values(markerList).forEach(m => (<any>m).unsetFastTransition('mapzoom'));
+  });
+});
+
 
 export class Marker {
   marker: L.Marker;
@@ -10,6 +34,7 @@ export class Marker {
 
   public events: Observable<any>;
   private obs: any;
+  id = markerID;
 
   constructor(
     public pos: L.LatLng,
@@ -19,6 +44,10 @@ export class Marker {
     public rotationAngle = 0,
     public options = {}
   ) {
+    this.id = markerID++;
+
+    markerList[this.id] = this;
+
     const o = <any>Object.assign({}, {
       icon: this.icon,
       draggable: true,
@@ -33,7 +62,7 @@ export class Marker {
     });
     this.events.subscribe();
 
-    this.setTransition();
+    this.setTransition(this.fastInterval); // The first transition is always the faster
 
     if (this.layer) {
       this.marker.addTo(this.layer);
@@ -67,7 +96,7 @@ export class Marker {
     }
   }
 
-  removeZoomTransition(map: L.Map, fastInterval = this.fastInterval) {
+  removeZoomTransition(fastInterval = this.fastInterval) {
     if (L.DomUtil.TRANSITION) {
       this.marker.on('dragstart', e => {
         this.setFastTransition('drag');
@@ -99,18 +128,6 @@ export class Marker {
           this.obs.next({ type: 'drag', msg: e });
         }
       });
-      map.on('movestart', e => {
-        this.setFastTransition('move');
-      });
-      map.on('moveend', e => {
-        this.unsetFastTransition('move');
-      });
-      map.on('zoomstart', e => {
-        this.setFastTransition('zoom');
-      });
-      map.on('zoomend', e => {
-        this.unsetFastTransition('zoom');
-      });
     }
   }
 
@@ -126,5 +143,6 @@ export class Marker {
   close() {
     this.marker.removeFrom(this.layer);
     this.obs.complete();
+    delete markerList[this.id];
   }
 }

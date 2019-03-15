@@ -73,7 +73,7 @@ export abstract class Markers {
 class UserMarker extends Marker {
   constructor(public m, public interval = 1000) {
     super(m.latlng, m.iconL, interval, userMarkerLayer, 0);
-    this.removeZoomTransition(map);
+    this.removeZoomTransition();
     // console.log('marker:', m);
     // this.marker.bindTooltip('Priority: ' + m.priority.toString());
   }
