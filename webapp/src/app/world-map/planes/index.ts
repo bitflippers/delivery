@@ -69,9 +69,9 @@ class Plane extends Marker {
     this.speed = speed;
 
     // Calculate the degree change, so the plane is going to rotate in the correct direction
-    const [d1, d2] = [(360 + this.deg) % 360, (360 + deg) % 360];
+    const [d1, d2] = [(360 + (this.deg||deg)) % 360, (360 + deg) % 360];
     const [o1, o2] = [(360 + d2 - d1) % 360, (360 + d1 - d2) % 360];
-    this.deg = (o1 < o2) ? d1 + o1 : d1 + o1 - 360;
+    this.deg = (o1 <= o2) ? d1 + o1 : d1 + o1 - 360;
 //    this.deg = deg;
     this.count = 0;
     this.tooltip();
@@ -100,7 +100,12 @@ export abstract class Planes {
 
   public static updatePlane(plane) {
     // console.log('update plane', plane);
-    if (plane.latlng && (plane.latlng[0] == null || plane.latlng[1] == null)) {
+    if (plane.latlng &&
+      (plane.latlng[0] == null ||
+        plane.latlng[1] == null ||
+          isNaN(plane.latlng[0]) ||
+          isNaN(plane.latlng[1])
+      )) {
       return; // Ignore plane with null
     }
     const id = Planes.univId(plane);
@@ -110,7 +115,9 @@ export abstract class Planes {
       plns[id].marker.setLonLat(plane.latlng[1], plane.latlng[0], plane.deg, plane.speed);
     } else {
       plns[id] = plane;
+      // console.log('Plane latlng', plane.latlng, plane);
       plns[id].marker = new Plane(plane);
+      // console.log('Plane planishe', plane.latlng);
     }
   }
 
