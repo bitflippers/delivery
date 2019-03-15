@@ -10,7 +10,7 @@ const plns = {};
 const icon = L.icon({
   iconUrl: 'assets/aeroplane.svg',
   iconSize: [16, 16],
-  iconAnchor: [0, 0]
+  iconAnchor: [8, 8]
 });
 
 class Plane extends Marker {
@@ -67,7 +67,12 @@ class Plane extends Marker {
     this.lon = lon;
     this.lat = lat;
     this.speed = speed;
-    this.deg = deg;
+
+    // Calculate the degree change, so the plane is going to rotate in the correct direction
+    const [d1, d2] = [(360 + this.deg) % 360, (360 + deg) % 360];
+    const [o1, o2] = [(360 + d2 - d1) % 360, (360 + d1 - d2) % 360];
+    this.deg = (o1 < o2) ? d1 + o1 : d1 + o1 - 360;
+//    this.deg = deg;
     this.count = 0;
     this.tooltip();
     this.setRotation(this.deg);
@@ -94,7 +99,7 @@ export abstract class Planes {
   }
 
   public static updatePlane(plane) {
-    //console.log('update plane', plane);
+    // console.log('update plane', plane);
     if (plane.latlng && (plane.latlng[0] == null || plane.latlng[1] == null)) {
       return; // Ignore plane with null
     }
