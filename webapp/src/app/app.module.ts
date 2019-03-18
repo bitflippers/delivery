@@ -17,6 +17,8 @@ import { MarkerButtonComponent, MarkerDialogComponent } from './marker-button/ma
 import { HomeButtonComponent } from './home-button/home-button.component';
 import { FooterComponent } from './footer/footer.component';
 import { DisasterComponent } from './disaster/disaster.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,8 @@ import { DisasterComponent } from './disaster/disaster.component';
     BrowserAnimationsModule,
     MaterialModuleModule,
     LayoutModule,
-    FormsModule
+    FormsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]
