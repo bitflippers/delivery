@@ -3,8 +3,8 @@ import * as L from 'leaflet';
 let mapObj: Map = null;
 
 const gridGeoJSON = {
-  'type': 'FeatureCollection',
-  'features': []
+  type: 'FeatureCollection',
+  features: []
 };
 
 class Map {
@@ -28,7 +28,7 @@ class Map {
     }).addTo(this.map);
 
 
-    let bounds = L.latLngBounds([[-88, -205], [88, 205]]);
+    const bounds = L.latLngBounds([[-88, -205], [88, 205]]);
     this.map.setMaxBounds(bounds);
     this.map.on('drag', () => this.map.panInsideBounds(bounds, {animate: false}));
 
@@ -38,19 +38,19 @@ class Map {
 
   drawGrid() {
     this.gridLayer = L.layerGroup();
-    this.grid = L.geoJSON(<any>gridGeoJSON, {
-      'style': feature => {
+    this.grid = L.geoJSON(gridGeoJSON as any, {
+      style: feature => {
         return {
-          'stroke': true,
-          'weight': 1,
-          'opacity': 0.3,
-          'lineCap': 'round'
-        }
+          stroke: true,
+          weight: 1,
+          opacity: 0.3,
+          lineCap: 'round'
+        };
       }
     }).addTo(this.gridLayer);
     this.gridLayer.addTo(this.map);
     this.control = L.control.layers({}, {
-      'Grid': this.gridLayer
+      Grid: this.gridLayer
     }).addTo(this.map);
     // console.log('Control', this.control);
   }
@@ -58,10 +58,10 @@ class Map {
   drawGridInit() {
     for (let i = -180; i <= 180; i += 6) {
       gridGeoJSON.features.push({
-        'type': 'Feature',
-        'geometry': {
-          'type': 'LineString',
-          'coordinates': [
+        type: 'Feature',
+        geometry: {
+          type: 'LineString',
+          coordinates: [
             [i, -88], [i, 88]
           ]
         }
@@ -69,10 +69,10 @@ class Map {
     }
     for (let i = -88; i <= 88; i += 8) {
       gridGeoJSON.features.push({
-        'type': 'Feature',
-        'geometry': {
-          'type': 'LineString',
-          'coordinates': [
+        type: 'Feature',
+        geometry: {
+          type: 'LineString',
+          coordinates: [
             [-180, i], [180, i]
           ]
         }

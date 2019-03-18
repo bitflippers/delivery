@@ -5,7 +5,7 @@ import {MessagingService} from '../messaging/messaging.service';
 import {iconList} from '../ressources/iconConvertor';
 import {Markers} from './userMarkers';
 import {Planes} from './planes';
-import {SpinnerServiceService} from "../spinner-service/spinner-service.service";
+import {SpinnerServiceService} from '../spinner-service/spinner-service.service';
 
 @Component({
   selector: 'app-world-map',
@@ -35,12 +35,12 @@ export class WorldMapComponent implements OnInit {
 
 
     this.msg.markers.subscribe(data => {
-      //console.log('I receive markers', data);
+      // console.log('I receive markers', data);
       this.spinner.hide('MsgMarkers');
       data.forEach(n => {
         n.data.icon = 'assets/' + iconList[n.data.slot.identifier] + '.svg';
 //        console.log("state of a marker: ",n.state);
-        switch (<string>n.state) {
+        switch (n.state as string) {
           case 'delete':
             Markers.deleteMarker(n.data);
             break;
@@ -49,13 +49,16 @@ export class WorldMapComponent implements OnInit {
             break;
           default:
             const m = Markers.updateMarker(n.data);
-            //console.log('Subscribe to marker');
+            // console.log('Subscribe to marker');
             m.marker.events.subscribe(e => {
               console.log('Drag king', e);
               if (e.type === 'drag') {
                 this.msg.emit('moveonemarker', {
                   markerid: m.markerID,
-                  e: e
+                  e: {
+                    type: e.type,
+                    latlng: e.msg.latlng
+                  }
                 });
               }
             });
@@ -67,7 +70,7 @@ export class WorldMapComponent implements OnInit {
       // console.log('Planes', data);
       this.spinner.hide('MsgPlanes');
       data.forEach(plane => {
-        switch (<string>plane.state) {
+        switch (plane.state as string) {
           case 'delete':
             Planes.deletePlane(plane.data);
             break;

@@ -43,10 +43,9 @@ function connect(client) {
         io.broadcast('messages', messages);
     }, 300);
 
-    // client.socket.on('moveonemarker', data => {
-    //     console.log('Move one marker', data);
-    //     io.broadcast('moveonemarker', data);
-    // });
+    client.socket.on('moveonemarker', data => {
+        io.broadcast('moveonemarker', data);
+    });
 }
 
 function broadcastMsg() {
