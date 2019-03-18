@@ -6,6 +6,7 @@ import {iconList} from '../ressources/iconConvertor';
 import {Markers} from './userMarkers';
 import {Planes} from './planes';
 import {SpinnerServiceService} from '../spinner-service/spinner-service.service';
+import {CdkDragEnd, CdkDragStart} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-world-map',
