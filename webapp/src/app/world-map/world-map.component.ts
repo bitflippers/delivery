@@ -35,7 +35,7 @@ export class WorldMapComponent implements OnInit {
 
 
     this.msg.markers.subscribe(data => {
-      console.log('I receive markers', data);
+      //console.log('I receive markers', data);
       this.spinner.hide('MsgMarkers');
       data.forEach(n => {
         n.data.icon = 'assets/' + iconList[n.data.slot.identifier] + '.svg';
