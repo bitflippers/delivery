@@ -5,6 +5,7 @@ import {MessagingService} from '../messaging/messaging.service';
 import {iconList} from '../ressources/iconConvertor';
 import {Markers} from './userMarkers';
 import {Planes} from './planes';
+import {SpinnerServiceService} from "../spinner-service/spinner-service.service";
 
 @Component({
   selector: 'app-world-map',
@@ -13,18 +14,29 @@ import {Planes} from './planes';
 })
 export class WorldMapComponent implements OnInit {
 
-  constructor(public msg: MessagingService) {
+  constructor(public msg: MessagingService, public spinner: SpinnerServiceService) {
   }
 
   ngOnInit() {
     // Generic INIT
+
+    this.spinner.show('Init');
+    this.spinner.show('MsgMarkers');
+    this.spinner.show('MsgPlanes');
+    this.spinner.show('MsgSatellites');
+
+
     World.init();
     Sat.init();
     Markers.init();
     Planes.init();
 
+    this.spinner.hide('Init');
+
+
     this.msg.markers.subscribe(data => {
 //      console.log('I receive markers', data);
+      this.spinner.hide('MsgMarkers');
       data.forEach(n => {
         n.data.icon = 'assets/' + iconList[n.data.slot.identifier] + '.svg';
 //        console.log("state of a marker: ",n.state);
@@ -53,6 +65,7 @@ export class WorldMapComponent implements OnInit {
 
     this.msg.planes.subscribe(data => {
       // console.log('Planes', data);
+      this.spinner.hide('MsgPlanes');
       data.forEach(plane => {
         switch (<string>plane.state) {
           case 'delete':
@@ -66,6 +79,7 @@ export class WorldMapComponent implements OnInit {
 
     this.msg.satellites.subscribe(data => {
 //      console.log('Satellites', data);
+      this.spinner.hide('MsgSatellites');
       Sat.dropAllBeams(); // Lets remove the old beams, before drawing the new
       data.forEach(satellite => {
         // console.log('Satellite', satellite);
