@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import {iconList} from "../ressources/iconConvertor";
+import {iconList} from '../ressources/iconConvertor';
 
 export interface DialogData {
   username: string;
@@ -39,7 +39,18 @@ export class MarkerButtonComponent implements OnInit {
   styleUrls: ['./marker-button.component.css']
 })
 export class MarkerDialogComponent {
+
+  iconList = [
+    'contact_support', 'favorite', 'arrow_downward', 'assistant_photo', 'flash_on', 'favorite_border',
+    'location_on', 'local_pizza', 'not_listed_location', 'where_to_vote', 'beenhere', 'person_pin_circle'
+  ];
+
   constructor(public dialogRef: MatDialogRef<MarkerDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+  }
+
+  selectIcon(name) {
+    console.log('Icon selected', name);
+    this.dialogRef.close();
   }
 
   close() {
