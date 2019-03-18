@@ -33,6 +33,18 @@ export class WorldMapComponent implements OnInit {
 
     this.spinner.hide('Init');
 
+    this.msg.moveonemarker.subscribe(data => {
+      //console.log('moveonemarker received', data);
+      if (data.e.type === 'dragstart') {
+        Markers.updateMarkerStart(data.markerid, data.e);
+      }
+      if (data.e.type === 'dragend') {
+        Markers.updateMarkerEnd(data.markerid, data.e);
+      }
+      if (data.e.latlng) {
+        Markers.updateMarkerPos(data.markerid, data.e);
+      }
+    });
 
     this.msg.markers.subscribe(data => {
       // console.log('I receive markers', data);
@@ -51,8 +63,8 @@ export class WorldMapComponent implements OnInit {
             const m = Markers.updateMarker(n.data);
             // console.log('Subscribe to marker');
             m.marker.events.subscribe(e => {
-              console.log('Drag king', e);
-              if (e.type === 'drag') {
+              // console.log('Drag king', e);
+              if (e.type === 'drag' || e.type === 'dragstart' || e.type === 'dragend') {
                 this.msg.emit('moveonemarker', {
                   markerid: m.markerID,
                   e: {
@@ -94,4 +106,12 @@ export class WorldMapComponent implements OnInit {
     });
   }
 
+  startDrag($event: CdkDragStart) {
+    console.log('drag start',$event);
+  }
+
+  stopDrag($event: CdkDragEnd) {
+    console.log('drag end',$event);
+    //$event.source.element
+  }
 }

@@ -17,15 +17,34 @@ export abstract class Markers {
     return marker.slot.identifier + '.' + marker.uuid;
   }
 
-  public static buildIcon(marker) {
+  public static buildIcon(marker, c = '') {
     // console.log("icon color option", marker);
     return L.icon({
       iconUrl: marker.icon,
       iconSize: [32, 32],
       iconAnchor: [16, 32],
-      className: `markerColor${marker.priority || 1}`,
+      className: `${c} markerColor${marker.priority || 1}`,
     });
 
+  }
+
+  public static updateMarkerPos(id, data) {
+    if (typeof mrks[id] === 'object') {
+      mrks[id].latlng = data.latlng;
+      mrks[id].marker.marker.setLatLng(mrks[id].latlng);
+    }
+  }
+
+  public static updateMarkerStart(id, data) {
+    if (typeof mrks[id] === 'object') {
+      mrks[id].marker.marker._icon.classList.add('markerSelected');
+    }
+  }
+
+  public static updateMarkerEnd(id, data) {
+    if (typeof mrks[id] === 'object') {
+      mrks[id].marker.marker._icon.classList.remove('markerSelected');
+    }
   }
 
   public static updateMarker(marker) {
@@ -60,7 +79,7 @@ export abstract class Markers {
 
   public static deleteMarker(marker) {
     const id = Markers.univId(marker);
-    //console.log('We delete marker');
+    // console.log('We delete marker');
     if (mrks[id]) {
       mrks[id].marker.close();
       delete mrks[id];
@@ -69,7 +88,7 @@ export abstract class Markers {
 }
 
 class UserMarker extends Marker {
-  constructor(public m, public interval = 1000) {
+  constructor(public m, public interval = 200) {
     super(m.latlng, m.iconL, interval, userMarkerLayer, 0);
     this.removeZoomTransition();
     // console.log('marker:', m);

@@ -97,38 +97,36 @@ export class Marker {
   }
 
   removeZoomTransition(fastInterval = this.fastInterval) {
-    if (L.DomUtil.TRANSITION) {
-      this.marker.on('dragstart', e => {
-        this.setFastTransition('drag');
-        if (this.obs) {
-          this.obs.next({ type: 'dragstart', msg: e });
-        }
-      });
-      this.marker.on('movestart', e => {
-        this.setFastTransition('move');
-        if (this.obs) {
-          this.obs.next({ type: 'movestart', msg: e });
-        }
-      });
-      this.marker.on('dragend', e => {
-        this.unsetFastTransition('drag');
-        if (this.obs) {
-          this.obs.next({ type: 'dragend', msg: e });
-        }
-      });
-      this.marker.on('moveend', e => {
-        this.unsetFastTransition('move');
-        if (this.obs) {
-          this.obs.next({ type: 'moveend', msg: e });
-        }
-      });
-      this.marker.on('drag', e => {
-        if (this.obs) {
-          //console.log('drag queen', e);
-          this.obs.next({ type: 'drag', msg: e });
-        }
-      });
-    }
+    this.marker.on('dragstart', e => {
+      this.setFastTransition('drag');
+      if (this.obs) {
+        this.obs.next({ type: 'dragstart', msg: e });
+      }
+    });
+    this.marker.on('movestart', e => {
+      this.setFastTransition('move');
+      if (this.obs) {
+        this.obs.next({ type: 'movestart', msg: e });
+      }
+    });
+    this.marker.on('dragend', e => {
+      this.unsetFastTransition('drag');
+      if (this.obs) {
+        this.obs.next({ type: 'dragend', msg: e });
+      }
+    });
+    this.marker.on('moveend', e => {
+      this.unsetFastTransition('move');
+      if (this.obs) {
+        this.obs.next({ type: 'moveend', msg: e });
+      }
+    });
+    this.marker.on('drag', e => {
+      if (this.obs) {
+        //console.log('drag queen', e);
+        this.obs.next({ type: 'drag', msg: e });
+      }
+    });
   }
 
   setTransition(interval = this.interval) {

@@ -1,7 +1,7 @@
-<div id="worldmap"></div>
+<div id="worldmap" cdkDrop></div>
 <app-user-ui class="appUserUi"></app-user-ui>
 <app-spinner class="appSpinner"></app-spinner>
-<app-marker-button class="appMarkerButton"></app-marker-button>
+<app-marker-button class="appMarkerButton"  cdkDrag cdkDragHandle (cdkDragStarted)="startDrag($event)" (cdkDragEnded)="stopDrag($event)"></app-marker-button>
 <app-navigation class="appFooter"></app-navigation>
 <app-home-button class="appHome"></app-home-button>
 <!--<app-disaster class="appDisaster"></app-disaster>-->

@@ -7,25 +7,31 @@ body { margin: 0; font-family: 'Roboto', sans-serif; }
 
 .markerColor1 {
   background: #fffc0030;
-  clip-path: circle(49% at 50% 50%);
+  clip-path: circle(50% at 50% 50%);
 }
 
 .markerColor2 {
   background: #ffb80030;
-  clip-path: circle(49% at 50% 50%);
+  clip-path: circle(50% at 50% 50%);
 }
 
 .markerColor3 {
   background: #ff800030;
-  clip-path: circle(49% at 50% 50%);
+  clip-path: circle(50% at 50% 50%);
 }
 
 .markerColor4 {
   background: #ff400030;
-  clip-path: circle(49% at 50% 50%);
+  clip-path: circle(50% at 50% 50%);
 }
 
 .markerColor5 {
   background: #ff0f0030;
-  clip-path: circle(49% at 50% 50%);
+  clip-path: circle(50% at 50% 50%);
+}
+
+.markerSelected {
+  border: 2pt solid black;
+  box-sizing: border-box;
+  clip-path: circle(50% at 50% 50%);
 }
