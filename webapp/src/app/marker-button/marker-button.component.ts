@@ -27,7 +27,7 @@ export class MarkerButtonComponent implements OnInit {
       data: <DialogData>{username: 'User', password: 'Pass'}
     });
     dialogRef.afterClosed().subscribe(r => {
-      console.log('dialog closed', r);
+      //console.log('dialog closed', r);
     });
   }
 
@@ -49,7 +49,7 @@ export class MarkerDialogComponent {
   }
 
   selectIcon(name) {
-    console.log('Icon selected', name);
+    //console.log('Icon selected', name);
     this.dialogRef.close();
   }
 
