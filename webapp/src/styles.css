@@ -2,3 +2,30 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: 'Roboto', sans-serif; }
+
+/* Custom global classes */
+
+.markerColor1 {
+     background: #1c743030;
+     clip-path: circle(49% at 50% 50%);
+}
+
+.markerColor2 {
+  background: #fd7e1430;
+  clip-path: circle(49% at 50% 50%);
+}
+
+.markerColor3 {
+  background: #6f42c130;
+  clip-path: circle(49% at 50% 50%);
+}
+
+.markerColor4 {
+  background: #e83e8c30;
+  clip-path: circle(49% at 50% 50%);
+}
+
+.markerColor5 {
+  background: #bacee630;
+  clip-path: circle(49% at 50% 50%);
+}

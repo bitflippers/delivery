@@ -44,25 +44,3 @@
   position: absolute;
   z-index: 500;
 }
-
-
-.markerColor1 {
-  background: #1c7430;
-}
-
-.markerColor2 {
-  background: #fd7e14;
-}
-
-.markerColor3 {
-  background: #6f42c1;
-}
-
-.markerColor4 {
-  background: #e83e8c;
-}
-
-.markerColor5 {
-  background: aqua;
-
-}
