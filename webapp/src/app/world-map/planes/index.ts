@@ -79,7 +79,7 @@ class Plane extends Marker {
 //    this.deg = deg;
     this.count = 0;
     this.tooltip();
-    this.setRotation(this.deg);
+    this.setRotation(this.deg - 45);
     this.setTransition();
     this.nextStep();
   }
