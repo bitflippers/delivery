@@ -5,15 +5,15 @@
 }
 
 .toggleIcon {
-  right: 15pt;
-  top: 50%;
-  margin-top: -16pt;
+  right: 25pt;
+  top: calc(47% - 0pt);
   position: absolute;
   z-index: 502;
 }
 
 .toggleIconDef {
   font-size: 36pt;
+  position: absolute;
 }
 
 .userListCustom {

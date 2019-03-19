@@ -14,6 +14,12 @@
 
 .toggleIconDef {
   font-size: 36pt;
+  position: absolute;
+  left: 0;
+}
+
+.buttonOverride {
+  border-radius: 0 !important;
 }
 
 .markerList {
