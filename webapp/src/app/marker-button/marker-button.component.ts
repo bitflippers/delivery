@@ -22,12 +22,14 @@ export class MarkerButtonComponent implements OnInit {
 
   openLogin() {
     const dialogRef = this.dialog.open(MarkerDialogComponent, {
-      width: '40%',
-      height: '65%',
-      data: <DialogData>{username: 'User', password: 'Pass'}
+      width: '40vw',
+      height: '65vw',
+      minWidth: '370pt',
+      minHeight: '340pt',
+      data: {username: 'User', password: 'Pass'} as DialogData
     });
     dialogRef.afterClosed().subscribe(r => {
-      //console.log('dialog closed', r);
+      // console.log('dialog closed', r);
     });
   }
 
@@ -49,7 +51,7 @@ export class MarkerDialogComponent {
   }
 
   selectIcon(name) {
-    //console.log('Icon selected', name);
+    // console.log('Icon selected', name);
     this.dialogRef.close();
   }
 
