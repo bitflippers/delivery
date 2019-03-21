@@ -1,13 +1,13 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MessagingService} from "../messaging/messaging.service";
-import {SpinnerServiceService} from "../spinner-service/spinner-service.service";
-import {iconList} from "../ressources/iconConvertor";
+import {MessagingService} from '../messaging/messaging.service';
+import {SpinnerServiceService} from '../spinner-service/spinner-service.service';
+import {iconList} from '../ressources/iconConvertor';
 
 
 const colorMap = {
-  "SYSTEM": "gray",
-  "SADREMA": "red",
-  "EVENTS": "blue"
+  SYSTEM: 'gray',
+  SADREMA: 'red',
+  EVENTS: 'blue'
 };
 
 @Component({
@@ -75,7 +75,7 @@ export class FooterComponent implements OnInit {
   ngOnInit() {
     const r = /\[/;
     this.msg.messages.subscribe(data => {
-      //console.log('Messages', data);
+      // console.log('Messages', data);
       for (const line of data.filter(n => r.test(n)).map(n => ({ text: n, color: colorMap[n.match(/\[(\w+)\]/)[1]] }))) {
         if (this.saDReMaFullLog.concat(this.pausedBuff).filter(n => n.text === line.text).length > 0) {
           continue;

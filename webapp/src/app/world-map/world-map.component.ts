@@ -6,7 +6,7 @@ import {iconList} from '../ressources/iconConvertor';
 import {Markers} from './userMarkers';
 import {Planes} from './planes';
 import {SpinnerServiceService} from '../spinner-service/spinner-service.service';
-import {CdkDragEnd, CdkDragStart} from "@angular/cdk/drag-drop";
+import {CdkDragEnd, CdkDragStart} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-world-map',
@@ -36,7 +36,7 @@ export class WorldMapComponent implements OnInit {
     this.spinner.hide('Init');
 
     this.msg.moveonemarker.subscribe(data => {
-      //console.log('moveonemarker received', data);
+      // console.log('moveonemarker received', data);
       if (data.e.type === 'dragstart') {
         Markers.updateMarkerStart(data.markerid, data.e);
       }
@@ -95,20 +95,12 @@ export class WorldMapComponent implements OnInit {
     });
 
     this.msg.satellites.subscribe(data => {
-      //console.log('Satellites', data);
+      // console.log('Satellites', data);
       this.spinner.hide('MsgSatellites');
-      // Sat.dropAllBeams(); // Lets remove the old beams, before drawing the new
-      // data.forEach(satellite => {
-      //   // console.log('Satellite', satellite);
-      //   Object.values(satellite.data.mapBeam).forEach(beam => {
-      //     // console.log('beam', beam);
-      //     Sat.addBeam(beam, satellite.data);
-      //   });
-      // });
     });
 
     this.msg.beams.subscribe(data => {
-      //console.log('Beams', data);
+      // console.log('Beams', data);
       this.spinner.hide('MsgBeams');
       Sat.dropAllBeams();
       data.forEach(beam => {
@@ -118,11 +110,11 @@ export class WorldMapComponent implements OnInit {
   }
 
   startDrag($event: CdkDragStart) {
-    console.log('drag start',$event);
+    console.log('drag start', $event);
   }
 
   stopDrag($event: CdkDragEnd) {
-    console.log('drag end',$event);
-    //$event.source.element
+    console.log('drag end', $event);
+    // $event.source.element
   }
 }

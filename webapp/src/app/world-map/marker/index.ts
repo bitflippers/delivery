@@ -9,19 +9,19 @@ const markerList = {};
 // Performance optimization
 World.cbOnMap(map => {
   map.map.on('movestart', e => {
-    Object.values(markerList).forEach(m => (<any>m).setFastTransition('mapmove'));
+    Object.values(markerList).forEach(m => (m as any).setFastTransition('mapmove'));
   });
 
   map.map.on('moveend', e => {
-    Object.values(markerList).forEach(m => (<any>m).unsetFastTransition('mapmove'));
+    Object.values(markerList).forEach(m => (m as any).unsetFastTransition('mapmove'));
   });
 
   map.map.on('zoomstart', e => {
-    Object.values(markerList).forEach(m => (<any>m).setFastTransition('mapzoom'));
+    Object.values(markerList).forEach(m => (m as any).setFastTransition('mapzoom'));
   });
 
   map.map.on('zoomend', e => {
-    Object.values(markerList).forEach(m => (<any>m).unsetFastTransition('mapzoom'));
+    Object.values(markerList).forEach(m => (m as any).unsetFastTransition('mapzoom'));
   });
 });
 
@@ -48,11 +48,11 @@ export class Marker {
 
     markerList[this.id] = this;
 
-    const o = <any>Object.assign({}, {
+    const o = Object.assign({}, {
       icon: this.icon,
       draggable: true,
       rotationAngle: this.rotationAngle
-    }, options);
+    }, options) as any;
 
     this.marker = L.marker(pos, o);
 
@@ -71,7 +71,7 @@ export class Marker {
 
   setRotation(deg) {
     this.rotationAngle = deg;
-    (<any>this.marker).setRotationAngle(deg);
+    (this.marker as any).setRotationAngle(deg);
   }
 
   setFastTransition(name) {
@@ -123,7 +123,7 @@ export class Marker {
     });
     this.marker.on('drag', e => {
       if (this.obs) {
-        //console.log('drag queen', e);
+        // console.log('drag queen', e);
         this.obs.next({ type: 'drag', msg: e });
       }
     });
@@ -132,8 +132,8 @@ export class Marker {
   setTransition(interval = this.interval) {
     if (L.DomUtil.TRANSITION) {
       // console.log('Transition', interval);
-      this.execIf(() => (<any>this.marker)._icon,
-        () => (<any>this.marker)._icon.style[L.DomUtil.TRANSITION] = ('all ' + interval + 'ms linear')
+      this.execIf(() => (this.marker as any)._icon,
+        () => (this.marker as any)._icon.style[L.DomUtil.TRANSITION] = ('all ' + interval + 'ms linear')
       );
     }
   }

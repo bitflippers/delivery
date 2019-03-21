@@ -1,6 +1,6 @@
 import {A11yModule} from '@angular/cdk/a11y';
-//import {DragDropModule} from '@angular/cdk/drag-drop';
-//import {ScrollingModule} from '@angular/cdk/scrolling';
+// import {DragDropModule} from '@angular/cdk/drag-drop';
+// import {ScrollingModule} from '@angular/cdk/scrolling';
 import {CdkStepperModule} from '@angular/cdk/stepper';
 import {CdkTableModule} from '@angular/cdk/table';
 import {CdkTreeModule} from '@angular/cdk/tree';
@@ -49,7 +49,7 @@ import {
     CdkStepperModule,
     CdkTableModule,
     CdkTreeModule,
-    //DragDropModule,
+    // DragDropModule,
     MatAutocompleteModule,
     MatBadgeModule,
     MatBottomSheetModule,
@@ -85,12 +85,8 @@ import {
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
-    //ScrollingModule,
+    // ScrollingModule,
   ]
 })
 export class MaterialModuleModule {
 }
-
-/**  Copyright 2018 Google Inc. All Rights Reserved.
- Use of this source code is governed by an MIT-style license that
- can be found in the LICENSE file at http://angular.io/license */

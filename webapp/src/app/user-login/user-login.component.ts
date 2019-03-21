@@ -22,7 +22,7 @@ export class UserLoginComponent implements OnInit {
   openLogin() {
     const dialogRef = this.dialog.open(LoginDialogComponent, {
       width: '250px',
-      data: <DialogData>{username: 'User', password: 'Pass'}
+      data: {username: 'User', password: 'Pass'} as DialogData
     });
     dialogRef.afterClosed().subscribe(r => {
       console.log('dialog closed', r);

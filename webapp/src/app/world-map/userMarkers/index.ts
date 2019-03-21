@@ -6,6 +6,15 @@ let map;
 const userMarkerLayer = L.layerGroup();
 const mrks = {};
 
+class UserMarker extends Marker {
+  constructor(public m, public interval = 200) {
+    super(m.latlng, m.iconL, interval, userMarkerLayer, 0);
+    this.removeZoomTransition();
+    // console.log('marker:', m);
+    // this.marker.bindTooltip('Priority: ' + m.priority.toString());
+  }
+}
+
 export abstract class Markers {
   public static init() {
     map = World.map().map;
@@ -84,14 +93,5 @@ export abstract class Markers {
       mrks[id].marker.close();
       delete mrks[id];
     }
-  }
-}
-
-class UserMarker extends Marker {
-  constructor(public m, public interval = 200) {
-    super(m.latlng, m.iconL, interval, userMarkerLayer, 0);
-    this.removeZoomTransition();
-    // console.log('marker:', m);
-    // this.marker.bindTooltip('Priority: ' + m.priority.toString());
   }
 }

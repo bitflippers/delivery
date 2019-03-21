@@ -9,9 +9,9 @@ import {MGRS} from '../mgrs';
 let map;
 const equatorLayer = L.layerGroup();
 const equatorLine = L.polyline([[0, -300], [0, 300]], {
-  'color': 'red',
-  'weight': 1,
-  'opacity': 0.5
+  color: 'red',
+  weight: 1,
+  opacity: 0.5
 }).addTo(equatorLayer);
 
 const beamLayer = L.layerGroup();
@@ -25,27 +25,27 @@ const icon = L.icon({
 
 // Mockup data
 const satList = {
-  'Sat_1': {
-    'name': 'Sat_1',
-    'pos': [0, -120]
+  Sat_1: {
+    name: 'Sat_1',
+    pos: [0, -120]
   },
-  'Sat_2': {
-    'name': 'Sat_2',
-    'pos': [0, 0]
+  Sat_2: {
+    name: 'Sat_2',
+    pos: [0, 0]
   },
-  'Sat_3': {
-    'name': 'Sat_3',
-    'pos': [0, 120]
+  Sat_3: {
+    name: 'Sat_3',
+    pos: [0, 120]
   }
 };
 
 // Beam data
 const beamList = [
   {
-    'satellite': 'Satellite1',
-    'latng': [0, 0],
-    'radii': [10, 20],
-    'rotate': 90
+    satellite: 'Satellite1',
+    latng: [0, 0],
+    radii: [10, 20],
+    rotate: 90
   }
 ];
 
@@ -61,7 +61,7 @@ class Satellite extends Marker {
 
   constructor(public s, public interval = 1000) {
     super(s.pos, icon, interval, equatorLayer);
-    this.count = parseInt(<any>(Math.random() * this.path.length));
+    this.count = parseInt((Math.random() * this.path.length) as any, 10);
     this.removeZoomTransition();
     this.intervalT = setInterval(() => {
       this.nextStep();
@@ -90,19 +90,19 @@ class Ellipse {
       [51.51, -0.047],
       [0, 10],
       [-10, 0]
-    ], <any>{
+    ], {
       draggable: true,
       opacity: 0.2
-    }).addTo(beamLayer);
+    } as any).addTo(beamLayer);
     // this.ellipse.stop('click');
   }
 }
 
 const satColors = {
-  'Sat_1': '#008080',
-  'Sat_2': '#800080',
-  'Sat_3': '#808000'
-}
+  Sat_1: '#008080',
+  Sat_2: '#800080',
+  Sat_3: '#808000'
+};
 
 class Beam {
 
@@ -164,7 +164,7 @@ export abstract class Sat {
   }
 
   public static addSatellite(satellite) {
-    if (typeof satObjs[satellite.name] == 'object') {
+    if (typeof satObjs[satellite.name] === 'object') {
       satObjs[satellite.name].pos = satellite.pos;
       satObjs[satellite.name].s.marker.setLatLng(satellite.pos);
     } else {
@@ -174,7 +174,7 @@ export abstract class Sat {
   }
 
   public static delSatellite(satellite) {
-    if (typeof satObjs[satellite.name] == 'object') {
+    if (typeof satObjs[satellite.name] === 'object') {
       satObjs[satellite.name].s.closeX();
       delete satObjs[satellite.name];
     }
@@ -197,7 +197,6 @@ export abstract class Sat {
   }
 
   public static delBeam(beam) {
-      //beam.s.closeX();
       beam.b.b.forEach(b => b.remove());
       delete beamObjs[Sat.uniqueId(beam)];
   }

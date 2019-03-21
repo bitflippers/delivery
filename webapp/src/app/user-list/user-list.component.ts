@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MessagingService} from '../messaging/messaging.service';
 import {iconList} from '../ressources/iconConvertor';
-import {SpinnerServiceService} from "../spinner-service/spinner-service.service";
+import {SpinnerServiceService} from '../spinner-service/spinner-service.service';
 
 @Component({
   selector: 'app-user-list',
@@ -12,7 +12,7 @@ export class UserListComponent implements OnInit {
 
   userList = [];
 
-  constructor(public msg: MessagingService, public spinner:SpinnerServiceService) {
+  constructor(public msg: MessagingService, public spinner: SpinnerServiceService) {
   }
 
   trackByFn(index: number, data) {
@@ -23,7 +23,7 @@ export class UserListComponent implements OnInit {
     this.spinner.show('MsgUsers');
     this.msg.users.subscribe(data => {
       this.spinner.hide('MsgUsers');
-      //console.log('I receive users', data);
+      // console.log('I receive users', data);
       this.userList = data.map(n => {
         n.data.icon = iconList[n.data.slot.identifier];
         n.data.nickname = n.data.username;

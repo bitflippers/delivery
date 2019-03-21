@@ -25,7 +25,7 @@ class Plane extends Marker {
   constructor(public plane, public pollInterval = 1000) {
     super(plane.latlng, icon, pollInterval, planeLayer, plane.deg);
 
-    this.interval = pollInterval + parseInt(<any>(Math.random() * 100), 10);
+    this.interval = pollInterval + parseInt((Math.random() * 100) as any, 10);
     this.tooltip();
     this.setLonLat(plane.latlng[1], plane.latlng[0], plane.deg, plane.speed);
     this.removeZoomTransition();
@@ -36,7 +36,7 @@ class Plane extends Marker {
 
   tooltip() {
     const p = this.plane;
-    const speedKMH = parseInt(<any>(p.speed * 3600 / 1000), 10);
+    const speedKMH = parseInt((p.speed * 3600 / 1000) as any, 10);
     this.marker.bindTooltip(`ID: ${p.id}<BR>Flight: ${p.n[1]} ${p.n[2]}<BR>Lat: ${p.n[5]} Lon: ${p.n[6]}<BR>Deg: ${p.deg} Speed: ${p.speed} m/s ${speedKMH} km/h`);
   }
 
@@ -60,7 +60,7 @@ class Plane extends Marker {
     const R = this.count * (this.speed * this.interval * this.surfaceDeg2Km) / 1000000;
     const lon = this.lon + R * Math.cos(this.z(this.deg) * Math.PI / 180);
     const lat = this.lat + R * Math.sin(this.z(this.deg) * Math.PI / 180);
-    return {lon: lon, lat: lat, deg: this.deg, speed: this.speed, R: R};
+    return {lon, lat, deg: this.deg, speed: this.speed, R};
   }
 
   setLonLat(lon, lat, deg = this.deg, speed = this.speed) {
@@ -103,7 +103,7 @@ export abstract class Planes {
   }
 
   public static updatePlane(plane) {
-    //console.log('update plane', plane);
+    // console.log('update plane', plane);
     if (plane.latlng &&
       (plane.latlng[0] == null ||
         plane.latlng[1] == null ||
@@ -113,8 +113,7 @@ export abstract class Planes {
       return; // Ignore plane with null
     }
     const id = Planes.univId(plane);
-    if (typeof plns[id] == 'object') {
-      // TODO: Check!!!!
+    if (typeof plns[id] === 'object') {
       plns[id].plane = plane;
       plns[id].marker.setLonLat(plane.latlng[1], plane.latlng[0], plane.deg, plane.speed);
     } else {
@@ -127,7 +126,7 @@ export abstract class Planes {
 
   public static deletePlane(plane) {
     const id = Planes.univId(plane);
-    if (typeof plns[id] == 'object') {
+    if (typeof plns[id] === 'object') {
       plns[id].marker.close();
       delete plns[id];
     }
