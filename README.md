@@ -28,6 +28,14 @@ In SaDReMa you play the role of a satellite customer. Satellites provide connect
 * Angular, NodeJS, Leaflet, Twitter Bootstrap, Angular Material...
 * Backend in Java
 * Optimation algorithmics in Java
-* Contributions from: http://jmetal.sourceforge.net/, https://github.com/Berico-Technologies/Geo-Coordinate-Conversion-Java, ...
-
+* Contributions from: http://jmetal.sourceforge.net/, https://github.com/Berico-Technologies/Geo-Coordinate-Conversion-Java, Opensky-Networks
 * Modeled on: https://en.wikipedia.org/wiki/World_Geodetic_System and https://en.wikipedia.org/wiki/Military_Grid_Reference_System
+
+# UI App
+Angular.IO 7.x + Leaflet and Socket.IO frontend, NodeJS + Socket.IO backend.
+Stateful track of beams, planes, markers, satellites.
+The planes open-data comes from OpenSky-Networks.
+Every marker is animated.
+All planes are smoothly animated within the predictred direction and speed, according to the data provided by the Opensky.
+All markers can be moved freely and this is viewed in real time among all the current clients.
+With the exception of the beams, everything is updated only if a change in its status has appeared.
