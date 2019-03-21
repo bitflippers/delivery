@@ -180,12 +180,12 @@ export abstract class Sat {
     }
   }
 
-  public static uniqueId(beam, satellite) {
-    return satellite.name + '.' + beam.name;
+  public static uniqueId(beam /*, satellite*/) {
+    return beam.uuid;
   }
 
   public static addBeam(beam /*, satellite */) {
-    const id = Sat.uniqueId(beam, satellite);
+    const id = Sat.uniqueId(beam /*, satellite */);
     if (typeof beamObjs[id] === 'object') {
       beamObjs[id].pos = beam.pos;
       beamObjs[id].b.draw(beam.pos);
@@ -197,10 +197,9 @@ export abstract class Sat {
   }
 
   public static delBeam(beam) {
-    if (typeof beamObjs[beam.name] === 'object') {
-      beamObjs[beam.name].s.closeX();
-      delete beamObjs[beam.name];
-    }
+      //beam.s.closeX();
+      beam.b.b.forEach(b => b.remove());
+      delete beamObjs[Sat.uniqueId(beam)];
   }
 
   public static dropAllBeams() {

@@ -95,7 +95,7 @@ export class WorldMapComponent implements OnInit {
     });
 
     this.msg.satellites.subscribe(data => {
-      console.log('Satellites', data);
+      //console.log('Satellites', data);
       this.spinner.hide('MsgSatellites');
       // Sat.dropAllBeams(); // Lets remove the old beams, before drawing the new
       // data.forEach(satellite => {
@@ -108,11 +108,11 @@ export class WorldMapComponent implements OnInit {
     });
 
     this.msg.beams.subscribe(data => {
-      console.log('Beams', data);
+      //console.log('Beams', data);
       this.spinner.hide('MsgBeams');
       Sat.dropAllBeams();
       data.forEach(beam => {
-        Sat.addBeam(beam);
+        Sat.addBeam(beam.data);
       });
     });
   }
