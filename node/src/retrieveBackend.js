@@ -23,6 +23,7 @@ const planeNum = 20;
 let messages = [];
 const usersState = new StateObj();
 const markerState = new StateObj();
+const beamState = new StateObj();
 const satState = new StateObj();
 const planesState = new StateObj();
 
@@ -116,11 +117,21 @@ function broadcastSat() {
             markers.forEach(n => markerState.update(n.uuid, n));
             Object.values(jsonObj.mapSatellite).forEach(n => satState.update(n.uuid, n));
 
+            // Lets create the beams
+            Object.values(jsonObj.mapSatellite).forEach(s => {
+                Object.values(s.mapBeam).forEach(n => {
+                    n.satRef = Object.assign({}, s);
+                    delete n.satRef.mapBeam; // Drop the cyclic reference
+                    beamState.update(n.uuid, n);
+                });
+            });
+
             let o = Object.values(usersState.retrieve());
 
             io.broadcast('users', o);
             io.broadcast('markers', Object.values(markerState.retrieve()));
             io.broadcast('satellites', Object.values(satState.retrieve()));
+            io.broadcast('beams', Object.values(beamState.retrieve()));
         }
     
     });

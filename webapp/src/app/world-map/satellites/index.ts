@@ -141,10 +141,10 @@ class Beam {
         [y1, x1], [y2, x1], [y2, x2], [y1, x2], [y1, x1]
       ], {
         color: 'rgba(0,0,0,0)',
-        fillColor: satColors[this.beam.sat.name] || '#808080',
+        fillColor: satColors[this.beam.satRef.name] || '#808080',
         fillOpacity: 0.4
       });
-      p.bindTooltip(`Sat: ${this.beam.sat.name} Beam: ${this.beam.name}<BR>Col: ${n.columnIndex} Row: ${n.rowIndex}<BR>X1: ${x1} Y1: ${y1} X2: ${x2} Y2: ${y2}`);
+      p.bindTooltip(`Sat: ${this.beam.satRef.name} Beam: ${this.beam.name}<BR>Col: ${n.columnIndex} Row: ${n.rowIndex}<BR>X1: ${x1} Y1: ${y1} X2: ${x2} Y2: ${y2}`);
       p.addTo(this.l);
       this.b.push(p);
       // c.stop('click');
@@ -184,14 +184,14 @@ export abstract class Sat {
     return satellite.name + '.' + beam.name;
   }
 
-  public static addBeam(beam, satellite) {
+  public static addBeam(beam /*, satellite */) {
     const id = Sat.uniqueId(beam, satellite);
     if (typeof beamObjs[id] === 'object') {
       beamObjs[id].pos = beam.pos;
       beamObjs[id].b.draw(beam.pos);
     } else {
       beamObjs[id] = beam;
-      beamObjs[id].sat = satellite;
+//      beamObjs[id].sat = satellite;
       beamObjs[id].b = new Beam(beamObjs[id]);
     }
   }

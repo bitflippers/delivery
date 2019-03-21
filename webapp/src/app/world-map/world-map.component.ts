@@ -25,6 +25,7 @@ export class WorldMapComponent implements OnInit {
     this.spinner.show('MsgMarkers');
     this.spinner.show('MsgPlanes');
     this.spinner.show('MsgSatellites');
+    this.spinner.show('MsgBeams');
 
 
     World.init();
@@ -94,15 +95,24 @@ export class WorldMapComponent implements OnInit {
     });
 
     this.msg.satellites.subscribe(data => {
-//      console.log('Satellites', data);
+      console.log('Satellites', data);
       this.spinner.hide('MsgSatellites');
-      Sat.dropAllBeams(); // Lets remove the old beams, before drawing the new
-      data.forEach(satellite => {
-        // console.log('Satellite', satellite);
-        Object.values(satellite.data.mapBeam).forEach(beam => {
-          // console.log('beam', beam);
-          Sat.addBeam(beam, satellite.data);
-        });
+      // Sat.dropAllBeams(); // Lets remove the old beams, before drawing the new
+      // data.forEach(satellite => {
+      //   // console.log('Satellite', satellite);
+      //   Object.values(satellite.data.mapBeam).forEach(beam => {
+      //     // console.log('beam', beam);
+      //     Sat.addBeam(beam, satellite.data);
+      //   });
+      // });
+    });
+
+    this.msg.beams.subscribe(data => {
+      console.log('Beams', data);
+      this.spinner.hide('MsgBeams');
+      Sat.dropAllBeams();
+      data.forEach(beam => {
+        Sat.addBeam(beam);
       });
     });
   }
