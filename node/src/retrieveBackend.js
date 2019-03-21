@@ -34,6 +34,7 @@ function connect(client) {
     setTimeout(() => {
         io.broadcast('users', Object.values(usersState.current()).map( n => Object.assign({}, n, { state: 'new'})));
         io.broadcast('satellites', Object.values(satState.current()).map(n => Object.assign({}, n, { state: 'new'})));
+        io.broadcast('beams', Object.values(beamState.current()).map(n => Object.assign({}, n, { state: 'new'})));
         io.broadcast('markers', Object.values(markerState.current()).map(n => Object.assign({}, n, { state: 'new'})));
         io.broadcast('planes', Object.values(
             planesState.current())
