@@ -3,6 +3,9 @@
 * The bit flippers submission to the 2019 https://www.gameofcode.eu/ !
 *  http://sadrema.app (currently in simulation mode !)
 
+![alt tag](https://github.com/bitflippers/delivery/blob/master/video.gif?raw=true)
+
+
 # The Bit Flippers
 
 * David Valcarcel (Developer)
